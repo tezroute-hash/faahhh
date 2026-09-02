@@ -39,4 +39,25 @@ router.get("/profile/:id", async(req, res)=>{
     });
 });
 
+router.get("/search", restrictToLoggedinUserOnly, async (req, res) => {
+    const username = req.query.username;
+
+    let users = [];
+
+    if (username) {
+        users = await User.find({
+            username: {
+                $regex: username,
+                $options: "i"
+            }
+        });
+    }
+
+    res.render("search", {
+        users,
+        searched: !!username,
+        user: req.user
+    });
+});
+
 module.exports = router;
