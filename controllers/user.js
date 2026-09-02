@@ -11,7 +11,7 @@ const handleUserSignup = async (req, res) => {
         password
     });
 
-    return res.redirect("/login");
+    return res.redirect(`/profile/${user._id}`);
 };
 
 const handleUserLogin = async(req, res) => {
