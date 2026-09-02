@@ -15,10 +15,10 @@ const port = process.env.PORT || 8001;
 
 async function main() {
     await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB connected");
 }
 
 main()
-    .then(() => console.log("MongoDB connected"))
     .catch(err => console.log(err));
 
 app.use(express.json());
