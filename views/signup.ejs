@@ -1,29 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SignUp</title>
-</head>
-<body>
-    <h1>Sign up here</h1>
-    <div>
+<%- include('./partials/header', { title: 'Sign Up | Faahhh' , centered: true }) %>
+
+    <div class="glass-card">
+        <h1>Create <span>Account</span></h1>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Join us and get started in
+            seconds.</p>
+
         <form action="/user" method="post">
-            <label for="name">Full name : </label>
-            <input type="text" name="name" placeholder="enter your name" required>
-            <br><br>
-        
-            <label for="username">Username : </label>
-            <input type="text" name="username" placeholder="enter your username" required>
-            <br><br>
+            <div class="form-group">
+                <label for="name"><i class="uil uil-user"></i> Full Name</label>
+                <input type="text" id="name" name="name" placeholder="John Doe" required>
+            </div>
 
-            <label for="email">Email : </label>
-            <input type="text" name="email" placeholder="enter your email"><br><br>
+            <div class="form-group">
+                <label for="username"><i class="uil uil-at"></i> Username</label>
+                <input type="text" id="username" name="username" placeholder="johndoe123" required>
+            </div>
 
-            <label for="password">Password : </label>
-            <input type="password" name="password" placeholder="enter your password"><br><br>
-            <button type="submit">Sign Up</button>
+            <div class="form-group">
+                <label for="email"><i class="uil uil-envelope-alt"></i> Email Address</label>
+                <input type="email" id="email" name="email" placeholder="john@doe.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password"><i class="uil uil-lock-alt"></i> Password</label>
+                <input type="password" id="password" name="password" placeholder="Create a strong password" required>
+            </div>
+
+            <button type="submit" class="btn"><i class="uil uil-user-plus"></i> Create Account</button>
+
+            <div class="auth-footer">
+                Already have an account? <a href="/login">Login here</a>
+            </div>
         </form>
     </div>
-</body>
-</html>
+
+    <%- include('./partials/footer') %>

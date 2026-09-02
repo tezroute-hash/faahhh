@@ -5,7 +5,9 @@ const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
+const dns = require("dns");
 
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 const { checkAuth } = require("./middlewares/auth");
 
 const staticRoute = require("./routes/staticRouter");
@@ -26,6 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");

@@ -1,47 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
-    <h1>Login here</h1>
+<%- include('./partials/header', { title: 'Login | Faahhh' , centered: true }) %>
 
-    <div>
+    <div class="glass-card">
+        <h1>Welcome <span>Back</span></h1>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Please login to your account to
+            continue.</p>
+
         <form action="/user/login" method="post">
+            <div class="form-group">
+                <label for="email"><i class="uil uil-envelope-alt"></i> Email</label>
+                <input type="email" id="email" name="email" placeholder="Ex. john@doe.com" required>
+            </div>
 
-            <label for="email">Email: </label>
-            <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Enter your email"
-                required
-            >
+            <div class="form-group">
+                <label for="password"><i class="uil uil-lock-alt"></i> Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
 
-            <br><br>
+            <button type="submit" class="btn"><i class="uil uil-sign-in-alt"></i> Login Now</button>
 
-            <label for="password">Password: </label>
-            <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Enter your password"
-                required
-            >
-
-            <br><br>
-
-            <button type="submit">Login</button>
-
-            <p>
-                New here? <a href="/signup">Signup</a>
-            </p>
-
-            
-
+            <div class="auth-footer">
+                Don't have an account? <a href="/signup">Sign up for free</a>
+            </div>
         </form>
     </div>
-</body>
-</html>
+
+    <%- include('./partials/footer') %>
