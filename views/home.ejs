@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faahhh</title>
-</head>
-<body>
-    <h2>All users</h2>
-    <div>
-        <% for(let user of allUser) { %>
-            <p>username : <%= user.username %></p>
-            <p>email : <%= user.email%></p>
-        <% } %>
-    </div>
-</body>
-</html>
+<% layout('layouts/boilerplate') -%>
+
+<h2>All users</h2>
+<div>
+    <% for(let user of allUser) { %>
+        <p>username : <%= user.username %></p>
+        <p>email : <%= user.email%></p>
+    <% } %>
+</div>
