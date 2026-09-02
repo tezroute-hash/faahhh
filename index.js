@@ -5,13 +5,13 @@ const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
-const { restrictToLoggedinUserOnly, checkAuth } = require("./middlewares/auth");
+const { checkAuth } = require("./middlewares/auth");
 
 const staticRoute = require("./routes/staticRouter");
 const userRoute = require("./routes/user");
 
 const app = express();
-const port = 8001;
+const port = process.env.PORT || 8001;
 
 async function main() {
     await mongoose.connect(process.env.MONGO_URI);
@@ -20,10 +20,6 @@ async function main() {
 main()
     .then(() => console.log("MongoDB connected"))
     .catch(err => console.log(err));
-
-app.listen(port, () => {
-    console.log(`Listening to port ${port}`);
-});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -35,3 +31,7 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use("/user", userRoute);
 app.use("/", checkAuth, staticRoute);
+
+app.listen(port, () => {
+    console.log(`Listening to port ${port}`);
+});
