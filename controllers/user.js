@@ -11,7 +11,10 @@ const handleUserSignup = async (req, res) => {
         password
     });
 
-    return res.redirect(`/profile/${user._id}`);
+    const token = setUser(user);
+    res.cookie("uid", token);
+
+    return res.redirect(`/faahhh`);
 };
 
 const handleUserLogin = async(req, res) => {
@@ -25,7 +28,7 @@ const handleUserLogin = async(req, res) => {
 
     const token = setUser(user);
     res.cookie("uid", token);
-    return res.redirect(`/profile/${user._id}`);
+    return res.redirect(`/faahhh`);
 };
 
 module.exports = {handleUserSignup, handleUserLogin};
