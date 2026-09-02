@@ -1,8 +1,61 @@
 <% layout("layouts/boilerplate") -%>
 
-<body>
-    <p>username : <%= user.username %>
-    </p>
-    <p>email : <%= user.email%>
-    </p>
-</body>
+    <% if (typeof user !=='undefined' && user) { %>
+        <div class="profile-header">
+            <div class="avatar-lg">
+                <%= user.username ? user.username.charAt(0).toUpperCase() : 'U' %>
+            </div>
+            <div class="profile-details">
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <h2 class="profile-username">
+                        <%= user.username %>
+                    </h2>
+                    <button class="btn-follow"
+                        style="background: #efefef; color: #262626; border: none; padding: 6px 16px; font-weight: 600;">Edit
+                        profile</button>
+                    <i class="uil uil-setting" style="font-size: 24px; cursor: pointer;"></i>
+                </div>
+
+                <div class="profile-stats">
+                    <span><strong>0</strong> posts</span>
+                    <span><strong>24k</strong> followers</span>
+                    <span><strong>1</strong> following</span>
+                </div>
+
+                <div class="profile-name">
+                    <%= user.name || user.username %>
+                </div>
+                <div class="profile-bio">
+                    <%= user.email %> <br> Digital creator <br> 📍 Somewhere in the world
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-tabs">
+            <div class="profile-tab active"><i class="uil uil-grid"></i> POSTS</div>
+            <div class="profile-tab"><i class="uil uil-video"></i> REELS</div>
+            <div class="profile-tab"><i class="uil uil-bookmark"></i> SAVED</div>
+            <div class="profile-tab"><i class="uil uil-user-square"></i> TAGGED</div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 10px;">
+            <div
+                style="aspect-ratio: 1; background: #efefef; display: flex; justify-content: center; align-items: center; cursor: pointer;">
+                <i class="uil uil-image-v" style="font-size: 32px; color: var(--text-light);"></i>
+            </div>
+            <div
+                style="aspect-ratio: 1; background: #efefef; display: flex; justify-content: center; align-items: center; cursor: pointer;">
+                <i class="uil uil-image-v" style="font-size: 32px; color: var(--text-light);"></i>
+            </div>
+            <div
+                style="aspect-ratio: 1; background: #efefef; display: flex; justify-content: center; align-items: center; cursor: pointer;">
+                <i class="uil uil-image-v" style="font-size: 32px; color: var(--text-light);"></i>
+            </div>
+        </div>
+        <% } else { %>
+            <div style="text-align: center; padding: 40px;">
+                <h2>User Not Found</h2>
+                <p>Sorry, this page isn't available.</p>
+                <p>The link you followed may be broken, or the page may have been removed.</p>
+            </div>
+            <% } %>

@@ -4,46 +4,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up | Faahhh</title>
+    <title>Sign up &bull; Instagram</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 </head>
 
 <body>
-    <div class="container centered-layout">
-        <div class="glass-card">
-            <h1>Create <span>Account</span></h1>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Join us and get started in
-                seconds.</p>
+    <div class="auth-wrapper">
+        <div class="auth-container">
+            <div class="auth-box">
+                <h1 class="logo">Faahhh</h1>
+                <div class="auth-msg">Sign up to see photos and videos from your friends.</div>
 
-            <form action="/user" method="post">
-                <div class="form-group">
-                    <label for="name"><i class="uil uil-user"></i> Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="John Doe" required>
+                <form action="/user" method="post" class="auth-form">
+                    <button type="button"
+                        style="margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="uil uil-facebook-f"></i> Log in with Facebook
+                    </button>
+
+                    <div style="display: flex; align-items: center; margin: 15px 0;">
+                        <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+                        <div
+                            style="margin: 0 16px; color: var(--text-light); font-weight: 600; font-size: 12px; text-transform: uppercase;">
+                            or</div>
+                        <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+                    </div>
+
+                    <input type="email" name="email" placeholder="Mobile Number or Email" required>
+                    <input type="text" name="name" placeholder="Full Name" required>
+                    <input type="text" name="username" placeholder="Username" required>
+                    <input type="password" name="password" placeholder="Password" required>
+
+                    <p
+                        style="font-size: 12px; color: var(--text-light); text-align: center; margin-top: 15px; line-height: 1.4;">
+                        People who use our service may have uploaded your contact information to Instagram. Learn More
+                    </p>
+
+                    <button type="submit">Sign up</button>
+                </form>
+            </div>
+
+            <div class="auth-box alt">
+                <span style="font-size: 14px;">Have an account? <a href="/login"
+                        style="color: var(--blue-primary); font-weight: 600;">Log in</a></span>
+            </div>
+
+            <div style="text-align: center; font-size: 14px; margin-top: 10px;">
+                <p>Get the app.</p>
+                <div style="margin-top: 10px; display: flex; justify-content: center; gap: 10px;">
+                    <div
+                        style="width: 130px; height: 40px; background: #000; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white;">
+                        App Store</div>
+                    <div
+                        style="width: 130px; height: 40px; background: #000; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white;">
+                        Google Play</div>
                 </div>
-
-                <div class="form-group">
-                    <label for="username"><i class="uil uil-at"></i> Username</label>
-                    <input type="text" id="username" name="username" placeholder="johndoe123" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="email"><i class="uil uil-envelope-alt"></i> Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="john@doe.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password"><i class="uil uil-lock-alt"></i> Password</label>
-                    <input type="password" id="password" name="password" placeholder="Create a strong password"
-                        required>
-                </div>
-
-                <button type="submit" class="btn"><i class="uil uil-user-plus"></i> Create Account</button>
-
-                <div class="auth-footer">
-                    Already have an account? <a href="/login">Login here</a>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </body>

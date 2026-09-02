@@ -1,10 +1,65 @@
 <% layout("layouts/boilerplate") -%>
-<h2>All users</h2>
-<div>
-    <% for(let user of allUser) { %>
-        <p>username : <%= user.username %>
-        </p>
-        <p>email : <%= user.email%>
-        </p>
-        <% } %>
-</div>
+
+    <!-- Stories / Suggestions -->
+    <div class="suggestions-bar">
+        <% if (typeof allUser !=='undefined' ) { %>
+            <% for(let user of allUser) { %>
+                <div class="suggestion-circle">
+                    <div class="story-ring">
+                        <div class="avatar-med">
+                            <%= user.username.charAt(0).toUpperCase() %>
+                        </div>
+                    </div>
+                    <div class="suggestion-name">
+                        <%= user.username %>
+                    </div>
+                </div>
+                <% } %>
+                    <% } %>
+    </div>
+
+    <!-- Feed -->
+    <div>
+        <% if (typeof allUser !=='undefined' && allUser.length> 0) { %>
+            <% for(let user of allUser) { %>
+                <div class="feed-post">
+                    <div class="feed-header">
+                        <div class="avatar-med">
+                            <%= user.username.charAt(0).toUpperCase() %>
+                        </div>
+                        <div class="user-info-row">
+                            <a href="/profile/<%= user._id %>"><strong>
+                                    <%= user.username %>
+                                </strong></a>
+                        </div>
+                        <a href="/profile/<%= user._id %>" class="btn-follow">View Profile</a>
+                    </div>
+
+                    <div class="feed-image">
+                        <i class="uil uil-image-v"></i>
+                    </div>
+
+                    <div class="feed-actions">
+                        <i class="uil uil-heart"></i>
+                        <i class="uil uil-comment"></i>
+                        <i class="uil uil-message"></i>
+                        <i class="uil uil-bookmark" style="margin-left: auto;"></i>
+                    </div>
+
+                    <div class="feed-caption" style="padding: 0 14px;">
+                        <strong>
+                            <%= user.username %>
+                        </strong> Just joined the platform! Say hi 👋.<br>
+                        <span
+                            style="color: var(--text-light); text-transform: uppercase; font-size: 10px; margin-top: 6px; display: block;">2
+                            hours ago</span>
+                    </div>
+                </div>
+                <% } %>
+                    <% } else { %>
+                        <div style="text-align: center; padding: 40px; color: var(--text-light);">
+                            <i class="uil uil-camera" style="font-size: 40px;"></i>
+                            <h2>No posts yet</h2>
+                        </div>
+                        <% } %>
+    </div>
