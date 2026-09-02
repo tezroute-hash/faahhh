@@ -1,9 +1,49 @@
-<nav>
-    <a href="/faahhh">Home</a>
+<aside class="sidebar">
+    <a href="/faahhh" class="sidebar-logo">Faahhh</a>
 
-    <a href="/search">search user</a>
+    <div class="nav-links">
+        <a href="/faahhh" class="nav-link">
+            <i class="uil uil-estate"></i> Home
+        </a>
 
-    <a href="/profile/<%= user._id %>">Profile</a>
-</nav>
+        <a href="/search" class="nav-link">
+            <i class="uil uil-search"></i> Search
+        </a>
 
-<hr>
+        <a href="#" class="nav-link">
+            <i class="uil uil-compass"></i> Explore
+        </a>
+
+        <a href="#" class="nav-link">
+            <i class="uil uil-video"></i> Reels
+        </a>
+
+        <a href="#" class="nav-link">
+            <i class="uil uil-envelope"></i> Messages
+        </a>
+
+        <a href="#" class="nav-link">
+            <i class="uil uil-heart"></i> Notifications
+        </a>
+
+        <a href="#" class="nav-link">
+            <i class="uil uil-plus-square"></i> Create
+        </a>
+
+        <% if (typeof user !=='undefined' && user) { %>
+            <a href="/profile/<%= user._id %>" class="nav-link" style="font-weight: 700;">
+                <i class="uil uil-user-circle"></i> Profile
+            </a>
+            <% } else { %>
+                <a href="/login" class="nav-link">
+                    <i class="uil uil-signin"></i> Login
+                </a>
+                <% } %>
+    </div>
+    <div style="flex-grow: 1;"></div>
+    <div class="nav-links">
+        <a href="#" class="nav-link">
+            <i class="uil uil-bars"></i> More
+        </a>
+    </div>
+</aside>

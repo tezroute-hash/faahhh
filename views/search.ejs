@@ -1,38 +1,38 @@
 <% layout("layouts/boilerplate") -%>
 
-<h2>Search Users</h2>
+    <div class="search-container">
+        <form action="/search" method="get">
+            <input type="text" name="username" placeholder="Search" required>
+            <button type="submit" style="display: none;">Search</button>
+        </form>
+    </div>
 
-<form action="/search" method="get">
-    <input
-        type="text"
-        name="username"
-        placeholder="Search username"
-        required
-    >
+    <% if (typeof searched !=='undefined' && searched) { %>
+        <h3 style="margin-bottom: 16px; font-weight: 600;">Recent</h3>
 
-    <button type="submit">Search</button>
-</form>
-
-<% if (searched) { %>
-
-    <h3>Search Results</h3>
-
-    <% if (users.length === 0) { %>
-
-        <p>No users found.</p>
-
-    <% } else { %>
-
-        <% users.forEach(user => { %>
-
-            <div>
-                <a href="/profile/<%= user._id %>">
-                    @<%= user.username %>
-                </a>
-            </div>
-
-        <% }) %>
-
-    <% } %>
-
-<% } %>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <% if (users.length===0) { %>
+                <p style="color: var(--text-light); text-align: center; margin-top: 20px;">No results found.</p>
+                <% } else { %>
+                    <% users.forEach(user=> { %>
+                        <div class="user-item">
+                            <div class="avatar-med">
+                                <%= user.username.charAt(0).toUpperCase() %>
+                            </div>
+                            <div class="user-info-row">
+                                <a href="/profile/<%= user._id %>">
+                                    <strong>
+                                        <%= user.username %>
+                                    </strong>
+                                    <span>
+                                        <%= user.name || 'Instagram User' %>
+                                    </span>
+                                </a>
+                            </div>
+                            <a href="/profile/<%= user._id %>" class="btn-follow"
+                                style="background: transparent; color: var(--text-dark); border: 1px solid var(--border-color);">View</a>
+                        </div>
+                        <% }) %>
+                            <% } %>
+        </div>
+        <% } %>
