@@ -1,9 +1,17 @@
 <nav>
     <a href="/faahhh">Home</a>
 
-    <a href="/search">search user</a>
+    <form action="/search" method="get">
+        <input type="text" name="username" placeholder="Search username">
+        <button type="submit">Search</button>
+    </form>
 
-    <a href="/profile/<%= user._id %>">Profile</a>
+    <% if (typeof user !=='undefined' && user) { %>
+        <a href="/profile/<%= user._id %>">Profile</a>
+        <% } else { %>
+            <a href="/login">Login</a>
+            <a href="/signup">Sign Up</a>
+            <% } %>
 </nav>
 
 <hr>

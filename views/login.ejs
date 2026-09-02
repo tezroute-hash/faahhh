@@ -1,27 +1,40 @@
-<%- include('./partials/header', { title: 'Login | Faahhh' , centered: true }) %>
+<!DOCTYPE html>
+<html lang="en">
 
-    <div class="glass-card">
-        <h1>Welcome <span>Back</span></h1>
-        <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Please login to your account to
-            continue.</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Faahhh</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+</head>
 
-        <form action="/user/login" method="post">
-            <div class="form-group">
-                <label for="email"><i class="uil uil-envelope-alt"></i> Email</label>
-                <input type="email" id="email" name="email" placeholder="Ex. john@doe.com" required>
-            </div>
+<body>
+    <div class="container centered-layout">
+        <div class="glass-card">
+            <h1>Welcome <span>Back</span></h1>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">Please login to your account
+                to continue.</p>
 
-            <div class="form-group">
-                <label for="password"><i class="uil uil-lock-alt"></i> Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            </div>
+            <form action="/user/login" method="post">
+                <div class="form-group">
+                    <label for="email"><i class="uil uil-envelope-alt"></i> Email</label>
+                    <input type="email" id="email" name="email" placeholder="Ex. john@doe.com" required>
+                </div>
 
-            <button type="submit" class="btn"><i class="uil uil-sign-in-alt"></i> Login Now</button>
+                <div class="form-group">
+                    <label for="password"><i class="uil uil-lock-alt"></i> Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
 
-            <div class="auth-footer">
-                Don't have an account? <a href="/signup">Sign up for free</a>
-            </div>
-        </form>
+                <button type="submit" class="btn"><i class="uil uil-sign-in-alt"></i> Login Now</button>
+
+                <div class="auth-footer">
+                    Don't have an account? <a href="/signup">Sign up for free</a>
+                </div>
+            </form>
+        </div>
     </div>
+</body>
 
-    <%- include('./partials/footer') %>
+</html>
