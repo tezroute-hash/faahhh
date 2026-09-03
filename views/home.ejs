@@ -1,23 +1,5 @@
 <% layout("layouts/boilerplate") -%>
 
-    <!-- Stories / Suggestions -->
-    <div class="suggestions-bar">
-        <% if (typeof allUser !=='undefined' ) { %>
-            <% for(let user of allUser) { %>
-                <div class="suggestion-circle">
-                    <div class="story-ring">
-                        <div class="avatar-med">
-                            <%= user.username.charAt(0).toUpperCase() %>
-                        </div>
-                    </div>
-                    <div class="suggestion-name">
-                        <%= user.username %>
-                    </div>
-                </div>
-                <% } %>
-                    <% } %>
-    </div>
-
     <!-- Feed -->
     <div>
         <% if (typeof allUser !=='undefined' && allUser.length> 0) { %>
