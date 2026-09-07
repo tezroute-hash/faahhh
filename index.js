@@ -8,7 +8,7 @@ require("dotenv").config();
 const dns = require("dns");
 
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
-const { checkAuth } = require("./middlewares/auth");
+const { checkForAuthentication } = require("./middlewares/auth");
 
 const staticRoute = require("./routes/staticRouter");
 const userRoute = require("./routes/user");
@@ -29,13 +29,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(checkForAuthentication);
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use("/user", userRoute);
-app.use("/", checkAuth, staticRoute);
+app.use("/", staticRoute);
 
 app.listen(port, () => {
     console.log(`Listening to port ${port}`);
