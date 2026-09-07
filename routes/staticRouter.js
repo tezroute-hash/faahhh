@@ -1,19 +1,12 @@
 const express = require("express");
 const User = require("../models/user");
-const {
-    restrictToLoggedinUserOnly
-} = require("../middlewares/auth");
-
 const router = express.Router();
 
 router.get("/", (req, res) => {
     res.redirect("/login");
 });
 
-router.get(
-    "/faahhh",
-    restrictToLoggedinUserOnly,
-    async (req, res) => {
+router.get("/faahhh", async (req, res) => {
         const allUser = await User.find({});
 
         res.render("home", {
@@ -39,7 +32,7 @@ router.get("/profile/:id", async(req, res)=>{
     });
 });
 
-router.get("/search", restrictToLoggedinUserOnly, async (req, res) => {
+router.get("/search", async (req, res) => {
     const username = req.query.username;
 
     let users = [];
