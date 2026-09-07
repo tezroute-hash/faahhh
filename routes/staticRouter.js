@@ -11,7 +11,8 @@ router.get("/faahhh", async (req, res) => {
 
         res.render("home", {
             allUser,
-            user: req.user
+            user: req.user,
+            currentUser: req.user
         });
     }
 );

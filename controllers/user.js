@@ -40,4 +40,9 @@ const handleEditUser = async (req, res) => {
     res.redirect(`/profile/${id}`);
 };
 
-module.exports = {handleUserSignup, handleUserLogin, handleEditUser};
+const handleLogout = (req, res) => {
+    res.clearCookie("uid");
+    res.redirect("/login");
+};
+
+module.exports = {handleUserSignup, handleUserLogin, handleEditUser, handleLogout};
