@@ -10,9 +10,9 @@
                     <h2 class="profile-username">
                         <%= user.username %>
                     </h2>
-                    <button class="btn-follow"
-                        style="background: #efefef; color: #262626; border: none; padding: 6px 16px; font-weight: 600;">Edit
-                        profile</button>
+                    <a href="/profile/<%= user._id %>/edit">
+                        <button>Edit profile</button>
+                    </a>
                     <i class="uil uil-setting" style="font-size: 24px; cursor: pointer;"></i>
                 </div>
 

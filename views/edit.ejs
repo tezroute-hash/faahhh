@@ -1,11 +1,13 @@
 <% layout("layouts/boilerplate") -%>
 
 <div>
-    <form action="">
-        <input type="text" placeholder="" name="name">
-        <input type="text" placeholder="" name="username">
-        <input type="text" placeholder="" name="email">
-        <input type="text" placeholder="" name="bio">
-        <input type="file" placeholder="" name="profileImage">
+    <form action="/user/profile/<%= user._id %>/edit" method="post">
+        <input type="text" value="<%= user.name %>" name="name">
+        <input type="text" value="<%= user.username %>" name="username">
+        <input type="text" value="<%= user.email %>" name="email">
+        <input type="text" value="<%= user.bio %>" name="bio">
+        <!-- <input type="file" name="profileImage"> -->
+
+        <button type="submit">submit</button>
     </form>
 </div>

@@ -53,4 +53,12 @@ router.get("/search", async (req, res) => {
     });
 });
 
+router.get("/profile/:id/edit", async (req, res) => {
+    const { id } = req.params;
+
+    const user = await User.findById(id);
+
+    res.render("edit", { user });
+});
+
 module.exports = router;
