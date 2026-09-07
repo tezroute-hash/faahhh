@@ -28,7 +28,8 @@ router.get("/profile/:id", async(req, res)=>{
     const id = req.params.id;
     const user = await User.findById(id);
     res.render("profile", {
-        user : user
+        user : user,
+        currentUser: req.user
     });
 });
 
