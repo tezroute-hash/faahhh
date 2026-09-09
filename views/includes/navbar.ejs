@@ -10,8 +10,8 @@
             <i class="uil uil-search"></i> Search
         </a>
 
-        <% if (typeof user !=='undefined' && user) { %>
-            <a href="/profile/<%= user._id %>" class="nav-link" style="font-weight: 700;">
+        <% if (typeof currentUser !=='undefined' && currentUser) { %>
+            <a href="/profile/<%= currentUser._id %>" class="nav-link" style="font-weight: 700;">
                 <i class="uil uil-user-circle"></i> Profile
             </a>
             <% } else { %>
@@ -22,8 +22,8 @@
     </div>
     <div style="flex-grow: 1;"></div>
     <div class="nav-links">
-        <a href="#" class="nav-link">
-            <i class="uil uil-bars"></i> More
+        <a href="/user/logout" class="nav-link">
+            <i class="uil uil-bars"></i> Logout
         </a>
     </div>
 </aside>

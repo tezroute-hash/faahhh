@@ -10,10 +10,11 @@
                     <h2 class="profile-username">
                         <%= user.username %>
                     </h2>
-                    <button class="btn-follow"
-                        style="background: #efefef; color: #262626; border: none; padding: 6px 16px; font-weight: 600;">Edit
-                        profile</button>
-                    <i class="uil uil-setting" style="font-size: 24px; cursor: pointer;"></i>
+                    <% if (currentUser && currentUser._id.toString() === user._id.toString()) { %>
+                        <a href="/profile/<%= user._id %>/edit">
+                            <button>Edit profile</button>
+                        </a>
+                    <% } %>
                 </div>
 
                 <div class="profile-stats">
@@ -25,8 +26,12 @@
                 <div class="profile-name">
                     <%= user.name || user.username %>
                 </div>
+
                 <div class="profile-bio">
-                    <%= user.email %> <br> Digital creator <br> 📍 Somewhere in the world
+                    <%= user.email %>
+                    <br><b>
+                        <%= user.bio %>
+                    </b>
                 </div>
             </div>
         </div>
@@ -34,8 +39,6 @@
         <div class="profile-tabs">
             <div class="profile-tab active"><i class="uil uil-grid"></i> POSTS</div>
             <div class="profile-tab"><i class="uil uil-video"></i> REELS</div>
-            <div class="profile-tab"><i class="uil uil-bookmark"></i> SAVED</div>
-            <div class="profile-tab"><i class="uil uil-user-square"></i> TAGGED</div>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 10px;">
