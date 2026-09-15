@@ -1,13 +1,55 @@
 <% layout("layouts/boilerplate") -%>
 
-<div>
-    <form action="/user/profile/<%= user._id %>/edit" method="post">
-        <input type="text" value="<%= user.name %>" name="name">
-        <input type="text" value="<%= user.username %>" name="username">
-        <input type="text" value="<%= user.email %>" name="email">
-        <input type="text" value="<%= user.bio %>" name="bio">
-        <!-- <input type="file" name="profileImage"> -->
+    <div class="auth-wrapper"
+        style="align-items: flex-start; padding-top: 60px; min-height: unset; background: transparent;">
+        <div class="auth-container">
+            <div class="auth-box">
+                <h2
+                    style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--text-dark); margin-bottom: 25px;">
+                    Edit Profile</h2>
 
-        <button type="submit">submit</button>
-    </form>
-</div>
+                <form action="/user/profile/<%= user._id %>/edit" method="post" enctype="multipart/form-data"
+                    class="auth-form">
+
+                    <div style="margin-bottom: 20px;">
+                        <label
+                            style="display: block; text-align: left; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text-dark);">Profile
+                            Picture</label>
+                        <div
+                            style="border: 1px dashed #cbd5e1; border-radius: var(--border-radius-sm); padding: 15px; background: #f8fafc; text-align: center;">
+                            <input type="file" name="profileImage" accept="image/*"
+                                style="background: transparent; border: none; padding: 0; outline: none; cursor: pointer;">
+                            <div style="font-size: 12px; color: var(--text-light); margin-top: 5px;">(JPEG, PNG uploaded
+                                to Cloudinary)</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label
+                            style="display: block; text-align: left; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: var(--text-dark);">Name</label>
+                        <input type="text" value="<%= user.name %>" name="name" placeholder="Name" required>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label
+                            style="display: block; text-align: left; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: var(--text-dark);">Username</label>
+                        <input type="text" value="<%= user.username %>" name="username" placeholder="Username" required>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label
+                            style="display: block; text-align: left; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: var(--text-dark);">Email</label>
+                        <input type="text" value="<%= user.email %>" name="email" placeholder="Email" required>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label
+                            style="display: block; text-align: left; margin-bottom: 5px; font-weight: 600; font-size: 14px; color: var(--text-dark);">Bio</label>
+                        <input type="text" value="<%= user.bio %>" name="bio" placeholder="Bio">
+                    </div>
+
+                    <button type="submit" style="margin-top: 20px;">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>

@@ -1,29 +1,59 @@
 <aside class="sidebar">
-    <a href="/faahhh" class="sidebar-logo">Faahhh</a>
+
+    <a href="/hangout" class="sidebar-logo">Hangout</a>
 
     <div class="nav-links">
-        <a href="/faahhh" class="nav-link">
-            <i class="uil uil-estate"></i> Home
+
+        <a href="/hangout" class="nav-link">
+            <i class="uil uil-estate"></i>
+            <span>Home</span>
         </a>
 
         <a href="/search" class="nav-link">
-            <i class="uil uil-search"></i> Search
+            <i class="uil uil-search"></i>
+            <span>Search</span>
         </a>
 
-        <% if (typeof currentUser !=='undefined' && currentUser) { %>
-            <a href="/profile/<%= currentUser._id %>" class="nav-link" style="font-weight: 700;">
-                <i class="uil uil-user-circle"></i> Profile
+        <a href="/messages" class="nav-link">
+            <i class="uil uil-message"></i>
+            <span>Messages</span>
+        </a>
+
+        <a href="/notifications" class="nav-link">
+            <i class="uil uil-heart"></i>
+            <span>Notifications</span>
+        </a>
+
+        <a href="/create" class="nav-link">
+            <i class="uil uil-plus-circle"></i>
+            <span>Create</span>
+        </a>
+
+        <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+
+            <a href="/profile/<%= currentUser._id %>" class="nav-link">
+                <i class="uil uil-user-circle"></i>
+                <span>Profile</span>
             </a>
-            <% } else { %>
-                <a href="/login" class="nav-link">
-                    <i class="uil uil-signin"></i> Login
-                </a>
-                <% } %>
+
+        <% } else { %>
+
+            <a href="/login" class="nav-link">
+                <i class="uil uil-signin"></i>
+                <span>Login</span>
+            </a>
+
+        <% } %>
+
     </div>
+
     <div style="flex-grow: 1;"></div>
+
     <div class="nav-links">
         <a href="/user/logout" class="nav-link">
-            <i class="uil uil-bars"></i> Logout
+            <i class="uil uil-signout"></i>
+            <span>Log out</span>
         </a>
     </div>
+
 </aside>

@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const {setUser} = require("../service/auth");
+const { setUser } = require("../service/auth");
 
 const handleUserSignup = async (req, res) => {
     const { name, username, email, password } = req.body;
@@ -14,28 +14,32 @@ const handleUserSignup = async (req, res) => {
     const token = setUser(user);
     res.cookie("uid", token);
 
-    return res.redirect(`/faahhh`);
+    return res.redirect(`/hangout`);
 };
 
-const handleUserLogin = async(req, res) => {
-    const {email, password} = req.body;
-    const user = await User.findOne({email, password});
+const handleUserLogin = async (req, res) => {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email, password });
 
-    if(!user) {
-        return res.render( "login",
-            {error : "user not found"});
+    if (!user) {
+        return res.render("login",
+            { error: "user not found" });
     }
 
     const token = setUser(user);
     res.cookie("uid", token);
-    return res.redirect(`/faahhh`);
+    return res.redirect(`/hangout`);
 };
 
 const handleEditUser = async (req, res) => {
     const { id } = req.params;
-    console.log(req.body);
+    let updateData = { ...req.body };
 
-    await User.findByIdAndUpdate(id, req.body);
+    if (req.file) {
+        updateData.profilePic = req.file.path; // Save Cloudinary URL
+    }
+
+    await User.findByIdAndUpdate(id, updateData);
 
     res.redirect(`/profile/${id}`);
 };
@@ -45,4 +49,4 @@ const handleLogout = (req, res) => {
     res.redirect("/login");
 };
 
-module.exports = {handleUserSignup, handleUserLogin, handleEditUser, handleLogout};
+module.exports = { handleUserSignup, handleUserLogin, handleEditUser, handleLogout };

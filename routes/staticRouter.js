@@ -6,15 +6,15 @@ router.get("/", (req, res) => {
     res.redirect("/login");
 });
 
-router.get("/faahhh", async (req, res) => {
-        const allUser = await User.find({});
+router.get("/hangout", async (req, res) => {
+    const allUser = await User.find({});
 
-        res.render("home", {
-            allUser,
-            user: req.user,
-            currentUser: req.user
-        });
-    }
+    res.render("home", {
+        allUser,
+        user: req.user,
+        currentUser: req.user
+    });
+}
 );
 
 router.get("/signup", (req, res) => {
@@ -25,11 +25,11 @@ router.get("/login", (req, res) => {
     res.render("login");
 });
 
-router.get("/profile/:id", async(req, res)=>{
+router.get("/profile/:id", async (req, res) => {
     const id = req.params.id;
     const user = await User.findById(id);
     res.render("profile", {
-        user : user,
+        user: user,
         currentUser: req.user
     });
 });
@@ -51,7 +51,7 @@ router.get("/search", async (req, res) => {
     res.render("search", {
         users,
         searched: !!username,
-        user: req.user
+        currentUser: req.user
     });
 });
 

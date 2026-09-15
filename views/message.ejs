@@ -1,0 +1,94 @@
+<% layout("layouts/boilerplate") -%>
+    <div
+        style="background: white; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); display: flex; height: calc(100vh - 120px); overflow: hidden; min-height: 500px;">
+        <!-- Conversations List -->
+        <div
+            style="width: 320px; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; background: #fff;">
+            <div
+                style="padding: 20px; font-weight: 800; font-family: 'Outfit', sans-serif; font-size: 1.5rem; text-align: center; border-bottom: 1px solid #e5e7eb; color: var(--text-dark);">
+                Direct Messaging
+            </div>
+            <div style="overflow-y: auto; flex: 1;">
+                <!-- Conversation Item -->
+                <div class="user-item"
+                    style="border-radius: 0; box-shadow: none; border-bottom: 1px solid #f3f4f6; cursor: pointer; transition: 0.2s; background: rgba(79, 70, 229, 0.05); margin-bottom: 0;">
+                    <div class="avatar-med" style="width: 48px; height: 48px; font-size: 1.2rem;">S</div>
+                    <div class="user-info-row">
+                        <strong>Sumon</strong>
+                        <div style="font-size: 13px; color: var(--text-light); margin-top: 2px;">Check out this new
+                            diagram structure! · 2h</div>
+                    </div>
+                </div>
+
+                <div class="user-item"
+                    style="border-radius: 0; box-shadow: none; border-bottom: 1px solid #f3f4f6; cursor: pointer; transition: 0.2s; margin-bottom: 0;">
+                    <div class="avatar-med" style="width: 48px; height: 48px; font-size: 1.2rem;">A</div>
+                    <div class="user-info-row">
+                        <strong>Alice P.</strong>
+                        <div style="font-size: 13px; color: var(--text-light); margin-top: 2px;">Are you online? · 4h
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Box -->
+        <div style="flex: 1; display: flex; flex-direction: column; background: #f8fafc;">
+            <div
+                style="padding: 20px; border-bottom: 1px solid #e5e7eb; background: white; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div class="avatar-med" style="width: 44px; height: 44px; font-size: 1.1rem;">S</div>
+                    <div>
+                        <strong style="font-size: 1.1rem; color: var(--text-dark);">Sumon</strong>
+                        <div style="font-size: 12px; color: #10b981; font-weight: 500;">Active now</div>
+                    </div>
+                </div>
+                <i class="uil uil-info-circle" style="font-size: 1.6rem; cursor: pointer; color: var(--text-dark);"></i>
+            </div>
+
+            <div style="flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;">
+                <!-- Incoming message -->
+                <div style="display: flex; gap: 12px; align-items: flex-end;">
+                    <div class="avatar-med" style="width: 32px; height: 32px; font-size: 0.9rem; margin-right: 0;">S
+                    </div>
+                    <div
+                        style="background: white; padding: 14px 18px; border-radius: 20px; border-bottom-left-radius: 4px; max-width: 70%; box-shadow: var(--shadow-sm); color: var(--text-dark); font-size: 15px; line-height: 1.4;">
+                        Hey, I added the ER diagram to the plan. Make sure Direct Messaging is implemented in the UI.
+                    </div>
+                </div>
+
+                <!-- Outgoing message -->
+                <div style="display: flex; justify-content: flex-end; align-items: flex-end;">
+                    <div
+                        style="background: var(--primary); color: white; padding: 14px 18px; border-radius: 20px; border-bottom-right-radius: 4px; max-width: 70%; font-size: 15px; line-height: 1.4; box-shadow: var(--shadow-sm);">
+                        Got it! The DFD level 0 clearly shows direct messaging. The frontend is ready!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div style="padding: 20px; background: white; border-top: 1px solid #e5e7eb;">
+                <div
+                    style="display: flex; gap: 12px; align-items: center; background: #f1f5f9; padding: 12px 24px; border-radius: 999px;">
+                    <i class="uil uil-smile"
+                        style="font-size: 1.6rem; color: var(--text-light); cursor: pointer; transition: 0.2s;"></i>
+                    <input type="text" placeholder="Type a message..."
+                        style="flex: 1; border: none; background: transparent; outline: none; font-size: 15px; color: var(--text-dark);">
+                    <i class="uil uil-image"
+                        style="font-size: 1.4rem; color: var(--text-light); cursor: pointer; transition: 0.2s; margin-right: 5px;"></i>
+                    <i class="uil uil-heart"
+                        style="font-size: 1.4rem; color: var(--text-light); cursor: pointer; transition: 0.2s; margin-right: 15px;"></i>
+                    <button
+                        style="background: transparent; border: none; font-weight: 700; color: var(--primary); font-size: 15px; cursor: pointer;">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Mobile Responsive Fix for Messages -->
+    <style>
+        @media (max-width: 768px) {
+            div[style*="width: 320px"] {
+                display: none !important;
+            }
+        }
+    </style>
