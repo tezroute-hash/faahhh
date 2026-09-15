@@ -1,24 +1,37 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Hangout</title>
+
     <link rel="stylesheet" href="/css/style.css">
-    <!-- Unicons for icons -->
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+
+    <link
+        rel="stylesheet"
+        href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
+    >
 </head>
 
 <body>
+
     <div class="app-layout">
-        <%- include("../includes/navbar.ejs") %>
-            <main class="main-content">
-                <div class="content-inner">
-                    <%- body %>
-                </div>
-            </main>
+
+        <%- include("../includes/navbar.ejs", { user: user }) %>
+
+        <main class="main-content">
+
+            <div class="content-inner">
+                <%- body %>
+            </div>
+
+        </main>
+
     </div>
+
 </body>
 
 </html>

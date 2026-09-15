@@ -13,6 +13,7 @@ const { checkForAuthentication } = require("./middlewares/auth");
 
 const staticRoute = require("./routes/staticRouter");
 const userRoute = require("./routes/user");
+const postRoute = require("./routes/post");
 
 const app = express();
 const port = process.env.PORT || 8001;
@@ -21,14 +22,14 @@ async function main() {
     try {
         await mongoose.connect(process.env.MONGO_URI);
 
-        console.log("✅ MongoDB connected");
+        console.log("MongoDB connected");
 
         app.listen(port, () => {
-            console.log(`🚀 Listening to port ${port}`);
+            console.log(`Listening to port ${port}`);
         });
 
     } catch (err) {
-        console.log("❌ MongoDB connection failed:");
+        console.log("MongoDB connection failed:");
         console.log(err.message);
     }
 }
@@ -46,5 +47,6 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use("/user", userRoute);
 app.use("/", staticRoute);
+app.use("/post", postRoute);
 
 main();

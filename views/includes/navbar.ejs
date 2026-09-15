@@ -24,14 +24,14 @@
             <span>Notifications</span>
         </a>
 
-        <a href="/create" class="nav-link">
-            <i class="uil uil-plus-circle"></i>
-            <span>Create</span>
-        </a>
+        <% if (user) { %>
 
-        <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+            <a href="/create" class="nav-link">
+                <i class="uil uil-plus-circle"></i>
+                <span>Create</span>
+            </a>
 
-            <a href="/profile/<%= currentUser._id %>" class="nav-link">
+            <a href="/profile/<%= user._id %>" class="nav-link">
                 <i class="uil uil-user-circle"></i>
                 <span>Profile</span>
             </a>
@@ -50,10 +50,16 @@
     <div style="flex-grow: 1;"></div>
 
     <div class="nav-links">
-        <a href="/user/logout" class="nav-link">
-            <i class="uil uil-signout"></i>
-            <span>Log out</span>
-        </a>
+
+        <% if (user) { %>
+
+            <a href="/user/logout" class="nav-link">
+                <i class="uil uil-signout"></i>
+                <span>Log out</span>
+            </a>
+
+        <% } %>
+
     </div>
 
 </aside>
