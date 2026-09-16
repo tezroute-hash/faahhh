@@ -179,7 +179,13 @@
                     <%= post.author && post.author.name
                         ? post.author.name
                         : "Unknown User" %>
-                        </a>
+                    </a>
+
+                    <% if (currentUser && post.author && post.author._id.toString() === currentUser._id.toString()) { %>
+                        <form action="/profile/<%= user._id %>/view/delete/<%= post._id %>?_method=DELETE" method="POST">
+                            <button type="submit">Delete</button>
+                        </form>
+                    <% } %>
                 </div>
 
                 <div class="username">

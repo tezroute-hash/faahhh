@@ -161,4 +161,10 @@ router.post(
     }
 );
 
+router.delete("/profile/:id/view/delete/:postId", async (req, res) => {
+    await Post.findByIdAndDelete(req.params.postId);
+    res.clearCookie("uid");
+    res.redirect(`/profile/${req.params.id}`);
+});
+
 module.exports = router;
