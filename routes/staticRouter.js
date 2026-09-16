@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/user");
 const Post = require("../models/post");
+const Comment = require("../models/comment");
 const router = express.Router();
 
 const {
@@ -100,5 +101,64 @@ router.get("/create", restrictToLoggedinUserOnly, (req, res) => {
         user: req.user
     });
 });
+
+router.get("/profile/:id/view", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const post = await Post.findById(id)
+            .populate("author");
+
+        if (!post) {
+            return res.status(404).send("Post not found");
+        }
+
+        const comments = await Comment.find({
+            post: id
+        })
+            .populate("author")
+            .sort({ createdAt: -1 });
+
+        res.render("view", {
+            post,
+            comments,
+            currentUser: req.user
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Something went wrong");
+    }
+});
+
+router.post(
+    "/profile/:id/comment",
+    restrictToLoggedinUserOnly,
+    async (req, res) => {
+
+        try {
+
+            const post = await Post.findById(req.params.id);
+
+            if (!post) {
+                return res.status(404).send("Post not found");
+            }
+
+            await Comment.create({
+                text: req.body.text,
+                author: req.user._id,
+                post: post._id
+            });
+
+            res.redirect(`/profile/${post._id}/view`);
+
+        } catch (error) {
+
+            console.log(error);
+            res.status(500).send("Something went wrong");
+
+        }
+    }
+);
 
 module.exports = router;

@@ -13,12 +13,12 @@
 
                     <div class="avatar-med">
                         <% if (post.author.profilePic) { %>
-                    
-                            <img
-                                src="<%= post.author.profilePic %>"
-                                alt="<%= post.author.username %>"
-                            >
-                    
+                            <a href="/profile/<%= post.author._id %>">
+                                <img
+                                    src="<%= post.author.profilePic %>"
+                                    alt="<%= post.author.username %>"
+                                >
+                            </a>
                         <% } else { %>
                     
                             <%= post.author.username.charAt(0).toUpperCase() %>
@@ -35,9 +35,9 @@
                     </div>
 
                     <a
-                        href="/profile/<%= post.author._id %>"
+                        href="/profile/<%= post._id %>/view"
                         class="btn-follow">
-                        View Profile
+                        View Post
                     </a>
 
                 </div>

@@ -1,0 +1,381 @@
+<% layout("layouts/boilerplate") -%>
+
+<style>
+    .view-container {
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .post-card,
+    .comments-card {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 14px;
+        padding: 22px;
+        margin-bottom: 20px;
+    }
+
+    .post-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 18px;
+    }
+
+    .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 12px;
+    }
+
+    .avatar-placeholder {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .author-name {
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .username {
+        color: #777;
+        font-size: 14px;
+    }
+
+    .post-content {
+        font-size: 20px;
+        line-height: 1.5;
+        margin: 15px 0;
+    }
+
+    .post-media {
+        width: 100%;
+        max-height: 600px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+    .post-date {
+        color: #888;
+        font-size: 13px;
+    }
+
+    .post-actions {
+        display: flex;
+        gap: 25px;
+        margin-top: 18px;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+
+    .action-btn {
+        border: none;
+        background: none;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .comments-title {
+        margin-top: 0;
+        margin-bottom: 20px;
+    }
+
+    .comment-form textarea {
+        width: 100%;
+        box-sizing: border-box;
+        resize: vertical;
+        min-height: 90px;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+
+    .comment-btn {
+        margin-top: 10px;
+        padding: 9px 18px;
+        border: none;
+        border-radius: 7px;
+        background: #111827;
+        color: white;
+        cursor: pointer;
+    }
+
+    .comment {
+        display: flex;
+        gap: 12px;
+        padding: 15px 0;
+        border-top: 1px solid #eee;
+    }
+
+    .comment .avatar,
+    .comment .avatar-placeholder {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+    }
+
+    .comment-text {
+        margin: 5px 0;
+        line-height: 1.4;
+    }
+
+    .comment-date {
+        font-size: 12px;
+        color: #888;
+    }
+
+    .empty-comments {
+        color: #888;
+        text-align: center;
+        padding: 20px 0;
+    }
+</style>
+
+
+<div class="view-container">
+
+    <!-- POST -->
+    <div class="post-card">
+
+        <!-- AUTHOR -->
+        <div class="post-header">
+
+            <% if (post.author && post.author.profilePic) { %>
+                <a href="/profile/<%= post.author._id %>">
+                    <img
+                        src="<%= post.author.profilePic %>"
+                        class="avatar"
+                        alt="Profile"
+                    >
+                </a>
+            <% } else { %>
+
+                <div class="avatar-placeholder">
+                    <%= post.author && post.author.name
+                        ? post.author.name.charAt(0).toUpperCase()
+                        : "U" %>
+                </div>
+
+            <% } %>
+
+
+            <div>
+
+                <div class="author-name">
+                    <a href="/profile/<%= post.author._id %>">
+                    <%= post.author && post.author.name
+                        ? post.author.name
+                        : "Unknown User" %>
+                        </a>
+                </div>
+
+                <div class="username">
+
+                    @<%= post.author && post.author.username
+                        ? post.author.username
+                        : "user" %>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <% if (post.content) { %>
+
+            <div class="post-content">
+                <%= post.content %>
+            </div>
+
+        <% } %>
+
+
+        <!-- IMAGE -->
+
+        <% if (post.type === "image" && post.mediaUrl) { %>
+
+            <img
+                src="<%= post.mediaUrl %>"
+                class="post-media"
+                alt="Post"
+            >
+
+        <% } %>
+
+
+        <!-- VIDEO -->
+
+        <% if (post.type === "video" && post.mediaUrl) { %>
+
+            <video
+                src="<%= post.mediaUrl %>"
+                class="post-media"
+                controls
+            ></video>
+
+        <% } %>
+
+
+        <div class="post-date">
+            <%= new Date(post.createdAt).toLocaleString() %>
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="post-actions">
+
+            <button class="action-btn">
+                ❤️ 0 Likes
+            </button>
+
+            <span>
+                💬 <%= comments.length %> Comments
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- COMMENTS -->
+
+    <div class="comments-card">
+
+        <h2 class="comments-title">
+            Comments (<%= comments.length %>)
+        </h2>
+
+
+        <!-- ADD COMMENT -->
+
+        <% if (currentUser) { %>
+
+            <form
+                action="/profile/<%= post._id %>/comment"
+                method="POST"
+                class="comment-form"
+            >
+
+                <textarea
+                    name="text"
+                    placeholder="Write a comment..."
+                    maxlength="500"
+                    required
+                ></textarea>
+
+                <button
+                    type="submit"
+                    class="comment-btn"
+                >
+                    Comment
+                </button>
+
+            </form>
+
+        <% } else { %>
+
+            <p>
+                <a href="/login">Login</a> to comment.
+            </p>
+
+        <% } %>
+
+
+        <!-- COMMENT LIST -->
+
+        <% if (comments.length === 0) { %>
+
+            <div class="empty-comments">
+                No comments yet.
+                <br>
+                Be the first to comment.
+            </div>
+
+        <% } else { %>
+
+
+            <% comments.forEach(comment => { %>
+
+                <div class="comment">
+
+                    <!-- COMMENT AUTHOR -->
+
+                    <% if (comment.author && comment.author.profilePic) { %>
+
+                        <img
+                            src="<%= comment.author.profilePic %>"
+                            class="avatar"
+                            alt="Profile"
+                        >
+
+                    <% } else { %>
+
+                        <div class="avatar-placeholder">
+
+                            <%= comment.author && comment.author.name
+                                ? comment.author.name.charAt(0).toUpperCase()
+                                : "U" %>
+
+                        </div>
+
+                    <% } %>
+
+
+                    <!-- COMMENT CONTENT -->
+
+                    <div>
+
+                        <strong>
+
+                            <%= comment.author && comment.author.name
+                                ? comment.author.name
+                                : "Unknown User" %>
+
+                        </strong>
+
+                        <div class="username">
+
+                            @<%= comment.author && comment.author.username
+                                ? comment.author.username
+                                : "user" %>
+
+                        </div>
+
+                        <p class="comment-text">
+                            <%= comment.text %>
+                        </p>
+
+                        <div class="comment-date">
+
+                            <%= new Date(comment.createdAt).toLocaleString() %>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        <% } %>
+
+    </div>
+
+</div>
