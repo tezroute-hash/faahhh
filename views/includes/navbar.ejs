@@ -1,43 +1,64 @@
 <aside class="sidebar">
 
-    <a href="/hangout" class="sidebar-logo">Hangout</a>
+    <!-- LOGO -->
+    <a href="/hangout" class="sidebar-logo">
+        Hangout
+    </a>
 
+
+    <!-- MAIN NAVIGATION -->
     <div class="nav-links">
 
+        <!-- HOME -->
         <a href="/hangout" class="nav-link">
             <i class="uil uil-estate"></i>
             <span>Home</span>
         </a>
 
+
+        <!-- SEARCH -->
         <a href="/search" class="nav-link">
             <i class="uil uil-search"></i>
             <span>Search</span>
         </a>
 
+
+        <!-- MESSAGES -->
         <a href="/messages" class="nav-link">
             <i class="uil uil-message"></i>
             <span>Messages</span>
         </a>
 
+
+        <!-- NOTIFICATIONS -->
         <a href="/notifications" class="nav-link">
             <i class="uil uil-heart"></i>
             <span>Notifications</span>
         </a>
 
-        <% if (user) { %>
 
+        <% if (currentUser) { %>
+
+            <!-- CREATE -->
             <a href="/create" class="nav-link">
                 <i class="uil uil-plus-circle"></i>
                 <span>Create</span>
             </a>
 
-            <a href="/profile/<%= user._id %>" class="nav-link">
+
+            <!-- MY PROFILE -->
+            <a
+                href="/profile/<%= currentUser._id %>"
+                class="nav-link"
+            >
                 <i class="uil uil-user-circle"></i>
                 <span>Profile</span>
             </a>
 
+
         <% } else { %>
 
+            <!-- LOGIN -->
             <a href="/login" class="nav-link">
                 <i class="uil uil-signin"></i>
                 <span>Login</span>
@@ -47,13 +68,21 @@
 
     </div>
 
+
+    <!-- SPACER -->
     <div style="flex-grow: 1;"></div>
 
+
+    <!-- BOTTOM NAVIGATION -->
     <div class="nav-links">
 
-        <% if (user) { %>
+        <% if (currentUser) { %>
 
-            <a href="/user/logout" class="nav-link">
+            <!-- LOGOUT -->
+            <a
+                href="/user/logout"
+                class="nav-link"
+            >
                 <i class="uil uil-signout"></i>
                 <span>Log out</span>
             </a>
