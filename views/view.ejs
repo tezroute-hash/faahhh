@@ -1,11 +1,20 @@
 <% layout("layouts/boilerplate") -%>
 
 <style>
+    /* =========================
+       MAIN CONTAINER
+    ========================= */
+
     .view-container {
         max-width: 700px;
         margin: 40px auto;
         padding: 0 20px;
     }
+
+
+    /* =========================
+       POST + COMMENTS CARD
+    ========================= */
 
     .post-card,
     .comments-card {
@@ -16,11 +25,19 @@
         margin-bottom: 20px;
     }
 
+
+    /* =========================
+       POST HEADER
+    ========================= */
+
     .post-header {
         display: flex;
         align-items: center;
         margin-bottom: 18px;
     }
+
+
+    /* PROFILE IMAGE */
 
     .avatar {
         width: 48px;
@@ -28,118 +45,264 @@
         border-radius: 50%;
         object-fit: cover;
         margin-right: 12px;
+        flex-shrink: 0;
     }
+
+
+    /* PROFILE IMAGE PLACEHOLDER */
 
     .avatar-placeholder {
         width: 48px;
         height: 48px;
         border-radius: 50%;
         background: #e5e7eb;
+
         display: flex;
         align-items: center;
         justify-content: center;
+
         margin-right: 12px;
+
         font-size: 20px;
         font-weight: bold;
+
+        flex-shrink: 0;
     }
+
+
+    /* USER INFORMATION */
+
+    .author-info {
+        flex: 1;
+        min-width: 0;
+    }
+
 
     .author-name {
         font-weight: 600;
         font-size: 16px;
     }
 
+
+    .author-name a {
+        color: #111827;
+        text-decoration: none;
+    }
+
+
+    .author-name a:hover {
+        text-decoration: underline;
+    }
+
+
     .username {
         color: #777;
         font-size: 14px;
+        margin-top: 2px;
     }
+
+
+    /* =========================
+       DELETE BUTTON
+    ========================= */
+
+    .delete-form {
+        margin-left: auto;
+        flex-shrink: 0;
+    }
+
+
+    .delete-btn {
+        border: none;
+
+        background: #fee2e2;
+        color: #dc2626;
+
+        padding: 8px 16px;
+
+        border-radius: 8px;
+
+        font-size: 14px;
+        font-weight: 600;
+
+        cursor: pointer;
+
+        transition: all 0.2s ease;
+    }
+
+
+    .delete-btn:hover {
+        background: #dc2626;
+        color: white;
+    }
+
+
+    .delete-btn:active {
+        transform: scale(0.96);
+    }
+
+
+    /* =========================
+       POST CONTENT
+    ========================= */
 
     .post-content {
         font-size: 20px;
         line-height: 1.5;
+
         margin: 15px 0;
     }
+
+
+    /* =========================
+       POST IMAGE / VIDEO
+    ========================= */
 
     .post-media {
         width: 100%;
         max-height: 600px;
+
         object-fit: cover;
+
         border-radius: 10px;
+
         margin-top: 10px;
     }
+
+
+    /* =========================
+       POST DATE
+    ========================= */
 
     .post-date {
         color: #888;
         font-size: 13px;
+
+        margin-top: 12px;
     }
+
+
+    /* =========================
+       POST ACTIONS
+    ========================= */
 
     .post-actions {
         display: flex;
         gap: 25px;
+
         margin-top: 18px;
         padding-top: 15px;
+
         border-top: 1px solid #eee;
     }
+
 
     .action-btn {
         border: none;
         background: none;
+
         font-size: 16px;
+
         cursor: pointer;
     }
+
+
+    /* =========================
+       COMMENTS
+    ========================= */
 
     .comments-title {
         margin-top: 0;
         margin-bottom: 20px;
     }
 
+
+    /* COMMENT FORM */
+
     .comment-form textarea {
         width: 100%;
+
         box-sizing: border-box;
+
         resize: vertical;
+
         min-height: 90px;
+
         padding: 12px;
+
         border: 1px solid #ccc;
         border-radius: 8px;
+
         font-size: 15px;
     }
 
+
     .comment-btn {
         margin-top: 10px;
+
         padding: 9px 18px;
+
         border: none;
         border-radius: 7px;
+
         background: #111827;
         color: white;
+
         cursor: pointer;
     }
 
+
+    .comment-btn:hover {
+        background: #000;
+    }
+
+
+    /* =========================
+       COMMENT
+    ========================= */
+
     .comment {
         display: flex;
+
         gap: 12px;
+
         padding: 15px 0;
+
         border-top: 1px solid #eee;
     }
+
 
     .comment .avatar,
     .comment .avatar-placeholder {
         width: 38px;
         height: 38px;
+
         flex-shrink: 0;
     }
 
+
     .comment-text {
         margin: 5px 0;
+
         line-height: 1.4;
     }
+
 
     .comment-date {
         font-size: 12px;
         color: #888;
     }
 
+
+    /* =========================
+       EMPTY COMMENTS
+    ========================= */
+
     .empty-comments {
         color: #888;
+
         text-align: center;
+
         padding: 20px 0;
     }
 </style>
@@ -147,46 +310,71 @@
 
 <div class="view-container">
 
-    <!-- POST -->
+
+    <!-- =====================================
+         POST
+    ====================================== -->
+
     <div class="post-card">
 
-        <!-- AUTHOR -->
+
+        <!-- =================================
+             POST HEADER
+        ================================== -->
+
         <div class="post-header">
 
+
+            <!-- PROFILE IMAGE -->
+
             <% if (post.author && post.author.profilePic) { %>
+
                 <a href="/profile/<%= post.author._id %>">
+
                     <img
                         src="<%= post.author.profilePic %>"
                         class="avatar"
                         alt="Profile"
                     >
+
                 </a>
+
             <% } else { %>
 
                 <div class="avatar-placeholder">
+
                     <%= post.author && post.author.name
                         ? post.author.name.charAt(0).toUpperCase()
                         : "U" %>
+
                 </div>
 
             <% } %>
 
 
-            <div>
+            <!-- =================================
+                 AUTHOR INFORMATION
+            ================================== -->
+
+            <div class="author-info">
+
+
+                <!-- NAME -->
 
                 <div class="author-name">
+
                     <a href="/profile/<%= post.author._id %>">
-                    <%= post.author && post.author.name
-                        ? post.author.name
-                        : "Unknown User" %>
+
+                        <%= post.author && post.author.name
+                            ? post.author.name
+                            : "Unknown User" %>
+
                     </a>
 
-                    <% if (currentUser && post.author && post.author._id.toString() === currentUser._id.toString()) { %>
-                        <form action="/profile/<%= user._id %>/view/delete/<%= post._id %>?_method=DELETE" method="POST">
-                            <button type="submit">Delete</button>
-                        </form>
-                    <% } %>
                 </div>
+
+
+                <!-- USERNAME -->
 
                 <div class="username">
 
@@ -196,23 +384,66 @@
 
                 </div>
 
+
             </div>
+
+
+            <!-- =================================
+                 DELETE BUTTON
+            ================================== -->
+
+            <% if (
+                currentUser &&
+                post.author &&
+                post.author._id.toString() === currentUser._id.toString()
+            ) { %>
+
+
+                <form
+                    action="/profile/<%= user._id %>/view/delete/<%= post._id %>?_method=DELETE"
+                    method="POST"
+                    class="delete-form"
+                >
+
+
+                    <button
+                        type="submit"
+                        class="delete-btn"
+                        onclick="return confirm('Are you sure you want to delete this post?')"
+                    >
+
+                        Delete
+
+                    </button>
+
+
+                </form>
+
+
+            <% } %>
+
 
         </div>
 
 
-        <!-- CONTENT -->
+        <!-- =================================
+             POST CONTENT
+        ================================== -->
 
         <% if (post.content) { %>
 
             <div class="post-content">
+
                 <%= post.content %>
+
             </div>
 
         <% } %>
 
 
-        <!-- IMAGE -->
+        <!-- =================================
+             IMAGE
+        ================================== -->
 
         <% if (post.type === "image" && post.mediaUrl) { %>
 
@@ -225,7 +456,9 @@
         <% } %>
 
 
-        <!-- VIDEO -->
+        <!-- =================================
+             VIDEO
+        ================================== -->
 
         <% if (post.type === "video" && post.mediaUrl) { %>
 
@@ -238,46 +471,71 @@
         <% } %>
 
 
+        <!-- =================================
+             POST DATE
+        ================================== -->
+
         <div class="post-date">
+
             <%= new Date(post.createdAt).toLocaleString() %>
+
         </div>
 
 
-        <!-- ACTIONS -->
+        <!-- =================================
+             POST ACTIONS
+        ================================== -->
 
         <div class="post-actions">
 
+
             <button class="action-btn">
+
                 ❤️ 0 Likes
+
             </button>
 
+
             <span>
+
                 💬 <%= comments.length %> Comments
+
             </span>
 
+
         </div>
+
 
     </div>
 
 
-    <!-- COMMENTS -->
+    <!-- =====================================
+         COMMENTS CARD
+    ====================================== -->
 
     <div class="comments-card">
 
+
         <h2 class="comments-title">
+
             Comments (<%= comments.length %>)
+
         </h2>
 
 
-        <!-- ADD COMMENT -->
+        <!-- =================================
+             ADD COMMENT
+        ================================== -->
 
         <% if (currentUser) { %>
+
 
             <form
                 action="/profile/<%= post._id %>/comment"
                 method="POST"
                 class="comment-form"
             >
+
 
                 <textarea
                     name="text"
@@ -286,44 +544,66 @@
                     required
                 ></textarea>
 
+
                 <button
                     type="submit"
                     class="comment-btn"
                 >
+
                     Comment
+
                 </button>
+
 
             </form>
 
+
         <% } else { %>
 
+
             <p>
+
                 <a href="/login">Login</a> to comment.
+
             </p>
+
 
         <% } %>
 
 
-        <!-- COMMENT LIST -->
+        <!-- =================================
+             COMMENT LIST
+        ================================== -->
 
         <% if (comments.length === 0) { %>
 
+
             <div class="empty-comments">
+
                 No comments yet.
+
                 <br>
+
                 Be the first to comment.
+
             </div>
+
 
         <% } else { %>
 
 
             <% comments.forEach(comment => { %>
 
+
                 <div class="comment">
 
-                    <!-- COMMENT AUTHOR -->
+
+                    <!-- =========================
+                         COMMENT AUTHOR IMAGE
+                    ========================== -->
 
                     <% if (comment.author && comment.author.profilePic) { %>
+
 
                         <img
                             src="<%= comment.author.profilePic %>"
@@ -331,7 +611,9 @@
                             alt="Profile"
                         >
 
+
                     <% } else { %>
+
 
                         <div class="avatar-placeholder">
 
@@ -341,12 +623,18 @@
 
                         </div>
 
+
                     <% } %>
 
 
-                    <!-- COMMENT CONTENT -->
+                    <!-- =========================
+                         COMMENT CONTENT
+                    ========================== -->
 
                     <div>
+
+
+                        <!-- COMMENT NAME -->
 
                         <strong>
 
@@ -356,6 +644,9 @@
 
                         </strong>
 
+
+                        <!-- COMMENT USERNAME -->
+
                         <div class="username">
 
                             @<%= comment.author && comment.author.username
@@ -364,9 +655,17 @@
 
                         </div>
 
+
+                        <!-- COMMENT TEXT -->
+
                         <p class="comment-text">
+
                             <%= comment.text %>
+
                         </p>
+
+
+                        <!-- COMMENT DATE -->
 
                         <div class="comment-date">
 
@@ -374,14 +673,20 @@
 
                         </div>
 
+
                     </div>
+
 
                 </div>
 
+
             <% }) %>
+
 
         <% } %>
 
+
     </div>
+
 
 </div>
