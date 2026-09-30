@@ -1,16 +1,29 @@
 const express = require("express");
+
 const User = require("../models/user");
 const Post = require("../models/post");
 const Comment = require("../models/comment");
+const Like = require("../models/like");
+
 const router = express.Router();
 
 const {
     restrictToLoggedinUserOnly
 } = require("../middlewares/auth");
 
+
+// =========================
+// ROOT
+// =========================
+
 router.get("/", (req, res) => {
     res.redirect("/login");
 });
+
+
+// =========================
+// HOME
+// =========================
 
 router.get("/hangout", async (req, res) => {
     try {
@@ -19,41 +32,97 @@ router.get("/hangout", async (req, res) => {
             .populate("author")
             .sort({ createdAt: -1 });
 
+
+        // Get like count for every post
+        const likeCounts = await Like.aggregate([
+            {
+                $group: {
+                    _id: "$post",
+                    count: {
+                        $sum: 1
+                    }
+                }
+            }
+        ]);
+
+
+        // Convert result into object
+        const likeCountMap = {};
+
+        likeCounts.forEach((item) => {
+
+            likeCountMap[item._id.toString()] = item.count;
+
+        });
+
+
         res.render("home", {
             allPosts,
-            user: req.user
+            likeCountMap,
+            user: req.user,
+            currentUser: req.user
         });
 
     } catch (error) {
+
         console.log(error);
         res.status(500).send("Something went wrong");
+
     }
 });
 
+
+// =========================
+// SIGNUP
+// =========================
+
 router.get("/signup", (req, res) => {
+
     res.render("signup");
+
 });
+
+
+// =========================
+// LOGIN
+// =========================
 
 router.get("/login", (req, res) => {
+
     res.render("login");
+
 });
 
+
+// =========================
+// PROFILE
+// =========================
+
 router.get("/profile/:id", async (req, res) => {
+
     try {
+
         const { id } = req.params;
 
         const user = await User.findById(id);
 
         if (!user) {
+
             return res.status(404).render("profile", {
                 user: null,
                 currentUser: req.user,
                 posts: []
             });
+
         }
 
-        const posts = await Post.find({ author: id })
-            .sort({ createdAt: -1 });
+
+        const posts = await Post.find({
+            author: id
+        }).sort({
+            createdAt: -1
+        });
+
 
         res.render("profile", {
             user,
@@ -62,74 +131,183 @@ router.get("/profile/:id", async (req, res) => {
         });
 
     } catch (error) {
+
         console.log(error);
         res.status(500).send("Something went wrong");
+
     }
+
 });
+
+
+// =========================
+// SEARCH
+// =========================
 
 router.get("/search", async (req, res) => {
-    const username = req.query.username;
 
-    let users = [];
-
-    if (username) {
-        users = await User.find({
-            username: {
-                $regex: username,
-                $options: "i"
-            }
-        });
-    }
-
-    res.render("search", {
-        users,
-        searched: !!username,
-        currentUser: req.user
-    });
-});
-
-router.get("/profile/:id/edit", async (req, res) => {
-    const { id } = req.params;
-
-    const user = await User.findById(id);
-
-    res.render("edit", { user });
-});
-
-router.get("/create", restrictToLoggedinUserOnly, (req, res) => {
-    res.render("create", {
-        user: req.user
-    });
-});
-
-router.get("/profile/:id/view", async (req, res) => {
     try {
-        const { id } = req.params;
 
-        const post = await Post.findById(id)
-            .populate("author");
+        const username = req.query.username;
 
-        if (!post) {
-            return res.status(404).send("Post not found");
+        let users = [];
+
+        if (username) {
+
+            users = await User.find({
+                username: {
+                    $regex: username,
+                    $options: "i"
+                }
+            });
+
         }
 
-        const comments = await Comment.find({
-            post: id
-        })
-            .populate("author")
-            .sort({ createdAt: -1 });
 
-        res.render("view", {
-            post,
-            comments,
+        res.render("search", {
+            users,
+            searched: !!username,
             currentUser: req.user
         });
 
     } catch (error) {
+
         console.log(error);
         res.status(500).send("Something went wrong");
+
     }
+
 });
+
+
+// =========================
+// EDIT PROFILE
+// =========================
+
+router.get("/profile/:id/edit", async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+
+
+        res.render("edit", {
+            user,
+            currentUser: req.user
+        });
+
+    } catch (error) {
+
+        console.log(error);
+        res.status(500).send("Something went wrong");
+
+    }
+
+});
+
+
+// =========================
+// CREATE POST
+// =========================
+
+router.get(
+    "/create",
+    restrictToLoggedinUserOnly,
+    (req, res) => {
+
+        res.render("create", {
+            user: req.user,
+            currentUser: req.user
+        });
+
+    }
+);
+
+
+// =========================
+// VIEW POST
+// =========================
+
+router.get("/profile/:id/view", async (req, res) => {
+
+    try {
+
+        const { id } = req.params;
+
+
+        const post = await Post.findById(id)
+            .populate("author");
+
+
+        if (!post) {
+
+            return res.status(404).send("Post not found");
+
+        }
+
+
+        // Get comments
+        const comments = await Comment.find({
+            post: id
+        })
+            .populate("author")
+            .sort({
+                createdAt: -1
+            });
+
+
+        // Get like count
+        const likeCount = await Like.countDocuments({
+            post: id
+        });
+
+
+        // Check if current user liked the post
+        let userLiked = false;
+
+        if (req.user) {
+
+            const existingLike = await Like.findOne({
+                post: id,
+                user: req.user._id
+            });
+
+            if (existingLike) {
+                userLiked = true;
+            }
+
+        }
+
+
+        res.render("view", {
+
+            post,
+            comments,
+            currentUser: req.user,
+            likeCount,
+            userLiked
+
+        });
+
+    } catch (error) {
+
+        console.log(error);
+        res.status(500).send("Something went wrong");
+
+    }
+
+});
+
+
+// =========================
+// COMMENT
+// =========================
 
 router.post(
     "/profile/:id/comment",
@@ -141,14 +319,22 @@ router.post(
             const post = await Post.findById(req.params.id);
 
             if (!post) {
+
                 return res.status(404).send("Post not found");
+
             }
 
+
             await Comment.create({
+
                 text: req.body.text,
+
                 author: req.user._id,
+
                 post: post._id
+
             });
+
 
             res.redirect(`/profile/${post._id}/view`);
 
@@ -158,13 +344,224 @@ router.post(
             res.status(500).send("Something went wrong");
 
         }
+
     }
 );
 
-router.delete("/profile/:id/view/delete/:postId", async (req, res) => {
-    await Post.findByIdAndDelete(req.params.postId);
-    res.clearCookie("uid");
-    res.redirect(`/profile/${req.params.id}`);
-});
+
+// =========================
+// DELETE POST
+// =========================
+
+router.delete(
+    "/profile/:id/view/delete/:postId",
+    restrictToLoggedinUserOnly,
+    async (req, res) => {
+
+        try {
+
+            const post = await Post.findById(
+                req.params.postId
+            );
+
+
+            if (!post) {
+
+                return res.status(404).send("Post not found");
+
+            }
+
+
+            // Only post owner can delete
+            if (
+                post.author.toString() !==
+                req.user._id.toString()
+            ) {
+
+                return res.status(403).send(
+                    "You are not authorized to delete this post"
+                );
+
+            }
+
+
+            // Delete post
+            await Post.findByIdAndDelete(
+                req.params.postId
+            );
+
+
+            // Delete likes belonging to post
+            await Like.deleteMany({
+                post: req.params.postId
+            });
+
+
+            // Delete comments belonging to post
+            await Comment.deleteMany({
+                post: req.params.postId
+            });
+
+
+            // DO NOT clear uid here
+            // Otherwise user gets logged out
+
+
+            res.redirect(
+                `/profile/${req.params.id}`
+            );
+
+        } catch (error) {
+
+            console.log(error);
+            res.status(500).send("Something went wrong");
+
+        }
+
+    }
+);
+
+
+// =========================
+// LIKE / UNLIKE FROM HOME
+// =========================
+
+router.post(
+    "/hangout/:id/like",
+    restrictToLoggedinUserOnly,
+    async (req, res) => {
+
+        try {
+
+            const { id } = req.params;
+
+
+            const post = await Post.findById(id);
+
+            if (!post) {
+
+                return res.status(404).send(
+                    "Post not found"
+                );
+
+            }
+
+
+            const existingLike = await Like.findOne({
+
+                post: id,
+
+                user: req.user._id
+
+            });
+
+
+            if (existingLike) {
+
+                // UNLIKE
+
+                await Like.findByIdAndDelete(
+                    existingLike._id
+                );
+
+            } else {
+
+                // LIKE
+
+                await Like.create({
+
+                    post: id,
+
+                    user: req.user._id
+
+                });
+
+            }
+
+
+            // Stay on Home
+            res.redirect("/hangout");
+
+        } catch (error) {
+
+            console.log(error);
+            res.status(500).send("Something went wrong");
+
+        }
+
+    }
+);
+
+
+// =========================
+// LIKE / UNLIKE FROM VIEW POST
+// =========================
+
+router.post(
+    "/profile/:id/view/like",
+    restrictToLoggedinUserOnly,
+    async (req, res) => {
+
+        try {
+
+            const { id } = req.params;
+
+
+            const post = await Post.findById(id);
+
+            if (!post) {
+
+                return res.status(404).send(
+                    "Post not found"
+                );
+
+            }
+
+
+            const existingLike = await Like.findOne({
+
+                post: id,
+
+                user: req.user._id
+
+            });
+
+
+            if (existingLike) {
+
+                // UNLIKE
+
+                await Like.findByIdAndDelete(
+                    existingLike._id
+                );
+
+            } else {
+
+                // LIKE
+
+                await Like.create({
+
+                    post: id,
+
+                    user: req.user._id
+
+                });
+
+            }
+
+
+            // Stay on View Post
+            res.redirect(`/profile/${id}/view`);
+
+        } catch (error) {
+
+            console.log(error);
+            res.status(500).send("Something went wrong");
+
+        }
+
+    }
+);
+
 
 module.exports = router;

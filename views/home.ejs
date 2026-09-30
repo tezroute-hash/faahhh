@@ -8,43 +8,79 @@
 
             <div class="feed-post">
 
-                <!-- Header -->
+
+                <!-- ========================= -->
+                <!-- HEADER -->
+                <!-- ========================= -->
+
                 <div class="feed-header">
 
+
+                    <!-- Avatar -->
+
                     <div class="avatar-med">
-                        <% if (post.author.profilePic) { %>
+
+                        <% if (post.author && post.author.profilePic) { %>
+
                             <a href="/profile/<%= post.author._id %>">
+
                                 <img
                                     src="<%= post.author.profilePic %>"
                                     alt="<%= post.author.username %>"
                                 >
+
                             </a>
+
                         <% } else { %>
-                    
-                            <%= post.author.username.charAt(0).toUpperCase() %>
-                    
+
+                            <%= post.author && post.author.username
+                                ? post.author.username
+                                    .charAt(0)
+                                    .toUpperCase()
+                                : "U"
+                            %>
+
                         <% } %>
+
                     </div>
 
+
+                    <!-- Username -->
+
                     <div class="user-info-row">
+
                         <a href="/profile/<%= post.author._id %>">
+
                             <strong>
                                 <%= post.author.username %>
                             </strong>
+
                         </a>
+
                     </div>
+
+
+                    <!-- View Post -->
 
                     <a
                         href="/profile/<%= post._id %>/view"
-                        class="btn-follow">
+                        class="btn-follow"
+                    >
                         View Post
                     </a>
+
 
                 </div>
 
 
-                <!-- Image -->
-                <% if (post.type === "image" && post.mediaUrl) { %>
+                <!-- ========================= -->
+                <!-- IMAGE -->
+                <!-- ========================= -->
+
+                <% if (
+                    post.type === "image" &&
+                    post.mediaUrl
+                ) { %>
 
                     <div class="feed-image">
 
@@ -64,27 +100,107 @@
                 <% } %>
 
 
-                <!-- Actions -->
+                <!-- ========================= -->
+                <!-- ACTIONS -->
+                <!-- ========================= -->
+
                 <div class="feed-actions">
 
-                    <i class="uil uil-heart"></i>
 
-                    <i class="uil uil-comment"></i>
+                    <!-- LIKE -->
 
-                    <i class="uil uil-message"></i>
+                    <% if (currentUser) { %>
 
-                    <i
-                        class="uil uil-bookmark"
-                        style="margin-left: auto;">
-                    </i>
+                        <form
+                            action="/hangout/<%= post._id %>/like"
+                            method="POST"
+                            class="like-form"
+                        >
+
+                            <button
+                                type="submit"
+                                class="feed-action-btn"
+                                title="Like"
+                            >
+
+                                <i class="uil uil-heart"></i>
+
+                            </button>
+
+                        </form>
+
+                    <% } else { %>
+
+                        <a
+                            href="/login"
+                            class="feed-action-btn"
+                            title="Like"
+                        >
+
+                            <i class="uil uil-heart"></i>
+
+                        </a>
+
+                    <% } %>
+
+
+                    <!-- COMMENT -->
+
+                    <a
+                        href="/profile/<%= post._id %>/view"
+                        class="feed-action-btn"
+                        title="Comment"
+                    >
+
+                        <i class="uil uil-message"></i>
+
+                    </a>
+
+
+                    <!-- BOOKMARK -->
+
+                    <button
+                        type="button"
+                        class="feed-action-btn bookmark-btn"
+                        title="Bookmark"
+                    >
+
+                        <i class="uil uil-bookmark"></i>
+
+                    </button>
+
 
                 </div>
 
 
-                <!-- Caption -->
+                <!-- ========================= -->
+                <!-- LIKE COUNT -->
+                <!-- ========================= -->
+
+                <div class="feed-like-count">
+
+                    <strong>
+
+                        <%= likeCountMap[post._id.toString()] || 0 %>
+
+                        <%= (likeCountMap[post._id.toString()] || 0) === 1
+                            ? "Like"
+                            : "Likes"
+                        %>
+
+                    </strong>
+
+                </div>
+
+
+                <!-- ========================= -->
+                <!-- CAPTION -->
+                <!-- ========================= -->
+
                 <div
                     class="feed-caption"
-                    style="padding: 0 14px;">
+                    style="padding: 0 14px;"
+                >
 
                     <strong>
                         <%= post.author.username %>
@@ -101,35 +217,50 @@
                             font-size: 10px;
                             margin-top: 6px;
                             display: block;
-                        ">
+                        "
+                    >
 
-                        <%= new Date(post.createdAt).toLocaleString() %>
+                        <%= new Date(
+                            post.createdAt
+                        ).toLocaleString() %>
 
                     </span>
 
                 </div>
 
+
             </div>
 
         <% } %>
 
+
     <% } else { %>
+
+
+        <!-- ========================= -->
+        <!-- NO POSTS -->
+        <!-- ========================= -->
 
         <div
             style="
                 text-align: center;
                 padding: 40px;
                 color: var(--text-light);
-            ">
+            "
+        >
 
             <i
                 class="uil uil-camera"
-                style="font-size: 40px;">
+                style="font-size: 40px;"
+            >
             </i>
 
-            <h2>No posts yet</h2>
+            <h2>
+                No posts yet
+            </h2>
 
         </div>
+
 
     <% } %>
 

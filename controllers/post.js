@@ -2,15 +2,16 @@ const Post = require("../models/post");
 
 const handleCreatePost = async (req, res) => {
     try {
-        const { content } = req.body;
+        // Get caption from form
+        const content = req.body.content || "";
 
-        // Get logged-in user
+        // Get logged-in user's ID
         const author = req.user._id;
 
         let type = "text";
         let mediaUrl = "";
 
-        // If a file was uploaded
+        // If image was uploaded
         if (req.file) {
             mediaUrl = req.file.path;
 
@@ -23,27 +24,24 @@ const handleCreatePost = async (req, res) => {
 
         // Create post
         const post = await Post.create({
-            type,
-            content: content || "",
-            mediaUrl,
-            author,
+            type: type,
+            content: content,
+            mediaUrl: mediaUrl,
+            author: author
         });
 
-        console.log("Post created:", post);
+        console.log("Post created successfully:", post._id);
 
-        // Go back to Hangout feed
+        // Go back to feed
         return res.redirect("/hangout");
 
     } catch (err) {
         console.error("Error creating post:", err);
 
-        return res.status(500).json({
-            message: "Failed to create post",
-            error: err.message,
-        });
+        return res.status(500).send("Failed to create post");
     }
 };
 
 module.exports = {
-    handleCreatePost,
+    handleCreatePost
 };
