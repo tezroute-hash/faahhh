@@ -1,0 +1,45 @@
+<% layout("layouts/boilerplate") -%>
+
+    <div class="auth-wrapper">
+        <div class="auth-container">
+
+            <div class="auth-box">
+
+                <div class="auth-logo">Hangout</div>
+
+                <h2 style="text-align: center; margin-bottom: 20px;">Verify Your Email</h2>
+
+                <p style="text-align: center; color: var(--text-light); margin-bottom: 25px; font-size: 14px;">
+                    We've sent a 6-digit verification code to <br><strong>
+                        <%= email %>
+                    </strong>
+                </p>
+
+                <% if (typeof error !=='undefined' && error) { %>
+                    <div class="error-msg">
+                        <%= error %>
+                    </div>
+                    <% } %>
+
+                        <form action="/user/verify" method="POST" class="auth-form">
+
+                            <input type="hidden" name="email" value="<%= email %>">
+                            <input type="hidden" name="action" value="<%= action %>">
+
+                            <input type="text" name="otp" placeholder="Enter 6-digit OTP" required autocomplete="off"
+                                maxlength="6" style="text-align: center; font-size: 20px; letter-spacing: 5px;">
+
+                            <button type="submit">Verify Code</button>
+                        </form>
+
+                        <div style="text-align: center; margin-top: 20px;">
+                            <p class="auth-msg-alt">
+                                Didn't receive code?
+                                <a href="/login">Back to Login</a>
+                            </p>
+                        </div>
+
+            </div>
+
+        </div>
+    </div>

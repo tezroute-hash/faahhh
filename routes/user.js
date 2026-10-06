@@ -11,6 +11,9 @@ const {
     handleUserLogin,
     handleEditUser,
     handleLogout,
+    handleVerifyOtp,
+    handleForgotPassword,
+    handleResetPassword,
     handleFollowUser,
     handleUnfollowUser
 } = require("../controllers/user");
@@ -51,5 +54,12 @@ router.post(
     handleUnfollowUser
 );
 
+
+
+// OTP features
+router.post("/verify", handleVerifyOtp);
+router.get("/forgot-password", (req, res) => res.render("forgot"));
+router.post("/forgot-password", handleForgotPassword);
+router.post("/reset-password", handleResetPassword);
 
 module.exports = router;

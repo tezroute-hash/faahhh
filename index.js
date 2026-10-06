@@ -1,10 +1,11 @@
+require("dotenv").config(); // MUST be first line
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
-require("dotenv").config();
+
 
 const dns = require("dns");
 dns.setServers(["8.8.8.8", "1.1.1.1"]);

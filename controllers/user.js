@@ -1,27 +1,40 @@
 const User = require("../models/user");
+const { sendOtpEmail } = require("../service/email");
 const Notification = require("../models/notification");
 const { setUser } = require("../service/auth");
+
+
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 const handleUserSignup = async (req, res) => {
     try {
         const { name, username, email, password } = req.body;
+        
+        let user = await User.findOne({ email });
+        if (user && user.verified) {
+            return res.render("signup", { error: "Email already exists." });
+        }
+        if (user && !user.verified) {
+            // override unverified user
+            Object.assign(user, { name, username, password });
+        } else {
+            user = await User.create({ name, username, email, password, verified: false });
+        }
 
-        const user = await User.create({
-            name,
-            username,
-            email,
-            password
-        });
+        const otp = generateOTP();
+        user.otp = otp;
+        user.otpExpiry = Date.now() + 10 * 60 * 1000;
+        await user.save();
 
-        const token = setUser(user);
-        res.cookie("uid", token);
+        await sendOtpEmail(email, otp);
 
-        return res.redirect(`/hangout`);
+        return res.render("verify", { email, action: "signup" });
     } catch (error) {
         console.error(error);
         return res.render("signup", { error: "Username or email already exists. Please try another." });
     }
 };
+
 
 const handleUserLogin = async (req, res) => {
     try {
@@ -32,6 +45,15 @@ const handleUserLogin = async (req, res) => {
             return res.render("login", { error: "Invalid email or password." });
         }
 
+        if (!user.verified) {
+            const otp = generateOTP();
+            user.otp = otp;
+            user.otpExpiry = Date.now() + 10 * 60 * 1000;
+            await user.save();
+            await sendOtpEmail(email, otp);
+            return res.render("verify", { email, action: "signup", error: "Please verify your email first. We sent a new OTP." });
+        }
+
         const token = setUser(user);
         res.cookie("uid", token);
         return res.redirect(`/hangout`);
@@ -40,6 +62,7 @@ const handleUserLogin = async (req, res) => {
         return res.render("login", { error: "An error occurred during login. Please try again." });
     }
 };
+
 
 const handleEditUser = async (req, res) => {
     try {
@@ -150,7 +173,71 @@ const handleUnfollowUser = async (req, res) => {
     }
 };
 
+
+const handleVerifyOtp = async (req, res) => {
+    try {
+        const { email, otp, action } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) return res.render("verify", { email, action, error: "User not found" });
+
+        if (user.otp !== otp || user.otpExpiry < Date.now()) {
+            return res.render("verify", { email, action, error: "Invalid or expired OTP" });
+        }
+
+        user.otp = null;
+        user.otpExpiry = null;
+        
+        if (action === "signup") {
+            user.verified = true;
+            await user.save();
+            const token = setUser(user);
+            res.cookie("uid", token);
+            return res.redirect('/hangout');
+        } else if (action === "reset") {
+            await user.save();
+            return res.render("reset_password", { email });
+        }
+    } catch (err) {
+        console.error(err);
+        return res.render("verify", { email, action: req.body.action, error: "Server error" });
+    }
+};
+
+const handleForgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) return res.render("forgot", { error: "No account with that email found." });
+
+        const otp = generateOTP();
+        user.otp = otp;
+        user.otpExpiry = Date.now() + 10 * 60 * 1000;
+        await user.save();
+
+        await sendOtpEmail(email, otp);
+        return res.render("verify", { email, action: "reset" });
+    } catch (err) {
+        console.error(err);
+        return res.render("forgot", { error: "Server error" });
+    }
+};
+
+const handleResetPassword = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        await User.findOneAndUpdate({ email }, { password });
+        return res.redirect("/login");
+    } catch (err) {
+        console.error(err);
+        return res.redirect("/login");
+    }
+};
+
 module.exports = {
+    handleVerifyOtp,
+    handleForgotPassword,
+    handleResetPassword,
     handleUserSignup,
     handleUserLogin,
     handleEditUser,

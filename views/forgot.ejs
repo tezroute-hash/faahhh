@@ -1,0 +1,39 @@
+<% layout("layouts/boilerplate") -%>
+
+    <div class="auth-wrapper">
+        <div class="auth-container">
+
+            <div class="auth-box">
+
+                <div class="auth-logo">Hangout</div>
+
+                <h2 style="text-align: center; margin-bottom: 20px;">Forgot Password</h2>
+
+                <p style="text-align: center; color: var(--text-light); margin-bottom: 25px; font-size: 14px;">
+                    Enter your email address and we'll send you an OTP to reset your password.
+                </p>
+
+                <% if (typeof error !=='undefined' && error) { %>
+                    <div class="error-msg">
+                        <%= error %>
+                    </div>
+                    <% } %>
+
+                        <form action="/user/forgot-password" method="POST" class="auth-form">
+                            <input type="email" name="email" placeholder="Email address" required autocomplete="email">
+
+                            <button type="submit">Send OTP</button>
+                        </form>
+
+                        <div style="text-align: center; margin-top: 20px;">
+                            <p class="auth-msg-link">
+                                <a href="/login"
+                                    style="color: var(--primary); text-decoration: none; font-weight: 600;">Back to
+                                    Login</a>
+                            </p>
+                        </div>
+
+            </div>
+
+        </div>
+    </div>
