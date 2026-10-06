@@ -8,7 +8,9 @@ const cookieParser = require("cookie-parser");
 
 
 const dns = require("dns");
+dns.setDefaultResultOrder("ipv4first"); // Force IPv4 globally - fixes Render SMTP IPv6 issue
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
+
 
 const { checkForAuthentication } = require("./middlewares/auth");
 
