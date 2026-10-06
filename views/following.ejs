@@ -1,82 +1,48 @@
 <% layout("layouts/boilerplate") -%>
 
-<div style="max-width: 600px; margin: 30px auto;">
+    <div class="list-container">
 
-    <h2>Following</h2>
+        <h2>Following</h2>
 
-    <% if (following.length === 0) { %>
+        <% if (following.length===0) { %>
 
-        <p>Not following anyone yet.</p>
+            <p>Not following anyone yet.</p>
 
-    <% } else { %>
+            <% } else { %>
 
-        <% following.forEach(followedUser => { %>
+                <% following.forEach(followedUser=> { %>
 
-            <a
-                href="/profile/<%= followedUser._id %>"
-                style="
-                    display: flex;
-                    align-items: center;
-                    gap: 15px;
-                    padding: 15px;
-                    text-decoration: none;
-                    color: inherit;
-                    border-bottom: 1px solid #ddd;
-                "
-            >
+                    <a href="/profile/<%= followedUser._id %>" class="user-list-item">
 
-                <% if (followedUser.profilePic) { %>
+                        <% if (followedUser.profilePic) { %>
 
-                    <img
-                        src="<%= followedUser.profilePic %>"
-                        alt="Profile"
-                        style="
-                            width: 50px;
-                            height: 50px;
-                            border-radius: 50%;
-                            object-fit: cover;
-                        "
-                    >
+                            <img src="<%= followedUser.profilePic %>" alt="Profile" class="user-avatar-img">
 
-                <% } else { %>
+                            <% } else { %>
 
-                    <div
-                        style="
-                            width: 50px;
-                            height: 50px;
-                            border-radius: 50%;
-                            background: #ddd;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-size: 20px;
-                            font-weight: bold;
-                        "
-                    >
-                        <%= followedUser.username.charAt(0).toUpperCase() %>
-                    </div>
+                                <div class="user-avatar-placeholder">
+                                    <%= followedUser.username.charAt(0).toUpperCase() %>
+                                </div>
 
-                <% } %>
+                                <% } %>
 
 
-                <div>
+                                    <div class="user-list-info">
 
-                    <strong>
-                        <%= followedUser.username %>
-                    </strong>
+                                        <strong>
+                                            <%= followedUser.username %>
+                                        </strong>
 
-                    <br>
+                                        <span class="user-list-name">
+                                            <%= followedUser.name %>
+                                        </span>
 
-                    <span style="color: #777;">
-                        <%= followedUser.name %>
-                    </span>
+                                    </div>
 
-                </div>
+                    </a>
 
-            </a>
+                    <% }) %>
 
-        <% }) %>
+                        <% } %>
 
-    <% } %>
-
-</div>
+    </div>

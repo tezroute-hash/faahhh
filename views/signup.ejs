@@ -14,35 +14,29 @@
         <div class="auth-container">
             <div class="auth-box">
                 <h1 class="logo">Hangout</h1>
-                <div class="auth-msg">Sign up to see photos and videos from your friends.</div>
 
-                <form action="/user" method="post" class="auth-form">
-
-                    <div style="display: flex; align-items: center; margin: 15px 0;">
-                        <!-- <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
-                        <div
-                            style="margin: 0 16px; color: var(--text-light); font-weight: 600; font-size: 12px; text-transform: uppercase;">
-                            or</div> -->
-                        <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+                <% if (typeof error !=='undefined' && error) { %>
+                    <div class="error-msg">
+                        <%= error %>
                     </div>
+                    <% } %>
+                        <form action="/user" method="post" class="auth-form">
 
-                    <input type="email" name="email" placeholder="Email" required>
-                    <input type="text" name="name" placeholder="Full Name" required>
-                    <input type="text" name="username" placeholder="Username" required>
-                    <input type="password" name="password" placeholder="Password" required>
+                            <div style="display: flex; align-items: center; margin: 15px 0;">
+                                <div class="divider-row"></div>
+                            </div>
 
-                    <p
-                        style="font-size: 12px; color: var(--text-light); text-align: center; margin-top: 15px; line-height: 1.4;">
-                        People who use our service may have uploaded your contact information to Instagram. Learn More
-                    </p>
+                            <input type="email" name="email" placeholder="Email" required>
+                            <input type="text" name="name" placeholder="Full Name" required>
+                            <input type="text" name="username" placeholder="Username" required>
+                            <input type="password" name="password" placeholder="Password" required>
 
-                    <button type="submit">Sign up</button>
-                </form>
+                            <button type="submit">Sign up</button>
+                        </form>
             </div>
 
             <div class="auth-box alt">
-                <span style="font-size: 14px;">Have an account? <a href="/login"
-                        style="color: var(--blue-primary); font-weight: 600;">Log in</a></span>
+                <span class="auth-msg-alt">Have an account? <a href="/login">Log in</a></span>
             </div>
         </div>
     </div>

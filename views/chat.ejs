@@ -1,399 +1,150 @@
 <% layout("layouts/boilerplate") -%>
 
-<style>
-
-    .chat-container {
-        max-width: 700px;
-        height: 75vh;
-        margin: 30px auto;
-        background: #ffffff;
-        border: 1px solid #e5e7eb;
-        border-radius: 18px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
-
-
-    /* =========================
-       CHAT HEADER
-    ========================= */
-
-    .chat-header {
-        padding: 18px 22px;
-        border-bottom: 1px solid #eeeeee;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        background: #ffffff;
-    }
-
-
-    .chat-avatar {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        background: #e8f0fe;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        font-weight: 600;
-        font-size: 18px;
-        color: #333;
-
-        overflow: hidden;
-    }
-
-
-    .chat-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-
-    .chat-username {
-        font-size: 17px;
-        color: #111827;
-        font-weight: 600;
-    }
-
-
-    .chat-status {
-        font-size: 12px;
-        color: #888;
-        margin-top: 2px;
-    }
-
-
-    /* =========================
-       MESSAGE AREA
-    ========================= */
-
-    .messages-container {
-        flex: 1;
-        padding: 20px;
-        overflow-y: auto;
-        background: #fafafa;
-    }
-
-
-    /* MESSAGE ROW */
-
-    .message-row {
-        display: flex;
-        margin-bottom: 12px;
-    }
-
-
-    .message-sent {
-        justify-content: flex-end;
-    }
-
-
-    .message-received {
-        justify-content: flex-start;
-    }
-
-
-    /* MESSAGE BUBBLE */
-
-    .message-bubble {
-        max-width: 65%;
-        padding: 10px 15px;
-        border-radius: 18px;
-
-        color: #222;
-
-        word-break: break-word;
-
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
-    }
-
-
-    .message-bubble.sent {
-        background: #dbeafe;
-        border: 1px solid #bfdbfe;
-    }
-
-
-    .message-bubble.received {
-        background: #ffffff;
-        border: 1px solid #e5e7eb;
-    }
-
-
-    /* MESSAGE TIME */
-
-    .message-time {
-        font-size: 9px;
-        color: #999;
-        margin-top: 5px;
-        text-align: right;
-    }
-
-
-    /* =========================
-       EMPTY CHAT
-    ========================= */
-
-    .empty-chat {
-        height: 100%;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        color: #999;
-        font-size: 14px;
-    }
-
-
-    /* =========================
-       MESSAGE INPUT
-    ========================= */
-
-    .message-form {
-        padding: 15px;
-
-        border-top: 1px solid #eeeeee;
-
-        background: #ffffff;
-
-        display: flex;
-        gap: 10px;
-    }
-
-
-    .message-input {
-        flex: 1;
-
-        border: 1px solid #ddd;
-
-        border-radius: 25px;
-
-        padding: 12px 18px;
-
-        font-size: 14px;
-
-        outline: none;
-
-        background: #f8f9fa;
-    }
-
-
-    .message-input:focus {
-        border-color: #bfdbfe;
-        background: #ffffff;
-    }
-
-
-    .send-button {
-        border: none;
-
-        background: #dbeafe;
-
-        color: #1e3a8a;
-
-        width: 45px;
-        height: 45px;
-
-        border-radius: 50%;
-
-        cursor: pointer;
-
-        font-size: 18px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-
-    .send-button:hover {
-        background: #bfdbfe;
-    }
-
-</style>
-
-
-<!-- =========================
+    <!-- =========================
      CHAT CONTAINER
 ========================= -->
 
-<div class="chat-container">
+    <div class="chat-modal-container">
 
 
-    <!-- =========================
+        <!-- =========================
          CHAT HEADER
     ========================= -->
 
-    <div class="chat-header">
+        <div class="chat-modal-header">
 
 
-        <!-- PROFILE IMAGE -->
+            <!-- PROFILE IMAGE -->
 
-        <div class="chat-avatar">
+            <div class="chat-modal-avatar">
 
-            <% if (receiver.profilePic) { %>
+                <% if (receiver.profilePic) { %>
 
-                <img
-                    src="<%= receiver.profilePic %>"
-                    alt="Profile"
-                >
+                    <img src="<%= receiver.profilePic %>" alt="Profile">
 
-            <% } else { %>
+                    <% } else { %>
 
-                <%= receiver.username.charAt(0).toUpperCase() %>
+                        <%= receiver.username.charAt(0).toUpperCase() %>
 
-            <% } %>
+                            <% } %>
+
+            </div>
+
+
+            <!-- USER INFO -->
+
+            <div>
+
+                <div class="chat-modal-username">
+                    <%= receiver.username %>
+                </div>
+
+                <div class="chat-modal-status">
+                    Message
+                </div>
+
+            </div>
 
         </div>
 
 
-        <!-- USER INFO -->
 
-        <div>
-
-            <div class="chat-username">
-                <%= receiver.username %>
-            </div>
-
-            <div class="chat-status">
-                Message
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =========================
+        <!-- =========================
          MESSAGES
     ========================= -->
 
-    <div class="messages-container">
+        <div class="chat-modal-messages">
 
 
-        <% if (messages.length === 0) { %>
+            <% if (messages.length===0) { %>
 
 
-            <!-- EMPTY CHAT -->
+                <!-- EMPTY CHAT -->
 
-            <div class="empty-chat">
+                <div class="chat-modal-empty">
 
-                Start a conversation with
-                <strong style="margin-left: 5px;">
-                    @<%= receiver.username %>
-                </strong>
-
-            </div>
-
-
-        <% } else { %>
-
-
-            <!-- MESSAGE LIST -->
-
-            <% messages.forEach(message => { %>
-
-
-                <% 
-                    const isSent =
-                        message.sender._id.toString() ===
-                        currentUser._id.toString();
-                %>
-
-
-                <!-- MESSAGE ROW -->
-
-                <div
-                    class="<%= isSent
-                        ? 'message-row message-sent'
-                        : 'message-row message-received' %>"
-                >
-
-
-                    <!-- MESSAGE BUBBLE -->
-
-                    <div
-                        class="<%= isSent
-                            ? 'message-bubble sent'
-                            : 'message-bubble received' %>"
-                    >
-
-
-                        <!-- MESSAGE TEXT -->
-
-                        <%= message.text %>
-
-
-                        <!-- MESSAGE TIME -->
-
-                        <div class="message-time">
-
-                            <%= new Date(
-                                message.createdAt
-                            ).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit"
-                            }) %>
-
-                        </div>
-
-
-                    </div>
+                    Start a conversation with
+                    <strong style="margin-left: 5px;">
+                        @<%= receiver.username %>
+                    </strong>
 
                 </div>
 
 
-            <% }) %>
+                <% } else { %>
 
 
-        <% } %>
+                    <!-- MESSAGE LIST -->
+
+                    <% messages.forEach(message=> { %>
 
 
-    </div>
+                        <% const isSent=message.sender._id.toString()===currentUser._id.toString(); %>
+
+
+                            <!-- MESSAGE ROW -->
+
+                            <div class="<%= isSent
+                        ? 'chat-modal-row chat-modal-sent'
+                        : 'chat-modal-row chat-modal-received' %>">
+
+
+                                <!-- MESSAGE BUBBLE -->
+
+                                <div class="<%= isSent
+                            ? 'chat-modal-bubble sent'
+                            : 'chat-modal-bubble received' %>">
+
+
+                                    <!-- MESSAGE TEXT -->
+
+                                    <%= message.text %>
+
+
+                                        <!-- MESSAGE TIME -->
+
+                                        <div class="chat-modal-time">
+
+                                            <%= new Date( message.createdAt ).toLocaleTimeString([], { hour: "2-digit" ,
+                                                minute: "2-digit" }) %>
+
+                                        </div>
+
+
+                                </div>
+
+                            </div>
+
+
+                            <% }) %>
+
+
+                                <% } %>
+
+
+        </div>
 
 
 
-    <!-- =========================
+        <!-- =========================
          MESSAGE INPUT
     ========================= -->
 
-    <form
-        action="/messages/<%= receiver._id %>"
-        method="POST"
-        class="message-form"
-    >
+        <form action="/messages/<%= receiver._id %>" method="POST" class="chat-modal-form">
 
 
-        <input
-            type="text"
-            name="text"
-            placeholder="Write a message..."
-            required
-            autocomplete="off"
-            class="message-input"
-        >
+            <input type="text" name="text" placeholder="Write a message..." required autocomplete="off"
+                class="chat-modal-input">
 
 
-        <button
-            type="submit"
-            class="send-button"
-            title="Send"
-        >
+            <button type="submit" class="chat-modal-send" title="Send">
 
-            <i class="uil uil-message"></i>
+                <i class="uil uil-message"></i>
 
-        </button>
+            </button>
 
 
-    </form>
+        </form>
 
 
-</div>
+    </div>

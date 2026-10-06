@@ -113,9 +113,10 @@ router.get(
 
             console.log(error);
 
-            res.status(500).send(
-                "Something went wrong"
-            );
+            res.status(500).render("error", {
+                error: "Something went wrong",
+                currentUser: req.user
+            });
 
         }
 
@@ -148,7 +149,7 @@ router.get(
 
                 return res
                     .status(404)
-                    .send("User not found");
+                    .render("error", { error: "User not found", currentUser: req.user });
 
             }
 
@@ -265,9 +266,10 @@ router.get(
 
             console.log(error);
 
-            res.status(500).send(
-                "Something went wrong"
-            );
+            res.status(500).render("error", {
+                error: "Something went wrong",
+                currentUser: req.user
+            });
 
         }
 
@@ -311,7 +313,7 @@ router.post(
 
                 return res
                     .status(404)
-                    .send("User not found");
+                    .render("error", { error: "User not found", currentUser: req.user });
 
             }
 
@@ -351,9 +353,10 @@ router.post(
 
             console.log(error);
 
-            res.status(500).send(
-                "Something went wrong"
-            );
+            res.status(500).render("error", {
+                error: "Something went wrong",
+                currentUser: req.user
+            });
 
         }
 

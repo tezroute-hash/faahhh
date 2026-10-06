@@ -25,6 +25,12 @@
 
         <% if (currentUser) { %>
 
+            <!-- NOTIFICATIONS -->
+            <a href="/notifications" class="nav-link">
+                <i class="uil uil-bell"></i>
+                <span>Notifications</span>
+            </a>
+
             <!-- MESSAGES -->
             <a href="/messages" class="nav-link">
                 <i class="uil uil-message"></i>
@@ -40,24 +46,21 @@
 
 
             <!-- MY PROFILE -->
-            <a
-                href="/profile/<%= currentUser._id %>"
-                class="nav-link"
-            >
+            <a href="/profile/<%= currentUser._id %>" class="nav-link">
                 <i class="uil uil-user-circle"></i>
                 <span>Profile</span>
             </a>
 
 
-        <% } else { %>
+            <% } else { %>
 
-            <!-- LOGIN -->
-            <a href="/login" class="nav-link">
-                <i class="uil uil-signin"></i>
-                <span>Login</span>
-            </a>
+                <!-- LOGIN -->
+                <a href="/login" class="nav-link">
+                    <i class="uil uil-signin"></i>
+                    <span>Login</span>
+                </a>
 
-        <% } %>
+                <% } %>
 
     </div>
 
@@ -71,16 +74,19 @@
 
         <% if (currentUser) { %>
 
+            <!-- THEME TOGGLE -->
+            <a href="#" class="nav-link" id="theme-toggle">
+                <i class="uil uil-moon"></i>
+                <span>Dark Mode</span>
+            </a>
+
             <!-- LOGOUT -->
-            <a
-                href="/user/logout"
-                class="nav-link"
-            >
+            <a href="/user/logout" class="nav-link">
                 <i class="uil uil-signout"></i>
                 <span>Log out</span>
             </a>
 
-        <% } %>
+            <% } %>
 
     </div>
 

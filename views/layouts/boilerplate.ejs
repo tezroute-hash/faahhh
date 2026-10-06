@@ -10,28 +10,77 @@
 
     <link rel="stylesheet" href="/css/style.css">
 
-    <link
-        rel="stylesheet"
-        href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
-    >
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <script>
+        // Check local storage before rendering body to prevent flickering
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark-theme');
+        }
+    </script>
 </head>
 
-<body>
+<body class="light-theme">
 
     <div class="app-layout">
 
+        <!-- MOBILE TOP HEADER -->
+        <div class="mobile-top-header">
+            <a href="/hangout" class="mobile-logo">Hangout</a>
+        </div>
+
         <%- include("../includes/navbar.ejs", { user: user }) %>
 
-        <main class="main-content">
+            <main class="main-content">
 
-            <div class="content-inner">
-                <%- body %>
-            </div>
+                <div class="content-inner">
+                    <%- body %>
+                </div>
 
-        </main>
+            </main>
 
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (document.documentElement.classList.contains('dark-theme')) {
+                document.body.classList.add('dark-theme');
+                updateToggleIcon(true);
+            }
+
+            const toggleBtn = document.getElementById('theme-toggle');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.body.classList.toggle('dark-theme');
+                    const isDark = document.body.classList.contains('dark-theme');
+
+                    if (isDark) {
+                        localStorage.setItem('theme', 'dark');
+                    } else {
+                        localStorage.setItem('theme', 'light');
+                    }
+
+                    updateToggleIcon(isDark);
+                });
+            }
+
+            function updateToggleIcon(isDark) {
+                const toggleBtn = document.getElementById('theme-toggle');
+                if (toggleBtn) {
+                    const icon = toggleBtn.querySelector('i');
+                    const span = toggleBtn.querySelector('span');
+                    if (isDark) {
+                        icon.className = 'uil uil-sun';
+                        span.textContent = 'Light Mode';
+                    } else {
+                        icon.className = 'uil uil-moon';
+                        span.textContent = 'Dark Mode';
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

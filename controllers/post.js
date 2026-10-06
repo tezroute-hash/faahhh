@@ -38,7 +38,7 @@ const handleCreatePost = async (req, res) => {
     } catch (err) {
         console.error("Error creating post:", err);
 
-        return res.status(500).send("Failed to create post");
+        return res.status(500).render("error", { error: "Failed to create post", currentUser: req.user || null });
     }
 };
 

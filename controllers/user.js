@@ -1,47 +1,62 @@
 const User = require("../models/user");
+const Notification = require("../models/notification");
 const { setUser } = require("../service/auth");
 
 const handleUserSignup = async (req, res) => {
-    const { name, username, email, password } = req.body;
+    try {
+        const { name, username, email, password } = req.body;
 
-    const user = await User.create({
-        name,
-        username,
-        email,
-        password
-    });
+        const user = await User.create({
+            name,
+            username,
+            email,
+            password
+        });
 
-    const token = setUser(user);
-    res.cookie("uid", token);
+        const token = setUser(user);
+        res.cookie("uid", token);
 
-    return res.redirect(`/hangout`);
+        return res.redirect(`/hangout`);
+    } catch (error) {
+        console.error(error);
+        return res.render("signup", { error: "Username or email already exists. Please try another." });
+    }
 };
 
 const handleUserLogin = async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email, password });
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email, password });
 
-    if (!user) {
-        return res.render("login",
-            { error: "user not found" });
+        if (!user) {
+            return res.render("login", { error: "Invalid email or password." });
+        }
+
+        const token = setUser(user);
+        res.cookie("uid", token);
+        return res.redirect(`/hangout`);
+    } catch (error) {
+        console.error(error);
+        return res.render("login", { error: "An error occurred during login. Please try again." });
     }
-
-    const token = setUser(user);
-    res.cookie("uid", token);
-    return res.redirect(`/hangout`);
 };
 
 const handleEditUser = async (req, res) => {
-    const { id } = req.params;
-    let updateData = { ...req.body };
+    try {
+        const { id } = req.params;
+        let updateData = { ...req.body };
 
-    if (req.file) {
-        updateData.profilePic = req.file.path; // Save Cloudinary URL
+        if (req.file) {
+            updateData.profilePic = req.file.path; // Save Cloudinary URL
+        }
+
+        await User.findByIdAndUpdate(id, updateData);
+
+        res.redirect(`/profile/${id}`);
+    } catch (error) {
+        console.error("Error editing user:", error);
+        return res.status(500).render("error", { error: "Failed to update profile", currentUser: req.user || null });
     }
-
-    await User.findByIdAndUpdate(id, updateData);
-
-    res.redirect(`/profile/${id}`);
 };
 
 const handleLogout = (req, res) => {
@@ -63,7 +78,7 @@ const handleFollowUser = async (req, res) => {
         const targetUser = await User.findById(targetUserId);
 
         if (!targetUser) {
-            return res.status(404).send("User not found");
+            return res.status(404).render("error", { error: "User not found", currentUser: req.user || null });
         }
 
         // Add target user to current user's following
@@ -77,7 +92,7 @@ const handleFollowUser = async (req, res) => {
         );
 
         // Add current user to target user's followers
-        await User.findByIdAndUpdate(
+        const updatedTarget = await User.findByIdAndUpdate(
             targetUserId,
             {
                 $addToSet: {
@@ -86,11 +101,18 @@ const handleFollowUser = async (req, res) => {
             }
         );
 
+        // Create notification
+        await Notification.create({
+            recipient: targetUserId,
+            sender: currentUserId,
+            type: "follow"
+        });
+
         return res.redirect(`/profile/${targetUserId}`);
 
     } catch (error) {
         console.log(error);
-        return res.status(500).send("Something went wrong");
+        return res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
     }
 };
 
@@ -124,7 +146,7 @@ const handleUnfollowUser = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        return res.status(500).send("Something went wrong");
+        return res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
     }
 };
 

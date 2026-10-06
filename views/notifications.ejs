@@ -1,48 +1,110 @@
 <% layout("layouts/boilerplate") -%>
-    <div
-        style="max-width: 600px; margin: 0 auto; background: white; border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); padding: 35px 30px;">
-        <h2
-            style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; margin-bottom: 25px; border-bottom: 1px solid #f1f5f9; padding-bottom: 20px; color: var(--text-dark);">
+    <div class="notif-container">
+        <h2 class="notif-title">
             User Alerts
         </h2>
 
-        <div style="display: flex; flex-direction: column; gap: 24px;">
-            <!-- Notification Item: Like -->
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <div class="avatar-med" style="width: 50px; height: 50px; font-size: 1.2rem;">R</div>
-                <div style="flex: 1; font-size: 15px; line-height: 1.4;">
-                    <strong style="color: var(--text-dark); font-weight: 700;">Rachel</strong> loved your recent post.
-                    <span style="display: block; color: var(--text-light); font-size: 13px; margin-top: 4px;">1 hour
-                        ago</span>
-                </div>
-                <div
-                    style="width: 48px; height: 48px; background: var(--bg-color-main) url('https://via.placeholder.com/48') center / cover; border-radius: 8px;">
-                </div>
-            </div>
-
-            <!-- Notification Item: Follow System -->
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <div class="avatar-med" style="width: 50px; height: 50px; font-size: 1.2rem;">D</div>
-                <div style="flex: 1; font-size: 15px; line-height: 1.4;">
-                    <strong style="color: var(--text-dark); font-weight: 700;">Daniel</strong> started following you.
-                    <span style="display: block; color: var(--text-light); font-size: 13px; margin-top: 4px;">4 hours
-                        ago</span>
-                </div>
-                <button class="btn-follow">Follow Back</button>
-            </div>
-
-            <!-- Notification Item: Comment -->
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <div class="avatar-med" style="width: 50px; height: 50px; font-size: 1.2rem;">E</div>
-                <div style="flex: 1; font-size: 15px; line-height: 1.4;">
-                    <strong style="color: var(--text-dark); font-weight: 700;">Eleanor</strong> commented: "This plan
-                    looks incredible!"
-                    <span
-                        style="display: block; color: var(--text-light); font-size: 13px; margin-top: 4px;">Yesterday</span>
-                </div>
-                <div
-                    style="width: 48px; height: 48px; background: var(--bg-color-main) url('https://via.placeholder.com/48') center / cover; border-radius: 8px;">
-                </div>
-            </div>
+        <div class="notif-list">
+            <% if (notifications && notifications.length> 0) { %>
+                <% function timeAgo(date) { const s=Math.floor((new Date() - date) / 1000); if (s < 60)
+                    return "just now" ; const m=Math.floor(s / 60); if (m===1) return "1 minute ago" ; if (m < 60)
+                    return m + " minutes ago" ; const h=Math.floor(s / 3600); if (h===1) return "1 hour ago" ; if (h <
+                    24) return h + " hours ago" ; const d=Math.floor(s / 86400); if (d===1) return "1 day ago" ; if (d <
+                    30) return d + " days ago" ; const mo=Math.floor(s / 2592000); if (mo===1) return "1 month ago" ; if
+                    (mo < 12) return mo + " months ago" ; const y=Math.floor(s / 31536000); if (y===1)
+                    return "1 year ago" ; return y + " years ago" ; } %>
+                    <% notifications.forEach(function(notification) { %>
+                        <% if (notification.type==='like' ) { %>
+                            <div class="notif-row">
+                                <div class="notif-avatar"
+                                    style="<%= notification.sender.profilePic ? 'background-image: url(' + notification.sender.profilePic + ');' : '' %>">
+                                    <%= !notification.sender.profilePic ?
+                                        notification.sender.name.charAt(0).toUpperCase() : '' %>
+                                </div>
+                                <div class="notif-text">
+                                    <strong class="notif-author">
+                                        <%= notification.sender.name %>
+                                    </strong> loved your recent post.
+                                    <span class="notif-time">
+                                        <%= timeAgo(notification.createdAt) %>
+                                    </span>
+                                </div>
+                                <% if (notification.post) { %>
+                                    <a href="/profile/<%= notification.post._id %>/view">
+                                        <% if (notification.post.mediaUrl) { %>
+                                            <div class="notif-post-media"
+                                                style="background-image: url('<%= notification.post.mediaUrl %>');">
+                                            </div>
+                                            <% } else { %>
+                                                <div class="notif-post-placeholder">
+                                                    Text
+                                                </div>
+                                                <% } %>
+                                    </a>
+                                    <% } else { %>
+                                        <div class="notif-post-placeholder">
+                                            Deleted
+                                        </div>
+                                        <% } %>
+                            </div>
+                            <% } else if (notification.type==='follow' ) { %>
+                                <div class="notif-row">
+                                    <div class="notif-avatar"
+                                        style="<%= notification.sender.profilePic ? 'background-image: url(' + notification.sender.profilePic + ');' : '' %>">
+                                        <%= !notification.sender.profilePic ?
+                                            notification.sender.name.charAt(0).toUpperCase() : '' %>
+                                    </div>
+                                    <div class="notif-text">
+                                        <strong class="notif-author">
+                                            <%= notification.sender.name %>
+                                        </strong> started following you.
+                                        <span class="notif-time">
+                                            <%= timeAgo(notification.createdAt) %>
+                                        </span>
+                                    </div>
+                                    <a href="/profile/<%= notification.sender._id %>" style="text-decoration: none;">
+                                        <button class="btn-follow">Profile</button>
+                                    </a>
+                                </div>
+                                <% } else if (notification.type==='comment' ) { %>
+                                    <div class="notif-row">
+                                        <div class="notif-avatar"
+                                            style="<%= notification.sender.profilePic ? 'background-image: url(' + notification.sender.profilePic + ');' : '' %>">
+                                            <%= !notification.sender.profilePic ?
+                                                notification.sender.name.charAt(0).toUpperCase() : '' %>
+                                        </div>
+                                        <div class="notif-text">
+                                            <strong class="notif-author">
+                                                <%= notification.sender.name %>
+                                            </strong> commented on your post.
+                                            <span class="notif-time">
+                                                <%= timeAgo(notification.createdAt) %>
+                                            </span>
+                                        </div>
+                                        <% if (notification.post) { %>
+                                            <a href="/profile/<%= notification.post._id %>/view">
+                                                <% if (notification.post.mediaUrl) { %>
+                                                    <div class="notif-post-media"
+                                                        style="background-image: url('<%= notification.post.mediaUrl %>');">
+                                                    </div>
+                                                    <% } else { %>
+                                                        <div class="notif-post-placeholder">
+                                                            Text
+                                                        </div>
+                                                        <% } %>
+                                            </a>
+                                            <% } else { %>
+                                                <div class="notif-post-placeholder">
+                                                    Deleted
+                                                </div>
+                                                <% } %>
+                                    </div>
+                                    <% } %>
+                                        <% }); %>
+                                            <% } else { %>
+                                                <div class="notif-empty">
+                                                    No notifications yet.
+                                                </div>
+                                                <% } %>
         </div>
     </div>

@@ -4,12 +4,35 @@ const User = require("../models/user");
 const Post = require("../models/post");
 const Comment = require("../models/comment");
 const Like = require("../models/like");
+const Notification = require("../models/notification");
 
 const router = express.Router();
 
 const {
     restrictToLoggedinUserOnly
 } = require("../middlewares/auth");
+
+
+// =========================
+// NOTIFICATIONS
+// =========================
+
+router.get("/notifications", restrictToLoggedinUserOnly, async (req, res) => {
+    try {
+        const notifications = await Notification.find({ recipient: req.user._id })
+            .populate("sender")
+            .populate("post")
+            .sort({ createdAt: -1 });
+
+        res.render("notifications", {
+            notifications,
+            currentUser: req.user
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
+    }
+});
 
 
 // =========================
@@ -66,7 +89,7 @@ router.get("/hangout", async (req, res) => {
     } catch (error) {
 
         console.log(error);
-        res.status(500).send("Something went wrong");
+        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
     }
 });
@@ -150,7 +173,7 @@ router.get("/profile/:id", async (req, res) => {
     } catch (error) {
 
         console.log(error);
-        res.status(500).send("Something went wrong");
+        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
     }
 
@@ -190,7 +213,7 @@ router.get("/search", async (req, res) => {
     } catch (error) {
 
         console.log(error);
-        res.status(500).send("Something went wrong");
+        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
     }
 
@@ -211,7 +234,7 @@ router.get("/profile/:id/edit", async (req, res) => {
 
         if (!user) {
 
-            return res.status(404).send("User not found");
+            return res.status(404).render("error", { error: "User not found", currentUser: req.user || null });
 
         }
 
@@ -224,7 +247,7 @@ router.get("/profile/:id/edit", async (req, res) => {
     } catch (error) {
 
         console.log(error);
-        res.status(500).send("Something went wrong");
+        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
     }
 
@@ -266,7 +289,7 @@ router.get("/profile/:id/view", async (req, res) => {
 
         if (!post) {
 
-            return res.status(404).send("Post not found");
+            return res.status(404).render("error", { error: "Post not found", currentUser: req.user || null });
 
         }
 
@@ -320,7 +343,7 @@ router.get("/profile/:id/view", async (req, res) => {
     } catch (error) {
 
         console.log(error);
-        res.status(500).send("Something went wrong");
+        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
     }
 
@@ -342,7 +365,7 @@ router.post(
 
             if (!post) {
 
-                return res.status(404).send("Post not found");
+                return res.status(404).render("error", { error: "Post not found", currentUser: req.user || null });
 
             }
 
@@ -357,13 +380,21 @@ router.post(
 
             });
 
+            if (post.author.toString() !== req.user._id.toString()) {
+                await Notification.create({
+                    recipient: post.author,
+                    sender: req.user._id,
+                    type: "comment",
+                    post: post._id
+                });
+            }
 
             res.redirect(`/profile/${post._id}/view`);
 
         } catch (error) {
 
             console.log(error);
-            res.status(500).send("Something went wrong");
+            res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
         }
 
@@ -389,7 +420,7 @@ router.delete(
 
             if (!post) {
 
-                return res.status(404).send("Post not found");
+                return res.status(404).render("error", { error: "Post not found", currentUser: req.user || null });
 
             }
 
@@ -436,7 +467,7 @@ router.delete(
         } catch (error) {
 
             console.log(error);
-            res.status(500).send("Something went wrong");
+            res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
         }
 
@@ -498,6 +529,15 @@ router.post(
 
                 });
 
+                if (post.author.toString() !== req.user._id.toString()) {
+                    await Notification.create({
+                        recipient: post.author,
+                        sender: req.user._id,
+                        type: "like",
+                        post: post._id
+                    });
+                }
+
             }
 
 
@@ -507,7 +547,7 @@ router.post(
         } catch (error) {
 
             console.log(error);
-            res.status(500).send("Something went wrong");
+            res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
         }
 
@@ -569,6 +609,15 @@ router.post(
 
                 });
 
+                if (post.author.toString() !== req.user._id.toString()) {
+                    await Notification.create({
+                        recipient: post.author,
+                        sender: req.user._id,
+                        type: "like",
+                        post: post._id
+                    });
+                }
+
             }
 
 
@@ -578,7 +627,7 @@ router.post(
         } catch (error) {
 
             console.log(error);
-            res.status(500).send("Something went wrong");
+            res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
         }
 
@@ -598,7 +647,7 @@ router.get("/profile/:id/followers", async (req, res) => {
             .populate("followers");
 
         if (!user) {
-            return res.status(404).send("User not found");
+            return res.status(404).render("error", { error: "User not found", currentUser: req.user || null });
         }
 
         res.render("followers", {
@@ -610,7 +659,7 @@ router.get("/profile/:id/followers", async (req, res) => {
     } catch (error) {
 
         console.log(error);
-        res.status(500).send("Something went wrong");
+        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
     }
 });
@@ -629,7 +678,7 @@ router.get("/profile/:id/following", async (req, res) => {
             .populate("following");
 
         if (!user) {
-            return res.status(404).send("User not found");
+            return res.status(404).render("error", { error: "User not found", currentUser: req.user || null });
         }
 
         res.render("following", {
@@ -641,7 +690,7 @@ router.get("/profile/:id/following", async (req, res) => {
     } catch (error) {
 
         console.log(error);
-        res.status(500).send("Something went wrong");
+        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
     }
 });

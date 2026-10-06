@@ -1,416 +1,202 @@
 <% layout("layouts/boilerplate") -%>
 
-<div
-    style="
-        max-width: 540px;
-        margin: 0 auto;
-        background: white;
-        border-radius: var(--border-radius-lg);
-        box-shadow: var(--shadow-md);
-        padding: 40px 30px;
-    ">
+    <div class="create-container">
 
-    <!-- Heading -->
-    <h2
-        style="
-            font-family: 'Outfit', sans-serif;
-            font-size: 2rem;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--text-dark);
-        ">
-        Create Post
-    </h2>
+        <!-- Header -->
+        <h2 class="create-title">
+            Create Post
+        </h2>
 
-
-    <!-- FORM -->
-    <form
-        action="/post/user/<%= user._id %>/posts"
-        method="POST"
-        enctype="multipart/form-data"
-        class="auth-form"
-        style="gap: 20px;">
-
-
-        <!-- ============================= -->
-        <!-- IMAGE UPLOAD AREA -->
-        <!-- ============================= -->
-
-        <div
-            id="uploadArea"
-            style="
-                width: 100%;
-                height: 260px;
-                border: 2px dashed #cbd5e1;
-                border-radius: var(--border-radius-md);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color: var(--text-light);
-                cursor: pointer;
-                background: #f8fafc;
-                transition: all 0.2s ease;
-                overflow: hidden;
-                position: relative;
-            ">
-
-
-            <!-- ============================= -->
-            <!-- IMAGE PREVIEW -->
-            <!-- ============================= -->
-
-            <img
-                id="imagePreview"
-                src=""
-                alt="Selected image"
-                style="
-                    display: none;
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    border-radius: var(--border-radius-md);
-                ">
-
-
-            <!-- ============================= -->
-            <!-- CHANGE IMAGE OVERLAY -->
-            <!-- ============================= -->
-
-            <div
-                id="changeImageOverlay"
-                style="
-                    display: none;
-                    position: absolute;
-                    inset: 0;
-                    background: rgba(0, 0, 0, 0.45);
-                    color: white;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: 18px;
-                    font-weight: 600;
-                    border-radius: var(--border-radius-md);
-                ">
-                Change image
-            </div>
-
-
-            <!-- ============================= -->
-            <!-- ORIGINAL UPLOAD CONTENT -->
-            <!-- ============================= -->
-
-            <div
-                id="uploadContent"
-                style="
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                ">
-
-
-                <!-- Upload Icon -->
-                <i
-                    class="uil uil-cloud-upload"
-                    style="
-                        font-size: 3.5rem;
-                        margin-bottom: 10px;
-                        color: var(--primary);
-                    ">
-                </i>
-
-
-                <!-- Main Text -->
-                <span
-                    style="
-                        font-weight: 500;
-                        font-size: 15px;
-                        color: var(--text-dark);
-                    ">
-                    Drag photos here
-                </span>
-
-
-                <!-- Small Text
-                <span
-                    style="
-                        font-size: 13px;
-                        margin-top: 8px;
-                    ">
-                    Images will be mapped to Cloudinary URLs
-                </span> -->
-
-
-                <!-- ============================= -->
-                <!-- HIDDEN FILE INPUT -->
-                <!-- ============================= -->
-
-                <input
-                    type="file"
-                    id="imageInput"
-                    name="image"
-                    accept="image/*"
-                    style="display: none;">
-
-
-                <!-- ============================= -->
-                <!-- SELECT BUTTON -->
-                <!-- ============================= -->
-
-                <button
-                    type="button"
-                    id="selectImageBtn"
-                    class="btn-follow"
-                    style="
-                        margin-top: 20px;
-                        font-weight: 600;
-                        width: auto;
-                    ">
-                    Select from your device
-                </button>
-
-            </div>
-
+        <!-- Tabs -->
+        <div class="create-tabs-container">
+            <button type="button" class="type-tab active" data-type="text">
+                📝 Text
+            </button>
+            <button type="button" class="type-tab" data-type="photo">
+                🖼️ Photo
+            </button>
+            <button type="button" class="type-tab" data-type="video">
+                🎥 Video
+            </button>
         </div>
 
+        <!-- MAIN FORM -->
+        <form action="/post/user/<%= user._id %>/posts" method="POST" enctype="multipart/form-data">
 
-        <!-- ============================= -->
-        <!-- CAPTION -->
-        <!-- ============================= -->
+            <!-- MEDIA STUDIO AREA -->
+            <div id="mediaStudio" class="media-studio" style="display: none;">
 
-        <textarea
-            id="caption"
-            name="content"
-            rows="4"
-            maxlength="2200"
-            placeholder="Write a gorgeous caption..."
-            style="
-                width: 100%;
-                padding: 20px;
-                border: 1px solid #f1f5f9;
-                border-radius: var(--border-radius-sm);
-                font-size: 15px;
-                outline: none;
-                resize: none;
-                background: #f8fafc;
-                font-family: 'Inter', sans-serif;
-            "></textarea>
+                <div id="uploadPrompt" class="upload-prompt">
+                    <i id="uploadIcon" class="uil uil-image-plus upload-icon"></i>
+                    <div id="uploadText" class="upload-text">Select a Photo</div>
+                    <div class="upload-hint">Click or drag and drop</div>
+                </div>
 
+                <!-- Preview Wrapper (for dynamic background blur) -->
+                <div id="previewContainer" class="preview-wrapper" style="display: none;">
+                    <div id="blurBg" class="blur-bg"></div>
+                    <img id="imagePreview" src="" class="preview-img" style="display: none;">
+                    <video id="videoPreview" src="" class="preview-video" style="display: none;" controls muted></video>
 
-        <!-- ============================= -->
-        <!-- CAPTION COUNTER -->
-        <!-- ============================= -->
+                    <div id="changeOverlay" class="change-overlay">
+                        Change Media
+                    </div>
+                </div>
 
-        <div
-            style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 0 5px;
-            ">
+                <input type="file" id="imageInput" name="image" style="display: none;">
+            </div>
 
-            <i
-                class="uil uil-smile"
-                style="
-                    font-size: 1.5rem;
-                    color: var(--text-light);
-                    cursor: pointer;
-                ">
-            </i>
+            <!-- CANVAS / CAPTION -->
+            <div style="position: relative;">
+                <textarea id="contentText" name="content" placeholder="What's on your mind?" maxlength="2200"
+                    class="content-textarea"></textarea>
 
-            <span
-                id="captionCount"
-                style="
-                    font-size: 13px;
-                    color: var(--text-light);
-                ">
-                0/2200
-            </span>
+                <!-- Quick Emojis -->
+                <div id="quickEmojis" class="quick-emojis">
+                    <span class="emoji-btn">✨</span>
+                    <span class="emoji-btn">🔥</span>
+                    <span class="emoji-btn">❤️</span>
+                    <span class="emoji-btn">😂</span>
+                    <span class="emoji-btn">🙌</span>
+                    <span class="emoji-btn">🎉</span>
+                    <span class="emoji-btn">🚀</span>
+                    <span class="emoji-btn">💯</span>
+                    <span class="emoji-btn">👀</span>
+                    <span class="emoji-btn">💡</span>
+                    <span class="emoji-btn">🌟</span>
+                    <span class="emoji-btn">🤔</span>
+                </div>
 
-        </div>
+                <div class="char-count-row">
+                    <span id="charCount">0/2200</span>
+                </div>
+            </div>
 
+            <button type="submit" class="publish-btn">
+                Publish Post
+            </button>
+        </form>
+    </div>
 
-        <!-- ============================= -->
-        <!-- SUBMIT BUTTON -->
-        <!-- ============================= -->
+    <script>
+        const tabs = document.querySelectorAll('.type-tab');
+        const mediaStudio = document.getElementById('mediaStudio');
+        const contentText = document.getElementById('contentText');
+        const imageInput = document.getElementById('imageInput');
 
-        <button
-            type="submit"
-            style="
-                margin-top: 5px;
-                padding: 18px;
-                border-radius: var(--border-radius-md);
-                font-size: 16px;
-                font-weight: 700;
-            ">
-            Share to Feed
-        </button>
+        const uploadPrompt = document.getElementById('uploadPrompt');
+        const uploadIcon = document.getElementById('uploadIcon');
+        const uploadText = document.getElementById('uploadText');
+        const previewContainer = document.getElementById('previewContainer');
+        const blurBg = document.getElementById('blurBg');
+        const imagePreview = document.getElementById('imagePreview');
+        const videoPreview = document.getElementById('videoPreview');
 
+        let currentType = 'text';
 
-    </form>
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
 
-</div>
+                const type = tab.getAttribute('data-type');
+                currentType = type;
 
+                if (type === 'text') {
+                    mediaStudio.style.display = 'none';
+                    imageInput.value = ''; // clear any media
+                    // Canvas mode
+                    contentText.style.fontSize = '22px';
+                    contentText.style.minHeight = '250px';
+                    contentText.placeholder = "What's on your mind?";
+                    resetPreview();
+                }
+                else if (type === 'photo') {
+                    mediaStudio.style.display = 'block';
+                    imageInput.accept = 'image/*';
+                    uploadIcon.className = 'uil uil-image-plus upload-icon';
+                    uploadText.textContent = 'Select a Photo';
+                    // Caption mode
+                    contentText.style.fontSize = '15px';
+                    contentText.style.minHeight = '120px';
+                    contentText.placeholder = "Write a caption...";
 
-<!-- ============================= -->
-<!-- CSS -->
-<!-- ============================= -->
+                    // Clear state if previously video
+                    if (videoPreview.src && videoPreview.style.display === 'block') {
+                        imageInput.value = '';
+                        resetPreview();
+                    }
+                }
+                else if (type === 'video') {
+                    mediaStudio.style.display = 'block';
+                    imageInput.accept = 'video/*';
+                    uploadIcon.className = 'uil uil-video upload-icon';
+                    uploadText.textContent = 'Select a Video';
+                    // Caption mode
+                    contentText.style.fontSize = '15px';
+                    contentText.style.minHeight = '120px';
+                    contentText.placeholder = "Write a caption...";
 
-<style>
+                    // Clear state if previously photo
+                    if (imagePreview.src && imagePreview.style.display === 'block') {
+                        imageInput.value = '';
+                        resetPreview();
+                    }
+                }
+            });
+        });
 
-    #uploadArea:hover {
-        background: #f1f5f9 !important;
-        border-color: var(--primary) !important;
-    }
-
-    #imagePreview {
-        transition: transform 0.2s ease;
-    }
-
-</style>
-
-
-<!-- ============================= -->
-<!-- JAVASCRIPT -->
-<!-- ============================= -->
-
-<script>
-
-    // Get elements
-    const imageInput = document.getElementById("imageInput");
-    const selectImageBtn = document.getElementById("selectImageBtn");
-    const imagePreview = document.getElementById("imagePreview");
-    const uploadContent = document.getElementById("uploadContent");
-    const uploadArea = document.getElementById("uploadArea");
-    const changeImageOverlay = document.getElementById("changeImageOverlay");
-
-
-    // ==========================================
-    // SELECT IMAGE BUTTON
-    // ==========================================
-
-    selectImageBtn.addEventListener("click", function (event) {
-
-        // Prevent parent upload area click
-        event.stopPropagation();
-
-        // Open file picker
-        imageInput.click();
-
-    });
-
-
-    // ==========================================
-    // WHEN IMAGE IS SELECTED
-    // ==========================================
-
-    imageInput.addEventListener("change", function () {
-
-        const file = imageInput.files[0];
-
-        // No file selected
-        if (!file) {
-            return;
-        }
-
-
-        // Make sure it is an image
-        if (!file.type.startsWith("image/")) {
-
-            alert("Please select an image.");
-
-            imageInput.value = "";
-
-            return;
-        }
-
-
-        // ==========================================
-        // CREATE TEMPORARY PREVIEW URL
-        // ==========================================
-
-        const imageURL = URL.createObjectURL(file);
-
-
-        // Put URL into image
-        imagePreview.src = imageURL;
-
-
-        // Show preview
-        imagePreview.style.display = "block";
-
-
-        // Hide upload instructions
-        uploadContent.style.display = "none";
-
-
-        // Show change overlay
-        changeImageOverlay.style.display = "flex";
-
-    });
-
-
-    // ==========================================
-    // CLICK IMAGE TO CHANGE IMAGE
-    // ==========================================
-
-    uploadArea.addEventListener("click", function () {
-
-        // Only open picker if an image
-        // has already been selected
-
-        if (imageInput.files.length > 0) {
-
+        mediaStudio.addEventListener('click', () => {
             imageInput.click();
+        });
 
+        function resetPreview() {
+            previewContainer.style.display = 'none';
+            uploadPrompt.style.display = 'flex';
+            imagePreview.style.display = 'none';
+            videoPreview.style.display = 'none';
+            blurBg.style.backgroundImage = 'none';
+            mediaStudio.style.borderStyle = 'dashed';
         }
 
-    });
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return resetPreview();
 
+            const objUrl = URL.createObjectURL(file);
 
-    // ==========================================
-    // MOUSE ENTER
-    // ==========================================
+            uploadPrompt.style.display = 'none';
+            previewContainer.style.display = 'flex';
+            mediaStudio.style.borderStyle = 'solid';
+            mediaStudio.style.borderColor = '#e2e8f0';
 
-    uploadArea.addEventListener("mouseenter", function () {
+            if (file.type.startsWith('video/')) {
+                videoPreview.src = objUrl;
+                videoPreview.style.display = 'block';
+                imagePreview.style.display = 'none';
+                blurBg.style.backgroundImage = 'none';
+            } else {
+                imagePreview.src = objUrl;
+                imagePreview.style.display = 'block';
+                videoPreview.style.display = 'none';
+                blurBg.style.backgroundImage = `url(${objUrl})`;
+            }
+        });
 
-        if (imageInput.files.length > 0) {
+        // Emojis
+        document.querySelectorAll('.emoji-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                contentText.value += btn.textContent;
+                contentText.focus();
+                updateCount();
+            });
+        });
 
-            changeImageOverlay.style.display = "flex";
-
+        // Char count
+        const charCount = document.getElementById('charCount');
+        function updateCount() {
+            charCount.textContent = `${contentText.value.length}/2200`;
         }
+        contentText.addEventListener('input', updateCount);
 
-    });
-
-
-    // ==========================================
-    // MOUSE LEAVE
-    // ==========================================
-
-    uploadArea.addEventListener("mouseleave", function () {
-
-        if (imageInput.files.length > 0) {
-
-            changeImageOverlay.style.display = "none";
-
-        }
-
-    });
-
-
-    // ==========================================
-    // CAPTION CHARACTER COUNTER
-    // ==========================================
-
-    const caption = document.getElementById("caption");
-    const captionCount = document.getElementById("captionCount");
-
-
-    caption.addEventListener("input", function () {
-
-        captionCount.textContent =
-            `${caption.value.length}/2200`;
-
-    });
-
-</script>
+    </script>

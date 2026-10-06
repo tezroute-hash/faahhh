@@ -13,24 +13,28 @@
         <div class="auth-container">
             <div class="auth-box">
                 <h1 class="logo">Hangout</h1>
-                <form action="/user/login" method="post" class="auth-form">
-                    <input type="email" name="email" placeholder="Enter email" required>
-                    <input type="password" name="password" placeholder="Enter password" required>
-                    <button type="submit">Log in</button>
-
-                    <div style="display: flex; align-items: center; margin: 15px 0;">
-                        <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+                <% if (typeof error !=='undefined' && error) { %>
+                    <div class="error-msg">
+                        <%= error %>
                     </div>
-                </form>
+                    <% } %>
+                        <form action="/user/login" method="post" class="auth-form">
+                            <input type="email" name="email" placeholder="Enter email" required>
+                            <input type="password" name="password" placeholder="Enter password" required>
+                            <button type="submit">Log in</button>
 
-                <div style="text-align: center; margin-top: 15px;">
-                    <a href="#" style="color: #00376b; font-size: 12px;">Forgot password?</a>
-                </div>
+                            <div style="display: flex; align-items: center; margin: 15px 0;">
+                                <div class="divider-row"></div>
+                            </div>
+                        </form>
+
+                        <div style="text-align: center; margin-top: 15px;">
+                            <a href="#" class="auth-msg-link">Forgot password?</a>
+                        </div>
             </div>
 
             <div class="auth-box alt">
-                <span" style="font-size: 14px;">Don't have an account? <a href="/signup"
-                        style="color: var(--blue-primary); font-weight: 600;">Sign up</a></span>
+                <span class="auth-msg-alt">Don't have an account? <a href="/signup">Sign up</a></span>
             </div>
         </div>
     </div>

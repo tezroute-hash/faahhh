@@ -1,458 +1,376 @@
 <% layout("layouts/boilerplate") -%>
 
-<% if (typeof user !== "undefined" && user) { %>
+    <% if (typeof user !=="undefined" && user) { %>
 
-    <!-- ========================= -->
-    <!-- PROFILE HEADER -->
-    <!-- ========================= -->
+        <!-- ========================= -->
+        <!-- PROFILE HEADER -->
+        <!-- ========================= -->
 
-    <div class="profile-header">
+        <div class="profile-header">
 
-        <!-- PROFILE IMAGE -->
+            <!-- PROFILE IMAGE -->
 
-        <% if (user.profilePic && user.profilePic !== "") { %>
+            <% if (user.profilePic && user.profilePic !=="" ) { %>
 
-            <img
-                src="<%= user.profilePic %>"
-                alt="Profile"
-                class="avatar-lg"
-                style="
-                    object-fit: cover;
-                    border: none;
-                    padding: 0;
-                "
-            >
-
-        <% } else { %>
-
-            <div class="avatar-lg">
-
-                <%= user.username
-                    ? user.username.charAt(0).toUpperCase()
-                    : "U"
-                %>
-
-            </div>
-
-        <% } %>
-
-
-        <!-- PROFILE DETAILS -->
-
-        <div class="profile-details">
-
-            <!-- USERNAME + BUTTONS -->
-
-            <div class="profile-name-row">
-
-                <h2 class="profile-username">
-                    <%= user.username %>
-                </h2>
-
-
-                <% if (
-                    currentUser &&
-                    currentUser._id.toString() === user._id.toString()
-                ) { %>
-
-                    <!-- ========================= -->
-                    <!-- OWN PROFILE -->
-                    <!-- ========================= -->
-
-                    <a
-                        href="/profile/<%= user._id %>/edit"
-                        class="btn-outline"
-                    >
-                        Edit profile
-                    </a>
-
-
-                <% } else if (currentUser) { %>
-
-                    <!-- ========================= -->
-                    <!-- OTHER USER PROFILE -->
-                    <!-- ========================= -->
-
-                    <!-- MESSAGE BUTTON -->
-
-                    <a
-                        href="/messages/<%= user._id %>"
-                        class="btn-outline"
-                        style="
-                            text-decoration: none;
-                            margin-right: 5px;
-                        "
-                    >
-                        Message
-                    </a>
-
-
-                    <!-- FOLLOW / UNFOLLOW -->
-
-                    <% if (isFollowing) { %>
-
-                        <!-- UNFOLLOW -->
-
-                        <form
-                            action="/user/profile/<%= user._id %>/unfollow"
-                            method="POST"
-                            style="display: inline;"
-                        >
-
-                            <button
-                                type="submit"
-                                class="btn-outline"
-                            >
-                                Following
-                            </button>
-
-                        </form>
-
-
-                    <% } else { %>
-
-                        <!-- FOLLOW -->
-
-                        <form
-                            action="/user/profile/<%= user._id %>/follow"
-                            method="POST"
-                            style="display: inline;"
-                        >
-
-                            <button
-                                type="submit"
-                                class="btn-outline"
-                            >
-                                Follow
-                            </button>
-
-                        </form>
-
-                    <% } %>
-
-                <% } %>
-
-            </div>
-
-
-            <!-- ========================= -->
-            <!-- PROFILE STATS -->
-            <!-- ========================= -->
-
-            <div class="profile-stats">
-
-                <!-- POSTS -->
-
-                <span>
-
-                    <strong>
-                        <%= posts.length %>
-                    </strong>
-
-                    posts
-
-                </span>
-
-
-                <!-- FOLLOWERS -->
-
-                <a
-                    href="/profile/<%= user._id %>/followers"
-                    style="
-                        text-decoration: none;
-                        color: inherit;
-                    "
-                >
-
-                    <span>
-
-                        <strong>
-                            <%= user.followers.length %>
-                        </strong>
-
-                        followers
-
-                    </span>
-
-                </a>
-
-
-                <!-- FOLLOWING -->
-
-                <a
-                    href="/profile/<%= user._id %>/following"
-                    style="
-                        text-decoration: none;
-                        color: inherit;
-                    "
-                >
-
-                    <span>
-
-                        <strong>
-                            <%= user.following.length %>
-                        </strong>
-
-                        following
-
-                    </span>
-
-                </a>
-
-            </div>
-
-
-            <!-- ========================= -->
-            <!-- NAME -->
-            <!-- ========================= -->
-
-            <div class="profile-name">
-
-                <%= user.name || user.username %>
-
-            </div>
-
-
-            <!-- ========================= -->
-            <!-- BIO -->
-            <!-- ========================= -->
-
-            <div class="profile-bio">
-
-                <%= user.email %>
-
-
-                <% if (user.bio) { %>
-
-                    <br>
-
-                    <b>
-                        <%= user.bio %>
-                    </b>
-
-                <% } %>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- TABS -->
-    <!-- ========================= -->
-
-    <div class="profile-tabs">
-
-        <div class="profile-tab active">
-
-            <i class="uil uil-grid"></i>
-
-            ALL POSTS
-
-        </div>
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- POSTS GRID -->
-    <!-- ========================= -->
-
-    <% if (posts && posts.length > 0) { %>
-
-        <div
-            style="
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 4px;
-                margin-top: 10px;
-            "
-        >
-
-            <% posts.forEach(post => { %>
-
-
-                <!-- ========================= -->
-                <!-- IMAGE POST -->
-                <!-- ========================= -->
-
-                <% if (
-                    post.type === "image" &&
-                    post.mediaUrl
-                ) { %>
-
-                    <div
-                        style="
-                            aspect-ratio: 1;
-                            overflow: hidden;
-                            background: #efefef;
-                            cursor: pointer;
-                        "
-                    >
-
-                        <a
-                            href="/profile/<%= post._id %>/view"
-                        >
-
-                            <img
-                                src="<%= post.mediaUrl %>"
-                                alt="Post"
-                                style="
-                                    width: 100%;
-                                    height: 100%;
-                                    object-fit: cover;
-                                    display: block;
-                                "
-                            >
-
-                        </a>
-
-                    </div>
-
-
-                <!-- ========================= -->
-                <!-- VIDEO POST -->
-                <!-- ========================= -->
-
-                <% } else if (
-                    post.type === "video" &&
-                    post.mediaUrl
-                ) { %>
-
-                    <div
-                        style="
-                            aspect-ratio: 1;
-                            overflow: hidden;
-                            background: #000;
-                            cursor: pointer;
-                        "
-                    >
-
-                        <video
-                            src="<%= post.mediaUrl %>"
-                            style="
-                                width: 100%;
-                                height: 100%;
-                                object-fit: cover;
-                            "
-                            controls
-                        >
-                        </video>
-
-                    </div>
-
-
-                <!-- ========================= -->
-                <!-- TEXT POST -->
-                <!-- ========================= -->
+                <img src="<%= user.profilePic %>" alt="Profile" class="avatar-lg profile-avatar-lg">
 
                 <% } else { %>
 
-                    <div
-                        style="
-                            aspect-ratio: 1;
-                            background: #f3f3f3;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            padding: 20px;
-                            text-align: center;
-                            cursor: pointer;
-                        "
-                    >
+                    <div class="avatar-lg">
 
-                        <p>
-                            <%= post.content %>
-                        </p>
+                        <%= user.username ? user.username.charAt(0).toUpperCase() : "U" %>
 
                     </div>
+
+                    <% } %>
+
+
+                        <!-- PROFILE DETAILS -->
+
+                        <div class="profile-details">
+
+                            <!-- USERNAME + BUTTONS -->
+
+                            <div class="profile-name-row">
+
+                                <h2 class="profile-username">
+                                    <%= user.username %>
+                                </h2>
+
+
+                                <% if ( currentUser && currentUser._id.toString()===user._id.toString() ) { %>
+
+                                    <!-- ========================= -->
+                                    <!-- OWN PROFILE -->
+                                    <!-- ========================= -->
+
+                                    <a href="/profile/<%= user._id %>/edit" class="btn-outline">
+                                        Edit profile
+                                    </a>
+
+
+                                    <% } else if (currentUser) { %>
+
+                                        <!-- ========================= -->
+                                        <!-- OTHER USER PROFILE -->
+                                        <!-- ========================= -->
+
+                                        <!-- MESSAGE BUTTON -->
+
+                                        <a href="/messages/<%= user._id %>" class="btn-outline"
+                                            style="text-decoration: none; margin-right: 5px;">
+                                            Message
+                                        </a>
+
+
+                                        <!-- FOLLOW / UNFOLLOW -->
+
+                                        <% if (isFollowing) { %>
+
+                                            <!-- UNFOLLOW -->
+
+                                            <form action="/user/profile/<%= user._id %>/unfollow" method="POST"
+                                                style="display: inline;">
+
+                                                <button type="submit" class="btn-outline">
+                                                    Following
+                                                </button>
+
+                                            </form>
+
+
+                                            <% } else { %>
+
+                                                <!-- FOLLOW -->
+
+                                                <form action="/user/profile/<%= user._id %>/follow" method="POST"
+                                                    style="display: inline;">
+
+                                                    <button type="submit" class="btn-outline">
+                                                        Follow
+                                                    </button>
+
+                                                </form>
+
+                                                <% } %>
+
+                                                    <% } %>
+
+                            </div>
+
+
+                            <!-- ========================= -->
+                            <!-- PROFILE STATS -->
+                            <!-- ========================= -->
+
+                            <div class="profile-stats">
+
+                                <!-- POSTS -->
+
+                                <span>
+
+                                    <strong>
+                                        <%= posts.length %>
+                                    </strong>
+
+                                    posts
+
+                                </span>
+
+
+                                <!-- FOLLOWERS -->
+
+                                <a href="/profile/<%= user._id %>/followers"
+                                    style="text-decoration: none; color: inherit;">
+
+                                    <span>
+
+                                        <strong>
+                                            <%= user.followers.length %>
+                                        </strong>
+
+                                        followers
+
+                                    </span>
+
+                                </a>
+
+
+                                <!-- FOLLOWING -->
+
+                                <a href="/profile/<%= user._id %>/following"
+                                    style="text-decoration: none; color: inherit;">
+
+                                    <span>
+
+                                        <strong>
+                                            <%= user.following.length %>
+                                        </strong>
+
+                                        following
+
+                                    </span>
+
+                                </a>
+
+                            </div>
+
+
+                            <!-- ========================= -->
+                            <!-- NAME -->
+                            <!-- ========================= -->
+
+                            <div class="profile-name">
+
+                                <%= user.name || user.username %>
+
+                            </div>
+
+
+                            <!-- ========================= -->
+                            <!-- BIO -->
+                            <!-- ========================= -->
+
+                            <div class="profile-bio">
+
+                                <%= user.email %>
+
+
+                                    <% if (user.bio) { %>
+
+                                        <br>
+
+                                        <b>
+                                            <%= user.bio %>
+                                        </b>
+
+                                        <% } %>
+
+                            </div>
+
+                        </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- TABS -->
+        <!-- ========================= -->
+
+        <div class="profile-tabs" style="display: flex; justify-content: center; gap: 40px;">
+
+            <div class="profile-tab active" id="tab-media" style="cursor: pointer;" onclick="switchTab('media')">
+                <i class="uil uil-image"></i>
+                IMAGES
+            </div>
+
+            <div class="profile-tab" id="tab-text" style="cursor: pointer;" onclick="switchTab('text')">
+                <i class="uil uil-text"></i>
+                TEXT POSTS
+            </div>
+
+            <div class="profile-tab" id="tab-all" style="cursor: pointer;" onclick="switchTab('all')">
+                <i class="uil uil-grid"></i>
+                ALL POSTS
+            </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- POSTS GRID -->
+        <!-- ========================= -->
+
+        <% if (posts && posts.length> 0) { %>
+
+            <div class="profile-grid-container">
+
+                <% posts.forEach(post=> { %>
+
+
+                    <!-- ========================= -->
+                    <!-- IMAGE POST -->
+                    <!-- ========================= -->
+
+                    <% if ( post.type==="image" && post.mediaUrl ) { %>
+
+                        <div class="grid-item-media">
+
+                            <a href="/profile/<%= post._id %>/view">
+
+                                <img src="<%= post.mediaUrl %>" alt="Post" class="img-post-container">
+
+                            </a>
+
+                        </div>
+
+
+                        <!-- ========================= -->
+                        <!-- VIDEO POST -->
+                        <!-- ========================= -->
+
+                        <% } else if ( post.type==="video" && post.mediaUrl ) { %>
+
+                            <div class="grid-item-media">
+
+                                <video src="<%= post.mediaUrl %>" class="grid-item-video" controls>
+                                </video>
+
+                            </div>
+
+
+                            <!-- ========================= -->
+                            <!-- TEXT POST -->
+                            <!-- ========================= -->
+
+                            <% } else { %>
+
+                                <a class="grid-item-text" href="/profile/<%= post._id %>/view">
+
+                                    <p class="grid-item-text-p">
+                                        <%= post.content %>
+                                    </p>
+
+                                </a>
+
+                                <% } %>
+
+
+                                    <% }) %>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- NO POSTS -->
+            <!-- ========================= -->
+
+            <% } else { %>
+
+                <div class="no-posts-container">
+
+                    <i class="uil uil-camera" style="font-size: 50px;">
+                    </i>
+
+
+                    <h2>
+                        No posts yet
+                    </h2>
+
+
+                    <% if ( currentUser && currentUser._id.toString()===user._id.toString() ) { %>
+
+                        <p>
+                            Create your first post.
+                        </p>
+
+
+                        <a href="/create" class="btn-outline">
+                            Create Post
+                        </a>
+
+                        <% } %>
+
+                </div>
 
                 <% } %>
 
 
-            <% }) %>
+                    <!-- ========================= -->
+                    <!-- USER NOT FOUND -->
+                    <!-- ========================= -->
 
-        </div>
+                    <% } else { %>
 
+                        <div class="no-posts-container">
 
-    <!-- ========================= -->
-    <!-- NO POSTS -->
-    <!-- ========================= -->
+                            <h2>
+                                User Not Found
+                            </h2>
 
-    <% } else { %>
+                            <p>
+                                Sorry, this page isn't available.
+                            </p>
 
-        <div
-            style="
-                text-align: center;
-                padding: 60px 20px;
-                color: var(--text-light);
-            "
-        >
+                            <p>
+                                The link you followed may be broken,
+                                or the page may have been removed.
+                            </p>
 
-            <i
-                class="uil uil-camera"
-                style="font-size: 50px;"
-            >
-            </i>
+                        </div>
 
+                        <% } %>
+                            <script>
+                                function switchTab(tab) {
+                                    const allTab = document.getElementById('tab-all');
+                                    const textTab = document.getElementById('tab-text');
+                                    const mediaTab = document.getElementById('tab-media');
 
-            <h2>
-                No posts yet
-            </h2>
+                                    allTab.classList.remove('active');
+                                    textTab.classList.remove('active');
+                                    mediaTab.classList.remove('active');
 
+                                    if (tab === 'all') allTab.classList.add('active');
+                                    if (tab === 'text') textTab.classList.add('active');
+                                    if (tab === 'media') mediaTab.classList.add('active');
 
-            <% if (
-                currentUser &&
-                currentUser._id.toString() === user._id.toString()
-            ) { %>
+                                    const mediaPosts = document.querySelectorAll('.grid-item-media');
+                                    const textPosts = document.querySelectorAll('.grid-item-text');
 
-                <p>
-                    Create your first post.
-                </p>
+                                    if (tab === 'all') {
+                                        mediaPosts.forEach(p => p.style.display = 'block');
+                                        textPosts.forEach(p => p.style.display = 'flex');
+                                    } else if (tab === 'text') {
+                                        mediaPosts.forEach(p => p.style.display = 'none');
+                                        textPosts.forEach(p => p.style.display = 'flex');
+                                    } else if (tab === 'media') {
+                                        mediaPosts.forEach(p => p.style.display = 'block');
+                                        textPosts.forEach(p => p.style.display = 'none');
+                                    }
+                                }
 
-
-                <a
-                    href="/create"
-                    class="btn-outline"
-                >
-                    Create Post
-                </a>
-
-            <% } %>
-
-        </div>
-
-    <% } %>
-
-
-<!-- ========================= -->
-<!-- USER NOT FOUND -->
-<!-- ========================= -->
-
-<% } else { %>
-
-    <div
-        style="
-            text-align: center;
-            padding: 40px;
-        "
-    >
-
-        <h2>
-            User Not Found
-        </h2>
-
-        <p>
-            Sorry, this page isn't available.
-        </p>
-
-        <p>
-            The link you followed may be broken,
-            or the page may have been removed.
-        </p>
-
-    </div>
-
-<% } %>
+                                // Set default tab to images
+                                document.addEventListener('DOMContentLoaded', () => {
+                                    switchTab('media');
+                                });
+                            </script>
