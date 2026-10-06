@@ -1,0 +1,686 @@
+<% layout("layouts/boilerplate") -%>
+
+<div
+    style="
+        background: white;
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        display: flex;
+        height: calc(100vh - 120px);
+        overflow: hidden;
+        min-height: 500px;
+    "
+>
+
+    <!-- ==================== LEFT SIDE ==================== -->
+    <div
+        class="messages-sidebar"
+        style="
+            width: 320px;
+            border-right: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            flex-shrink: 0;
+        "
+    >
+
+        <!-- TITLE -->
+        <div
+            style="
+                padding: 20px;
+                font-weight: 800;
+                font-family: 'Outfit', sans-serif;
+                font-size: 1.5rem;
+                text-align: center;
+                border-bottom: 1px solid #e5e7eb;
+                color: var(--text-dark);
+            "
+        >
+            Messages
+        </div>
+
+
+        <!-- CONVERSATIONS -->
+        <div
+            style="
+                overflow-y: auto;
+                flex: 1;
+            "
+        >
+
+            <% if (conversations && conversations.length > 0) { %>
+
+                <% conversations.forEach(conversation => { %>
+
+                    <a
+                        href="/messages/<%= conversation.user._id %>"
+                        class="conversation-item
+                        <% if (
+                            receiver &&
+                            receiver._id.toString() ===
+                            conversation.user._id.toString()
+                        ) { %>
+                            active-conversation
+                        <% } %>"
+                    >
+
+                        <!-- PROFILE IMAGE -->
+                        <div
+                            class="avatar-med"
+                            style="
+                                width: 48px;
+                                height: 48px;
+                                font-size: 1.2rem;
+                                flex-shrink: 0;
+                                overflow: hidden;
+                            "
+                        >
+
+                            <% if (conversation.user.profilePic) { %>
+
+                                <img
+                                    src="<%= conversation.user.profilePic %>"
+                                    alt="Profile"
+                                    style="
+                                        width: 100%;
+                                        height: 100%;
+                                        object-fit: cover;
+                                    "
+                                >
+
+                            <% } else { %>
+
+                                <%= conversation.user.username
+                                    .charAt(0)
+                                    .toUpperCase()
+                                %>
+
+                            <% } %>
+
+                        </div>
+
+
+                        <!-- USER INFO -->
+                        <div
+                            style="
+                                min-width: 0;
+                                flex: 1;
+                            "
+                        >
+
+                            <strong>
+                                <%= conversation.user.username %>
+                            </strong>
+
+
+                            <div
+                                style="
+                                    font-size: 13px;
+                                    color: var(--text-light);
+                                    margin-top: 3px;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                "
+                            >
+                                <%= conversation.lastMessage.text %>
+                            </div>
+
+                        </div>
+
+
+                        <!-- DATE -->
+                        <div
+                            style="
+                                font-size: 11px;
+                                color: #999;
+                                white-space: nowrap;
+                            "
+                        >
+                            <%= new Date(
+                                conversation.lastMessage.createdAt
+                            ).toLocaleDateString() %>
+                        </div>
+
+                    </a>
+
+                <% }) %>
+
+
+            <% } else { %>
+
+                <!-- NO CONVERSATIONS -->
+
+                <div
+                    style="
+                        text-align: center;
+                        padding: 50px 20px;
+                        color: var(--text-light);
+                    "
+                >
+
+                    <i
+                        class="uil uil-message"
+                        style="
+                            font-size: 45px;
+                        "
+                    ></i>
+
+                    <h3>
+                        No messages yet
+                    </h3>
+
+                    <p>
+                        Visit someone's profile to start a conversation.
+                    </p>
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================== RIGHT SIDE ==================== -->
+
+    <div
+        class="chat-container"
+        style="
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #f8fafc;
+            min-width: 0;
+        "
+    >
+
+        <% if (receiver) { %>
+
+
+            <!-- ==================== CHAT HEADER ==================== -->
+
+            <div
+                style="
+                    padding: 18px 22px;
+                    border-bottom: 1px solid #e5e7eb;
+                    background: white;
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                "
+            >
+
+                <!-- PROFILE IMAGE -->
+
+                <div
+                    class="avatar-med"
+                    style="
+                        width: 44px;
+                        height: 44px;
+                        font-size: 1.1rem;
+                        overflow: hidden;
+                        flex-shrink: 0;
+                    "
+                >
+
+                    <% if (receiver.profilePic) { %>
+
+                        <img
+                            src="<%= receiver.profilePic %>"
+                            alt="Profile"
+                            style="
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                            "
+                        >
+
+                    <% } else { %>
+
+                        <%= receiver.username
+                            .charAt(0)
+                            .toUpperCase()
+                        %>
+
+                    <% } %>
+
+                </div>
+
+
+                <!-- USER NAME -->
+
+                <div>
+
+                    <strong
+                        style="
+                            font-size: 1.1rem;
+                            color: var(--text-dark);
+                        "
+                    >
+                        <%= receiver.username %>
+                    </strong>
+
+
+                    <div
+                        style="
+                            font-size: 12px;
+                            color: var(--text-light);
+                        "
+                    >
+                        <%= receiver.name || receiver.username %>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==================== CHAT MESSAGES ==================== -->
+
+            <div
+                id="chat-messages"
+                style="
+                    flex: 1;
+                    padding: 25px;
+                    overflow-y: auto;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                "
+            >
+
+                <% if (messages && messages.length > 0) { %>
+
+
+                    <% messages.forEach(message => { %>
+
+                        <%
+                            const isMine =
+                                message.sender._id.toString() ===
+                                currentUser._id.toString();
+                        %>
+
+
+                        <!-- MESSAGE ROW -->
+
+                        <div
+                            class="<%= isMine
+                                ? 'message-row mine'
+                                : 'message-row theirs'
+                            %>"
+                        >
+
+                            <!-- MESSAGE BUBBLE -->
+
+                            <div
+                                class="<%= isMine
+                                    ? 'message-bubble mine-bubble'
+                                    : 'message-bubble their-bubble'
+                                %>"
+                            >
+
+                                <%= message.text %>
+
+
+                                <!-- TIME -->
+
+                                <div class="message-time">
+
+                                    <%= new Date(
+                                        message.createdAt
+                                    ).toLocaleTimeString(
+                                        [],
+                                        {
+                                            hour: "2-digit",
+                                            minute: "2-digit"
+                                        }
+                                    ) %>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    <% }) %>
+
+
+                <% } else { %>
+
+
+                    <!-- NO MESSAGES -->
+
+                    <div
+                        style="
+                            flex: 1;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: var(--text-light);
+                        "
+                    >
+
+                        <div
+                            style="
+                                text-align: center;
+                            "
+                        >
+
+                            <i
+                                class="uil uil-comment"
+                                style="
+                                    font-size: 55px;
+                                "
+                            ></i>
+
+                            <h3>
+                                Start the conversation
+                            </h3>
+
+                            <p>
+                                Send a message to
+                                <%= receiver.username %>
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                <% } %>
+
+            </div>
+
+
+
+            <!-- ==================== MESSAGE INPUT ==================== -->
+
+            <div
+                style="
+                    padding: 18px 20px;
+                    background: white;
+                    border-top: 1px solid #e5e7eb;
+                "
+            >
+
+                <form
+                    action="/messages/<%= receiver._id %>"
+                    method="POST"
+                    style="
+                        display: flex;
+                        gap: 10px;
+                        align-items: center;
+                        background: #f1f5f9;
+                        padding: 8px 10px 8px 18px;
+                        border-radius: 999px;
+                    "
+                >
+
+                    <input
+                        type="text"
+                        name="text"
+                        placeholder="Type a message..."
+                        required
+                        autocomplete="off"
+                        style="
+                            flex: 1;
+                            border: none;
+                            background: transparent;
+                            outline: none;
+                            font-size: 15px;
+                            color: var(--text-dark);
+                            min-width: 0;
+                        "
+                    >
+
+
+                    <button
+                        type="submit"
+                        style="
+                            background: var(--primary);
+                            color: white;
+                            border: none;
+                            padding: 9px 18px;
+                            border-radius: 999px;
+                            font-weight: 600;
+                            cursor: pointer;
+                        "
+                    >
+                        Send
+                    </button>
+
+                </form>
+
+            </div>
+
+
+        <% } else { %>
+
+
+            <!-- ==================== NO CHAT SELECTED ==================== -->
+
+            <div
+                style="
+                    flex: 1;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: var(--text-light);
+                "
+            >
+
+                <div
+                    style="
+                        text-align: center;
+                    "
+                >
+
+                    <i
+                        class="uil uil-message"
+                        style="
+                            font-size: 70px;
+                        "
+                    ></i>
+
+                    <h2>
+                        Your Messages
+                    </h2>
+
+                    <p>
+                        Select a conversation to start chatting.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        <% } %>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==================== CSS ==================== -->
+
+<style>
+
+    /* ==================== CONVERSATION LIST ==================== */
+
+    .conversation-item {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        padding: 15px;
+
+        text-decoration: none;
+
+        color: inherit;
+
+        border-bottom: 1px solid #f3f4f6;
+
+        transition: background 0.2s ease;
+
+    }
+
+
+    .conversation-item:hover {
+
+        background: #f8fafc;
+
+    }
+
+
+    .active-conversation {
+
+        background: rgba(79, 70, 229, 0.08);
+
+    }
+
+
+
+    /* ==================== MESSAGE ROW ==================== */
+
+    .message-row {
+
+        display: flex;
+
+        width: 100%;
+
+    }
+
+
+    /* YOUR MESSAGE */
+
+    .message-row.mine {
+
+        justify-content: flex-end;
+
+    }
+
+
+    /* OTHER USER MESSAGE */
+
+    .message-row.theirs {
+
+        justify-content: flex-start;
+
+    }
+
+
+
+    /* ==================== MESSAGE BUBBLE ==================== */
+
+    .message-bubble {
+
+        max-width: 70%;
+
+        padding: 12px 17px;
+
+        border-radius: 18px;
+
+        font-size: 15px;
+
+        line-height: 1.4;
+
+        word-break: break-word;
+
+    }
+
+
+    /* YOUR MESSAGE */
+
+    .mine-bubble {
+
+        background: var(--primary);
+
+        color: white;
+
+        border-bottom-right-radius: 4px;
+
+    }
+
+
+    /* OTHER USER MESSAGE */
+
+    .their-bubble {
+
+        background: white;
+
+        color: var(--text-dark);
+
+        border-bottom-left-radius: 4px;
+
+        box-shadow: var(--shadow-sm);
+
+    }
+
+
+
+    /* ==================== MESSAGE TIME ==================== */
+
+    .message-time {
+
+        font-size: 10px;
+
+        margin-top: 5px;
+
+        opacity: 0.7;
+
+        text-align: right;
+
+    }
+
+
+
+    /* ==================== MOBILE ==================== */
+
+    @media (max-width: 768px) {
+
+        .messages-sidebar {
+
+            width: 100% !important;
+
+            border-right: none !important;
+
+        }
+
+
+        .chat-container {
+
+            display: none !important;
+
+        }
+
+    }
+
+</style>
+
+
+
+<!-- ==================== AUTO SCROLL ==================== -->
+
+<script>
+
+    const chatMessages =
+        document.getElementById("chat-messages");
+
+    if (chatMessages) {
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+    }
+
+</script>

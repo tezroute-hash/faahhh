@@ -2,9 +2,13 @@
 
 <% if (typeof user !== "undefined" && user) { %>
 
+    <!-- ========================= -->
     <!-- PROFILE HEADER -->
+    <!-- ========================= -->
 
     <div class="profile-header">
+
+        <!-- PROFILE IMAGE -->
 
         <% if (user.profilePic && user.profilePic !== "") { %>
 
@@ -12,7 +16,11 @@
                 src="<%= user.profilePic %>"
                 alt="Profile"
                 class="avatar-lg"
-                style="object-fit: cover; border: none; padding: 0;"
+                style="
+                    object-fit: cover;
+                    border: none;
+                    padding: 0;
+                "
             >
 
         <% } else { %>
@@ -29,9 +37,11 @@
         <% } %>
 
 
+        <!-- PROFILE DETAILS -->
+
         <div class="profile-details">
 
-            <!-- USERNAME + BUTTON -->
+            <!-- USERNAME + BUTTONS -->
 
             <div class="profile-name-row">
 
@@ -45,7 +55,9 @@
                     currentUser._id.toString() === user._id.toString()
                 ) { %>
 
+                    <!-- ========================= -->
                     <!-- OWN PROFILE -->
+                    <!-- ========================= -->
 
                     <a
                         href="/profile/<%= user._id %>/edit"
@@ -57,7 +69,25 @@
 
                 <% } else if (currentUser) { %>
 
+                    <!-- ========================= -->
                     <!-- OTHER USER PROFILE -->
+                    <!-- ========================= -->
+
+                    <!-- MESSAGE BUTTON -->
+
+                    <a
+                        href="/messages/<%= user._id %>"
+                        class="btn-outline"
+                        style="
+                            text-decoration: none;
+                            margin-right: 5px;
+                        "
+                    >
+                        Message
+                    </a>
+
+
+                    <!-- FOLLOW / UNFOLLOW -->
 
                     <% if (isFollowing) { %>
 
@@ -77,6 +107,7 @@
                             </button>
 
                         </form>
+
 
                     <% } else { %>
 
@@ -104,9 +135,13 @@
             </div>
 
 
+            <!-- ========================= -->
             <!-- PROFILE STATS -->
+            <!-- ========================= -->
 
             <div class="profile-stats">
+
+                <!-- POSTS -->
 
                 <span>
 
@@ -119,9 +154,14 @@
                 </span>
 
 
+                <!-- FOLLOWERS -->
+
                 <a
                     href="/profile/<%= user._id %>/followers"
-                    style="text-decoration: none; color: inherit;"
+                    style="
+                        text-decoration: none;
+                        color: inherit;
+                    "
                 >
 
                     <span>
@@ -137,9 +177,14 @@
                 </a>
 
 
+                <!-- FOLLOWING -->
+
                 <a
                     href="/profile/<%= user._id %>/following"
-                    style="text-decoration: none; color: inherit;"
+                    style="
+                        text-decoration: none;
+                        color: inherit;
+                    "
                 >
 
                     <span>
@@ -157,7 +202,9 @@
             </div>
 
 
+            <!-- ========================= -->
             <!-- NAME -->
+            <!-- ========================= -->
 
             <div class="profile-name">
 
@@ -166,11 +213,14 @@
             </div>
 
 
+            <!-- ========================= -->
             <!-- BIO -->
+            <!-- ========================= -->
 
             <div class="profile-bio">
 
                 <%= user.email %>
+
 
                 <% if (user.bio) { %>
 
@@ -189,7 +239,9 @@
     </div>
 
 
+    <!-- ========================= -->
     <!-- TABS -->
+    <!-- ========================= -->
 
     <div class="profile-tabs">
 
@@ -204,7 +256,9 @@
     </div>
 
 
+    <!-- ========================= -->
     <!-- POSTS GRID -->
+    <!-- ========================= -->
 
     <% if (posts && posts.length > 0) { %>
 
@@ -220,9 +274,14 @@
             <% posts.forEach(post => { %>
 
 
+                <!-- ========================= -->
                 <!-- IMAGE POST -->
+                <!-- ========================= -->
 
-                <% if (post.type === "image" && post.mediaUrl) { %>
+                <% if (
+                    post.type === "image" &&
+                    post.mediaUrl
+                ) { %>
 
                     <div
                         style="
@@ -233,7 +292,9 @@
                         "
                     >
 
-                        <a href="/profile/<%= post._id %>/view">
+                        <a
+                            href="/profile/<%= post._id %>/view"
+                        >
 
                             <img
                                 src="<%= post.mediaUrl %>"
@@ -251,9 +312,14 @@
                     </div>
 
 
+                <!-- ========================= -->
                 <!-- VIDEO POST -->
+                <!-- ========================= -->
 
-                <% } else if (post.type === "video" && post.mediaUrl) { %>
+                <% } else if (
+                    post.type === "video" &&
+                    post.mediaUrl
+                ) { %>
 
                     <div
                         style="
@@ -278,7 +344,9 @@
                     </div>
 
 
+                <!-- ========================= -->
                 <!-- TEXT POST -->
+                <!-- ========================= -->
 
                 <% } else { %>
 
@@ -296,9 +364,7 @@
                     >
 
                         <p>
-
                             <%= post.content %>
-
                         </p>
 
                     </div>
@@ -311,7 +377,9 @@
         </div>
 
 
+    <!-- ========================= -->
     <!-- NO POSTS -->
+    <!-- ========================= -->
 
     <% } else { %>
 
@@ -359,7 +427,9 @@
     <% } %>
 
 
+<!-- ========================= -->
 <!-- USER NOT FOUND -->
+<!-- ========================= -->
 
 <% } else { %>
 
@@ -374,11 +444,9 @@
             User Not Found
         </h2>
 
-
         <p>
             Sorry, this page isn't available.
         </p>
-
 
         <p>
             The link you followed may be broken,

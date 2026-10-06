@@ -14,6 +14,7 @@ const { checkForAuthentication } = require("./middlewares/auth");
 const staticRoute = require("./routes/staticRouter");
 const userRoute = require("./routes/user");
 const postRoute = require("./routes/post");
+const messageRoute = require("./routes/message");
 
 const app = express();
 const port = process.env.PORT || 8001;
@@ -48,5 +49,6 @@ app.set("views", path.join(__dirname, "views"));
 app.use("/user", userRoute);
 app.use("/", staticRoute);
 app.use("/post", postRoute);
+app.use("/messages", messageRoute);
 
 main();
