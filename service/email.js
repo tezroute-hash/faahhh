@@ -2,21 +2,21 @@ const nodemailer = require("nodemailer");
 
 const sendOtpEmail = async (email, otp) => {
     try {
-        // Port 465 with secure:true works on Render (port 587 is often blocked)
         const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST || "smtp.gmail.com",
+            host: "smtp.gmail.com",
             port: 465,
-            secure: true, // SSL
+            secure: true,
+            family: 4, // Force IPv4 - Render doesn't support IPv6 outbound
             auth: {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASS,
             },
             tls: {
-                rejectUnauthorized: false, // Avoids cert issues on cloud hosts
+                rejectUnauthorized: false,
             },
-            connectionTimeout: 10000,
-            greetingTimeout: 10000,
-            socketTimeout: 10000,
+            connectionTimeout: 15000,
+            greetingTimeout: 15000,
+            socketTimeout: 15000,
         });
 
         const mailOptions = {
@@ -25,7 +25,7 @@ const sendOtpEmail = async (email, otp) => {
             subject: "Your Hangout Verification OTP",
             html: `
                 <div style="font-family: Arial, sans-serif; padding: 30px; max-width: 600px; margin: 0 auto; background-color: #FCFBF9; border-radius: 12px; border: 1px solid #F0EBE6;">
-                    <h2 style="color: #2D2825; font-size: 24px; margin-bottom: 5px;">Hangout</h2>
+                    <h2 style="color: #D97757; font-size: 28px; margin-bottom: 5px;">Hangout</h2>
                     <hr style="border: none; border-top: 1px solid #F0EBE6; margin-bottom: 25px;">
                     <p style="color: #2D2825; font-size: 16px;">Hello 👋,</p>
                     <p style="color: #8E8782; font-size: 15px;">Here is your One-Time Verification Code:</p>
