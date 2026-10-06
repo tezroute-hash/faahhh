@@ -49,4 +49,90 @@ const handleLogout = (req, res) => {
     res.redirect("/login");
 };
 
-module.exports = { handleUserSignup, handleUserLogin, handleEditUser, handleLogout };
+const handleFollowUser = async (req, res) => {
+    try {
+        const currentUserId = req.user._id;
+        const targetUserId = req.params.id;
+
+        // Cannot follow yourself
+        if (currentUserId.toString() === targetUserId.toString()) {
+            return res.redirect(`/profile/${targetUserId}`);
+        }
+
+        // Check whether target user exists
+        const targetUser = await User.findById(targetUserId);
+
+        if (!targetUser) {
+            return res.status(404).send("User not found");
+        }
+
+        // Add target user to current user's following
+        await User.findByIdAndUpdate(
+            currentUserId,
+            {
+                $addToSet: {
+                    following: targetUserId
+                }
+            }
+        );
+
+        // Add current user to target user's followers
+        await User.findByIdAndUpdate(
+            targetUserId,
+            {
+                $addToSet: {
+                    followers: currentUserId
+                }
+            }
+        );
+
+        return res.redirect(`/profile/${targetUserId}`);
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send("Something went wrong");
+    }
+};
+
+
+const handleUnfollowUser = async (req, res) => {
+    try {
+        const currentUserId = req.user._id;
+        const targetUserId = req.params.id;
+
+        // Remove target from current user's following
+        await User.findByIdAndUpdate(
+            currentUserId,
+            {
+                $pull: {
+                    following: targetUserId
+                }
+            }
+        );
+
+        // Remove current user from target's followers
+        await User.findByIdAndUpdate(
+            targetUserId,
+            {
+                $pull: {
+                    followers: currentUserId
+                }
+            }
+        );
+
+        return res.redirect(`/profile/${targetUserId}`);
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send("Something went wrong");
+    }
+};
+
+module.exports = {
+    handleUserSignup,
+    handleUserLogin,
+    handleEditUser,
+    handleLogout,
+    handleFollowUser,
+    handleUnfollowUser
+};

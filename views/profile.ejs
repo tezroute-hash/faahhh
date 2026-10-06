@@ -3,6 +3,7 @@
 <% if (typeof user !== "undefined" && user) { %>
 
     <!-- PROFILE HEADER -->
+
     <div class="profile-header">
 
         <% if (user.profilePic && user.profilePic !== "") { %>
@@ -17,10 +18,12 @@
         <% } else { %>
 
             <div class="avatar-lg">
+
                 <%= user.username
                     ? user.username.charAt(0).toUpperCase()
                     : "U"
                 %>
+
             </div>
 
         <% } %>
@@ -28,16 +31,21 @@
 
         <div class="profile-details">
 
+            <!-- USERNAME + BUTTON -->
+
             <div class="profile-name-row">
 
                 <h2 class="profile-username">
                     <%= user.username %>
                 </h2>
 
+
                 <% if (
                     currentUser &&
                     currentUser._id.toString() === user._id.toString()
                 ) { %>
+
+                    <!-- OWN PROFILE -->
 
                     <a
                         href="/profile/<%= user._id %>/edit"
@@ -46,54 +54,132 @@
                         Edit profile
                     </a>
 
+
+                <% } else if (currentUser) { %>
+
+                    <!-- OTHER USER PROFILE -->
+
+                    <% if (isFollowing) { %>
+
+                        <!-- UNFOLLOW -->
+
+                        <form
+                            action="/user/profile/<%= user._id %>/unfollow"
+                            method="POST"
+                            style="display: inline;"
+                        >
+
+                            <button
+                                type="submit"
+                                class="btn-outline"
+                            >
+                                Following
+                            </button>
+
+                        </form>
+
+                    <% } else { %>
+
+                        <!-- FOLLOW -->
+
+                        <form
+                            action="/user/profile/<%= user._id %>/follow"
+                            method="POST"
+                            style="display: inline;"
+                        >
+
+                            <button
+                                type="submit"
+                                class="btn-outline"
+                            >
+                                Follow
+                            </button>
+
+                        </form>
+
+                    <% } %>
+
                 <% } %>
 
             </div>
 
 
             <!-- PROFILE STATS -->
+
             <div class="profile-stats">
 
                 <span>
-                    <strong><%= posts.length %></strong>
+
+                    <strong>
+                        <%= posts.length %>
+                    </strong>
+
                     posts
+
                 </span>
+
 
                 <a
                     href="/profile/<%= user._id %>/followers"
                     style="text-decoration: none; color: inherit;"
                 >
+
                     <span>
-                        <strong><%= user.followers.length %></strong>
+
+                        <strong>
+                            <%= user.followers.length %>
+                        </strong>
+
                         followers
+
                     </span>
+
                 </a>
+
 
                 <a
                     href="/profile/<%= user._id %>/following"
                     style="text-decoration: none; color: inherit;"
                 >
+
                     <span>
-                        <strong><%= user.following.length %></strong>
+
+                        <strong>
+                            <%= user.following.length %>
+                        </strong>
+
                         following
+
                     </span>
+
                 </a>
 
             </div>
 
 
+            <!-- NAME -->
+
             <div class="profile-name">
+
                 <%= user.name || user.username %>
+
             </div>
 
+
+            <!-- BIO -->
 
             <div class="profile-bio">
 
                 <%= user.email %>
 
                 <% if (user.bio) { %>
+
                     <br>
-                    <b><%= user.bio %></b>
+
+                    <b>
+                        <%= user.bio %>
+                    </b>
+
                 <% } %>
 
             </div>
@@ -104,11 +190,15 @@
 
 
     <!-- TABS -->
+
     <div class="profile-tabs">
 
         <div class="profile-tab active">
+
             <i class="uil uil-grid"></i>
+
             ALL POSTS
+
         </div>
 
     </div>
@@ -129,6 +219,9 @@
 
             <% posts.forEach(post => { %>
 
+
+                <!-- IMAGE POST -->
+
                 <% if (post.type === "image" && post.mediaUrl) { %>
 
                     <div
@@ -139,21 +232,26 @@
                             cursor: pointer;
                         "
                     >
-                    
-                    <a href="/profile/<%= post._id %>/view">
-                        <img
-                            src="<%= post.mediaUrl %>"
-                            alt="Post"
-                            style="
-                                width: 100%;
-                                height: 100%;
-                                object-fit: cover;
-                                display: block;
-                            "
-                        >
-                    </a>
+
+                        <a href="/profile/<%= post._id %>/view">
+
+                            <img
+                                src="<%= post.mediaUrl %>"
+                                alt="Post"
+                                style="
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    display: block;
+                                "
+                            >
+
+                        </a>
 
                     </div>
+
+
+                <!-- VIDEO POST -->
 
                 <% } else if (post.type === "video" && post.mediaUrl) { %>
 
@@ -174,13 +272,15 @@
                                 object-fit: cover;
                             "
                             controls
-                        ></video>
+                        >
+                        </video>
 
                     </div>
 
-                <% } else { %>
 
-                    <!-- TEXT POST -->
+                <!-- TEXT POST -->
+
+                <% } else { %>
 
                     <div
                         style="
@@ -196,20 +296,24 @@
                     >
 
                         <p>
+
                             <%= post.content %>
+
                         </p>
 
                     </div>
 
                 <% } %>
 
+
             <% }) %>
 
         </div>
 
-    <% } else { %>
 
-        <!-- NO POSTS -->
+    <!-- NO POSTS -->
+
+    <% } else { %>
 
         <div
             style="
@@ -222,18 +326,29 @@
             <i
                 class="uil uil-camera"
                 style="font-size: 50px;"
-            ></i>
+            >
+            </i>
 
-            <h2>No posts yet</h2>
+
+            <h2>
+                No posts yet
+            </h2>
+
 
             <% if (
                 currentUser &&
                 currentUser._id.toString() === user._id.toString()
             ) { %>
 
-                <p>Create your first post.</p>
+                <p>
+                    Create your first post.
+                </p>
 
-                <a href="/create" class="btn-outline">
+
+                <a
+                    href="/create"
+                    class="btn-outline"
+                >
                     Create Post
                 </a>
 
@@ -243,9 +358,10 @@
 
     <% } %>
 
-<% } else { %>
 
-    <!-- USER NOT FOUND -->
+<!-- USER NOT FOUND -->
+
+<% } else { %>
 
     <div
         style="
@@ -254,11 +370,15 @@
         "
     >
 
-        <h2>User Not Found</h2>
+        <h2>
+            User Not Found
+        </h2>
+
 
         <p>
             Sorry, this page isn't available.
         </p>
+
 
         <p>
             The link you followed may be broken,

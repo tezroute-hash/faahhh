@@ -124,10 +124,27 @@ router.get("/profile/:id", async (req, res) => {
         });
 
 
+        // =========================
+        // CHECK FOLLOWING STATUS
+        // =========================
+
+        let isFollowing = false;
+
+        if (req.user) {
+
+            isFollowing = user.followers.some(
+                followerId =>
+                    followerId.toString() === req.user._id.toString()
+            );
+
+        }
+
+
         res.render("profile", {
             user,
             currentUser: req.user,
-            posts
+            posts,
+            isFollowing
         });
 
     } catch (error) {
@@ -193,7 +210,9 @@ router.get("/profile/:id/edit", async (req, res) => {
         const user = await User.findById(id);
 
         if (!user) {
+
             return res.status(404).send("User not found");
+
         }
 
 
@@ -278,8 +297,11 @@ router.get("/profile/:id/view", async (req, res) => {
                 user: req.user._id
             });
 
+
             if (existingLike) {
+
                 userLiked = true;
+
             }
 
         }
@@ -562,6 +584,67 @@ router.post(
 
     }
 );
+
+// =========================
+// FOLLOWERS LIST
+// =========================
+
+router.get("/profile/:id/followers", async (req, res) => {
+    try {
+
+        const { id } = req.params;
+
+        const user = await User.findById(id)
+            .populate("followers");
+
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+
+        res.render("followers", {
+            user,
+            followers: user.followers,
+            currentUser: req.user
+        });
+
+    } catch (error) {
+
+        console.log(error);
+        res.status(500).send("Something went wrong");
+
+    }
+});
+
+
+// =========================
+// FOLLOWING LIST
+// =========================
+
+router.get("/profile/:id/following", async (req, res) => {
+    try {
+
+        const { id } = req.params;
+
+        const user = await User.findById(id)
+            .populate("following");
+
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+
+        res.render("following", {
+            user,
+            following: user.following,
+            currentUser: req.user
+        });
+
+    } catch (error) {
+
+        console.log(error);
+        res.status(500).send("Something went wrong");
+
+    }
+});
 
 
 module.exports = router;
