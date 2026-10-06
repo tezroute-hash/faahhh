@@ -2,19 +2,25 @@ const nodemailer = require("nodemailer");
 
 const sendOtpEmail = async (email, otp) => {
     try {
-        // Create transporter fresh each time so env vars are always loaded
+        // Port 465 with secure:true works on Render (port 587 is often blocked)
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST || "smtp.gmail.com",
-            port: parseInt(process.env.SMTP_PORT) || 587,
-            secure: false,
+            port: 465,
+            secure: true, // SSL
             auth: {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASS,
             },
+            tls: {
+                rejectUnauthorized: false, // Avoids cert issues on cloud hosts
+            },
+            connectionTimeout: 10000,
+            greetingTimeout: 10000,
+            socketTimeout: 10000,
         });
 
         const mailOptions = {
-            from: `"Hangout Team" <${process.env.SMTP_USER}>`,
+            from: `"Hangout" <${process.env.SMTP_USER}>`,
             to: email,
             subject: "Your Hangout Verification OTP",
             html: `
@@ -34,20 +40,17 @@ const sendOtpEmail = async (email, otp) => {
             `,
         };
 
-        // Always print OTP to console for testing
         console.log("=========================================");
-        console.log("🔔 OTP GENERATED =>", otp, "| Sending to:", email);
+        console.log("🔔 OTP =>", otp, "| To:", email);
         console.log("=========================================");
 
         const info = await transporter.sendMail(mailOptions);
-        console.log("✅ Email sent: " + info.response);
+        console.log("✅ Email sent:", info.response);
         return true;
     } catch (error) {
-        console.error("❌ Error sending email: ", error.message);
+        console.error("❌ Email error:", error.message);
         return false;
     }
 };
 
-module.exports = {
-    sendOtpEmail,
-};
+module.exports = { sendOtpEmail };
