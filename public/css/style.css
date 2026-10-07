@@ -2045,7 +2045,14 @@ body.dark-theme .file-upload-box {
 
   /* Profile Grid */
   .profile-grid-container { gap: 2px; }
-  .grid-item-text-p { font-size: 0.9rem; -webkit-line-clamp: 3; }
+  .grid-item-text-p {
+    font-size: 0.9rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+  }
   .profile-tabs { gap: 15px; margin-top: 20px; }
   
   .profile-tab { font-size: 11px; padding: 10px 0; }
