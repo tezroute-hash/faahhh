@@ -1,3 +1,7 @@
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
 <aside class="sidebar">
 
     <!-- LOGO -->
@@ -7,7 +11,7 @@
 
 
     <!-- MAIN NAVIGATION -->
-    <div class="nav-links">
+    <nav class="nav-links">
 
         <!-- HOME -->
         <a href="/hangout" class="nav-link">
@@ -31,6 +35,7 @@
                 <span>Notifications</span>
             </a>
 
+
             <!-- MESSAGES -->
             <a href="/messages" class="nav-link">
                 <i class="uil uil-message"></i>
@@ -45,49 +50,146 @@
             </a>
 
 
-            <!-- MY PROFILE -->
-            <a href="/profile/<%= currentUser._id %>" class="nav-link">
+            <!-- PROFILE -->
+            <a
+                href="/profile/<%= currentUser._id %>"
+                class="nav-link"
+            >
                 <i class="uil uil-user-circle"></i>
                 <span>Profile</span>
             </a>
 
+        <% } else { %>
 
-            <% } else { %>
+            <!-- LOGIN -->
+            <a href="/login" class="nav-link">
+                <i class="uil uil-signin"></i>
+                <span>Login</span>
+            </a>
 
-                <!-- LOGIN -->
-                <a href="/login" class="nav-link">
-                    <i class="uil uil-signin"></i>
-                    <span>Login</span>
+        <% } %>
+
+    </nav>
+
+
+    <% if (currentUser) { %>
+
+        <!-- =================================================
+             MORE
+        ================================================== -->
+
+        <div class="sidebar-menu-wrapper">
+
+            <!-- MORE BUTTON -->
+            <button
+                type="button"
+                class="sidebar-menu-btn"
+                id="sidebar-menu-btn"
+            >
+                <i class="uil uil-bars"></i>
+                <span>More</span>
+            </button>
+
+
+            <!-- MORE MENU -->
+            <div
+                class="sidebar-menu"
+                id="sidebar-menu"
+            >
+
+                <!-- SAVED POSTS -->
+                <a
+                    href="/saved"
+                    class="sidebar-menu-item"
+                >
+                    <i class="uil uil-bookmark"></i>
+                    <span>Saved Posts</span>
                 </a>
 
-                <% } %>
 
-    </div>
+                <!-- DARK MODE -->
+                <button
+                    type="button"
+                    class="sidebar-menu-item"
+                    id="theme-toggle"
+                >
+                    <i class="uil uil-moon"></i>
+                    <span>Dark Mode</span>
+                </button>
 
 
-    <!-- SPACER -->
-    <div style="flex-grow: 1;"></div>
+                <!-- LOG OUT -->
+                <a
+                    href="/user/logout"
+                    class="sidebar-menu-item logout-item"
+                >
+                    <i class="uil uil-signout"></i>
+                    <span>Log out</span>
+                </a>
 
+            </div>
 
-    <!-- BOTTOM NAVIGATION -->
-    <div class="nav-links">
+        </div>
 
-        <% if (currentUser) { %>
-
-            <!-- THEME TOGGLE -->
-            <a href="#" class="nav-link" id="theme-toggle">
-                <i class="uil uil-moon"></i>
-                <span>Dark Mode</span>
-            </a>
-
-            <!-- LOGOUT -->
-            <a href="/user/logout" class="nav-link">
-                <i class="uil uil-signout"></i>
-                <span>Log out</span>
-            </a>
-
-            <% } %>
-
-    </div>
+    <% } %>
 
 </aside>
+
+
+<!-- =========================================================
+     MORE MENU JAVASCRIPT
+========================================================= -->
+
+<script>
+(function () {
+
+    const moreButton = document.getElementById("sidebar-menu-btn");
+    const moreMenu = document.getElementById("sidebar-menu");
+
+    if (!moreButton || !moreMenu) {
+        console.log("More menu elements not found");
+        return;
+    }
+
+
+    /* -----------------------------------------
+       OPEN / CLOSE MORE MENU
+    ----------------------------------------- */
+
+    moreButton.addEventListener("click", function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const isOpen = moreMenu.style.display === "flex";
+
+        if (isOpen) {
+
+            moreMenu.style.display = "none";
+
+        } else {
+
+            moreMenu.style.display = "flex";
+
+        }
+
+    });
+
+
+    /* -----------------------------------------
+       CLOSE WHEN CLICKING OUTSIDE
+    ----------------------------------------- */
+
+    document.addEventListener("click", function (event) {
+
+        if (
+            !moreMenu.contains(event.target) &&
+            !moreButton.contains(event.target)
+        ) {
+            moreMenu.style.display = "none";
+        }
+
+    });
+
+})();
+</script>

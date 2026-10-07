@@ -2178,123 +2178,794 @@ body.dark-theme .profile-tab.active {
     border-top-color: var(--text-dark);
 }
 
-/* =========================================
-   DELETE CHAT BUTTON
-========================================= */
+/* =========================================================
+   FINAL SIDEBAR + MORE MENU FIXES
+   Added after the original CSS so these rules win over
+   earlier duplicate sidebar/mobile rules.
+========================================================= */
 
-.delete-chat-form {
-    margin-left: auto;
+.sidebar {
+  background: var(--bg-color-content);
+  border: 1px solid var(--border-color);
+  padding: 24px 14px;
+}
+
+.sidebar-logo {
+  display: block;
+  padding: 4px 10px 22px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  padding: 13px 12px;
+  border-radius: 12px;
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  transition: background .2s ease, color .2s ease;
+}
+
+.nav-link i {
+  width: 28px;
+  flex-shrink: 0;
+  font-size: 1.45rem;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.nav-link:hover {
+  background: rgba(217,119,87,.08);
+  color: var(--primary);
+}
+
+.nav-link:hover i {
+  color: var(--primary);
+  transform: none;
+}
+
+/* More wrapper stays at the bottom of the desktop sidebar. */
+.sidebar-menu-wrapper {
+  position: relative;
+  width: 100%;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+/* More button */
+.sidebar-menu-btn {
+  width: 100%;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 0 12px;
+  margin: 0;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 12px;
+  background: transparent !important;
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: none !important;
+  transition: background .2s ease, color .2s ease;
+}
+
+.sidebar-menu-btn:hover,
+.sidebar-menu-btn:focus,
+.sidebar-menu-btn:active {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: rgba(217,119,87,.08) !important;
+  color: var(--primary);
+}
+
+.sidebar-menu-btn i {
+  width: 28px;
+  flex-shrink: 0;
+  font-size: 1.55rem;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.sidebar-menu-btn:hover i,
+.sidebar-menu-btn:focus i {
+  color: var(--primary);
+}
+
+/* Hidden by default. JavaScript opens it by setting display:flex. */
+.sidebar-menu {
+  position: absolute !important;
+  left: 0 !important;
+  right: auto !important;
+  bottom: 62px !important;
+  width: 100% !important;
+  min-width: 210px;
+  max-width: 230px;
+  padding: 7px !important;
+  margin: 0 !important;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--bg-color-content) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 15px 35px rgba(0,0,0,.14) !important;
+  z-index: 99999 !important;
+  overflow: hidden;
+}
+
+.sidebar-menu.show {
+  display: flex !important;
+}
+
+/* Menu links/buttons */
+.sidebar-menu-item {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 10px 11px;
+  margin: 0;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 9px;
+  background: transparent !important;
+  color: var(--text-dark);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: none !important;
+}
+
+.sidebar-menu-item:hover,
+.sidebar-menu-item:focus {
+  background: rgba(217,119,87,.08) !important;
+  color: var(--primary);
+}
+
+.sidebar-menu-item i {
+  width: 22px;
+  flex-shrink: 0;
+  font-size: 18px;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.sidebar-menu-item:hover i,
+.sidebar-menu-item:focus i {
+  color: var(--primary);
+}
+
+.sidebar-menu-item.logout-item,
+.sidebar-menu-item.logout-item i {
+  color: #dc2626;
+}
+
+.sidebar-menu-item.logout-item:hover {
+  background: #fff1f2 !important;
+  color: #dc2626;
+}
+
+/* Dark theme */
+body.dark-theme .sidebar {
+  background: var(--bg-color-content);
+  border-color: var(--border-color);
+}
+
+body.dark-theme .sidebar-logo {
+  border-color: var(--border-color);
+}
+
+body.dark-theme .nav-link:hover,
+body.dark-theme .sidebar-menu-btn:hover,
+body.dark-theme .sidebar-menu-btn:focus {
+  background: #292524 !important;
+}
+
+body.dark-theme .sidebar-menu {
+  background: var(--bg-color-content) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: 0 15px 35px rgba(0,0,0,.5) !important;
+}
+
+body.dark-theme .sidebar-menu-item:hover,
+body.dark-theme .sidebar-menu-item:focus {
+  background: #292524 !important;
+}
+
+body.dark-theme .sidebar-menu-item.logout-item:hover {
+  background: #3f1d1d !important;
+}
+
+/* Prevent media posts from being cropped/zoomed. */
+.post-media,
+.img-post-container {
+  width: 100%;
+  height: auto;
+  max-height: 600px;
+  object-fit: contain;
+  display: block;
+  background: #f8fafc;
+}
+
+/* =========================================================
+   FINAL MOBILE SIDEBAR
+========================================================= */
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 62px;
+    padding: 0 5px;
+    margin: 0;
+    border-radius: 0;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: 0 -4px 20px rgba(0,0,0,.08);
+    z-index: 1000;
+  }
+
+  .sidebar-logo,
+  .sidebar > div[style] {
+    display: none !important;
+  }
+
+  .nav-links {
+    display: contents !important;
+  }
+
+  .nav-link {
+    flex: 1;
+    width: auto;
+    height: 52px;
+    padding: 8px 0;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-
-/* Main button */
-
-.delete-chat-btn {
-    width: 44px;
-    height: 44px;
-
-    border: 1px solid #e5e7eb;
     border-radius: 10px;
+  }
 
-    background: #ffffff;
-    color: #374151;
+  .nav-link span {
+    display: none !important;
+  }
+
+  .nav-link i {
+    width: auto;
+    font-size: 1.4rem;
+  }
+
+  .sidebar-menu-wrapper {
+    width: auto;
+    margin: 0;
+    position: relative;
+  }
+
+  .sidebar-menu-btn {
+    width: 52px;
+    height: 52px;
+    padding: 8px;
+    justify-content: center;
+    border-radius: 10px;
+  }
+
+  .sidebar-menu-btn span {
+    display: none !important;
+  }
+
+  .sidebar-menu-btn i {
+    width: auto;
+    font-size: 1.4rem;
+  }
+
+  .sidebar-menu {
+    left: auto !important;
+    right: 0 !important;
+    bottom: 66px !important;
+    width: 205px !important;
+    min-width: 205px;
+    max-width: 205px;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    margin-bottom: 70px;
+  }
+
+  body.dark-theme .sidebar {
+    box-shadow: 0 -4px 15px rgba(0,0,0,.5);
+  }
+}
+
+/* =========================================================
+   FINAL POST / IMAGE OVERLAP FIX
+   Keeps the author header above the media and prevents
+   images from being cropped or zoomed.
+========================================================= */
+
+.post-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.post-header {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 48px;
+  margin: 0 0 18px 0;
+  padding: 0;
+  background: var(--bg-color-content);
+}
+
+.avatar,
+.avatar-placeholder {
+  position: relative;
+  z-index: 6;
+  flex: 0 0 48px;
+}
+
+.author-info {
+  position: relative;
+  z-index: 6;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: visible;
+}
+
+.author-name,
+.username {
+  position: relative;
+  z-index: 6;
+}
+
+.post-media {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto !important;
+  max-width: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  object-fit: contain !important;
+  object-position: center center;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.post-card .post-media {
+  margin-top: 0;
+}
+
+/* If the image is wrapped in a media container */
+.post-media-container,
+.img-post-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: block;
+  background: #f8fafc;
+}
+
+.post-media-container img,
+.img-post-container img {
+  display: block;
+  position: static;
+  width: 100%;
+  height: auto !important;
+  max-width: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  object-fit: contain !important;
+  object-position: center center;
+}
+
+/* Prevent old inline/legacy rules from making the image cover the header */
+.post-card > img,
+.post-card > .post-media {
+  position: relative;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+  transform: none;
+}
+
+/* Mobile post image */
+@media (max-width: 768px) {
+  .post-card {
+    overflow: hidden;
+  }
+
+  .post-header {
+    min-height: 48px;
+    margin-bottom: 14px;
+  }
+
+  .post-media,
+  .post-media-container img,
+  .img-post-container img {
+    width: 100%;
+    height: auto !important;
+    max-height: none;
+    object-fit: contain !important;
+  }
+}
+
+
+/* =========================================================
+   DEFINITIVE POST IMAGE FIX
+   Keep the image at its natural aspect ratio.
+   Do NOT crop, zoom, stretch, or constrain it to a fixed height.
+========================================================= */
+
+.post-card .post-media,
+.post-media,
+.post-media-container img,
+.img-post-container img,
+.post-card > img,
+.post-card > .post-media {
+  display: block !important;
+  position: static !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+  object-fit: fill !important;
+  object-position: center !important;
+  aspect-ratio: auto !important;
+  border-radius: 0 !important;
+}
+
+.post-media-container,
+.img-post-container {
+  display: block !important;
+  position: static !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Keep the author/header completely separate from the image. */
+.post-header {
+  position: relative !important;
+  z-index: 2 !important;
+  display: flex !important;
+  width: 100% !important;
+}
+
+.post-card {
+  overflow: visible !important;
+}
+
+/* =========================================================
+   FEED POST CARD
+========================================================= */
+
+.feed-post {
+    position: relative;
+
+    width: 100%;
+
+    max-width: 650px;
+
+    margin: 0 auto 24px;
+
+    background: var(--bg-color-content);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   POST HEADER
+========================================================= */
+
+.feed-header {
+    position: relative !important;
 
     display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    min-height: 76px;
+
+    padding: 16px 18px;
+
+    box-sizing: border-box;
+
+    background: var(--bg-color-content);
+
+    z-index: 5;
+
+    overflow: hidden;
+}
+
+
+/* Avatar */
+
+.avatar-med {
+    flex-shrink: 0;
+
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    display: flex;
+
     align-items: center;
     justify-content: center;
 
-    cursor: pointer;
-
-    font-size: 21px;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    background: #e5e7eb;
 }
 
 
-/* Icon */
+.avatar-med img {
+    width: 100%;
+    height: 100%;
 
-.delete-chat-btn i {
-    line-height: 1;
+    display: block;
+
+    object-fit: cover;
+
+    object-position: center;
 }
 
 
-/* Hover */
+/* =========================================================
+   IMAGE AREA
+========================================================= */
 
-.delete-chat-btn:hover {
-    background: #fff1f2;
-    color: #dc2626;
-    border-color: #fecaca;
+.feed-image {
+    position: relative !important;
 
-    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.12);
+    display: flex !important;
 
-    transform: translateY(-1px);
+    align-items: center;
+
+    justify-content: center;
+
+    width: 100%;
+
+    max-width: 100%;
+
+    height: auto !important;
+
+    max-height: 650px;
+
+    min-height: 0;
+
+    margin: 0;
+
+    padding: 0;
+
+    overflow: hidden;
+
+    background: #f5f5f5;
+
+    box-sizing: border-box;
+
+    z-index: 1;
 }
 
 
-/* Click */
+/* =========================================================
+   ACTUAL POST IMAGE
+========================================================= */
 
-.delete-chat-btn:active {
-    transform: scale(0.94);
-    box-shadow: none;
+.feed-image .img-post-container {
+    position: static !important;
+
+    display: block !important;
+
+    width: 100% !important;
+
+    height: auto !important;
+
+    max-width: 100% !important;
+
+    max-height: 650px !important;
+
+    min-width: 0 !important;
+
+    min-height: 0 !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    border: none !important;
+
+    outline: none !important;
+
+    object-fit: contain !important;
+
+    object-position: center center !important;
+
+    aspect-ratio: auto !important;
+
+    transform: none !important;
+
+    top: auto !important;
+
+    right: auto !important;
+
+    bottom: auto !important;
+
+    left: auto !important;
 }
 
 
-/* Focus */
+/* =========================================================
+   IMPORTANT:
+   REMOVE OLD ABSOLUTE IMAGE BEHAVIOR
+========================================================= */
 
-.delete-chat-btn:focus-visible {
-    outline: 3px solid rgba(220, 38, 38, 0.2);
-    outline-offset: 2px;
+.feed-image img {
+    position: static !important;
+
+    transform: none !important;
 }
 
 
-/* =========================================
-   DARK MODE
-========================================= */
+/* =========================================================
+   ACTIONS
+========================================================= */
 
-body.dark-theme .delete-chat-btn {
+.feed-post .feed-actions {
+    position: relative;
+
+    z-index: 5;
+
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    min-height: 54px;
+
+    padding: 8px 14px;
+
+    box-sizing: border-box;
+
     background: var(--bg-color-content);
-    color: #d1d5db;
-    border-color: #374151;
 }
 
 
-body.dark-theme .delete-chat-btn:hover {
-    background: #3f1d1d;
-    color: #f87171;
-    border-color: #7f1d1d;
+/* =========================================================
+   LIKE COUNT
+========================================================= */
 
-    box-shadow: 0 4px 12px rgba(248, 113, 113, 0.12);
+.feed-post .feed-like-count {
+    position: relative;
+
+    z-index: 5;
+
+    padding: 0 14px 4px;
+
+    background: var(--bg-color-content);
 }
 
 
-/* =========================================
-   CHAT USER INFO
-========================================= */
+/* =========================================================
+   CAPTION
+========================================================= */
 
-.chat-user-info {
-    min-width: 0;
+.feed-post .feed-caption {
+    position: relative;
+
+    z-index: 5;
+
+    background: var(--bg-color-content);
 }
 
 
-/* =========================================
-MOBILE
-========================================= */
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media (max-width: 768px) {
 
-    .delete-chat-btn {
-        width: 40px;
-        height: 40px;
+    .feed-post {
+        width: 100%;
 
-        font-size: 19px;
+        max-width: 100%;
+
+        border-radius: 14px;
+
+        margin-bottom: 18px;
     }
 
+
+    .feed-header {
+        min-height: 68px;
+
+        padding: 12px 14px;
+    }
+
+
+    .avatar-med {
+        width: 44px;
+        height: 44px;
+    }
+
+
+    .feed-image {
+        max-height: 550px;
+    }
+
+
+    .feed-image .img-post-container {
+        width: 100% !important;
+
+        height: auto !important;
+
+        max-height: 550px !important;
+
+        object-fit: contain !important;
+    }
 }
