@@ -17,22 +17,33 @@ const {
 // NOTIFICATIONS
 // =========================
 
-router.get("/notifications", restrictToLoggedinUserOnly, async (req, res) => {
-    try {
-        const notifications = await Notification.find({ recipient: req.user._id })
-            .populate("sender")
-            .populate("post")
-            .sort({ createdAt: -1 });
+router.get(
+    "/notifications",
+    restrictToLoggedinUserOnly,
+    async (req, res) => {
+        try {
+            const notifications = await Notification.find({
+                recipient: req.user._id
+            })
+                .populate("sender")
+                .populate("post")
+                .sort({ createdAt: -1 });
 
-        res.render("notifications", {
-            notifications,
-            currentUser: req.user
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
+            res.render("notifications", {
+                notifications,
+                currentUser: req.user
+            });
+
+        } catch (error) {
+            console.log(error);
+
+            res.status(500).render("error", {
+                error: "Something went wrong",
+                currentUser: req.user || null
+            });
+        }
     }
-});
+);
 
 
 // =========================
@@ -50,7 +61,6 @@ router.get("/", (req, res) => {
 
 router.get("/hangout", async (req, res) => {
     try {
-
         const allPosts = await Post.find({})
             .populate("author")
             .sort({ createdAt: -1 });
@@ -73,9 +83,7 @@ router.get("/hangout", async (req, res) => {
         const likeCountMap = {};
 
         likeCounts.forEach((item) => {
-
             likeCountMap[item._id.toString()] = item.count;
-
         });
 
 
@@ -87,12 +95,58 @@ router.get("/hangout", async (req, res) => {
         });
 
     } catch (error) {
-
         console.log(error);
-        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
+        res.status(500).render("error", {
+            error: "Something went wrong",
+            currentUser: req.user || null
+        });
     }
 });
+
+
+// =========================
+// SAVED POSTS
+// =========================
+
+router.get(
+    "/saved",
+    restrictToLoggedinUserOnly,
+    async (req, res) => {
+        try {
+
+            const user = await User.findById(req.user._id)
+                .populate({
+                    path: "savedPosts",
+                    populate: {
+                        path: "author"
+                    }
+                });
+
+
+            if (!user) {
+                return res.status(404).render("error", {
+                    error: "User not found",
+                    currentUser: req.user || null
+                });
+            }
+
+
+            res.render("saved", {
+                savedPosts: user.savedPosts || [],
+                currentUser: req.user
+            });
+
+        } catch (error) {
+            console.log(error);
+
+            res.status(500).render("error", {
+                error: "Something went wrong",
+                currentUser: req.user || null
+            });
+        }
+    }
+);
 
 
 // =========================
@@ -100,9 +154,7 @@ router.get("/hangout", async (req, res) => {
 // =========================
 
 router.get("/signup", (req, res) => {
-
     res.render("signup");
-
 });
 
 
@@ -111,9 +163,7 @@ router.get("/signup", (req, res) => {
 // =========================
 
 router.get("/login", (req, res) => {
-
     res.render("login");
-
 });
 
 
@@ -122,21 +172,19 @@ router.get("/login", (req, res) => {
 // =========================
 
 router.get("/profile/:id", async (req, res) => {
-
     try {
 
         const { id } = req.params;
 
         const user = await User.findById(id);
 
-        if (!user) {
 
+        if (!user) {
             return res.status(404).render("profile", {
                 user: null,
                 currentUser: req.user,
                 posts: []
             });
-
         }
 
 
@@ -153,13 +201,12 @@ router.get("/profile/:id", async (req, res) => {
 
         let isFollowing = false;
 
-        if (req.user) {
 
+        if (req.user) {
             isFollowing = user.followers.some(
                 followerId =>
                     followerId.toString() === req.user._id.toString()
             );
-
         }
 
 
@@ -171,12 +218,13 @@ router.get("/profile/:id", async (req, res) => {
         });
 
     } catch (error) {
-
         console.log(error);
-        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
+        res.status(500).render("error", {
+            error: "Something went wrong",
+            currentUser: req.user || null
+        });
     }
-
 });
 
 
@@ -185,22 +233,20 @@ router.get("/profile/:id", async (req, res) => {
 // =========================
 
 router.get("/search", async (req, res) => {
-
     try {
 
         const username = req.query.username;
 
         let users = [];
 
-        if (username) {
 
+        if (username) {
             users = await User.find({
                 username: {
                     $regex: username,
                     $options: "i"
                 }
             });
-
         }
 
 
@@ -211,12 +257,13 @@ router.get("/search", async (req, res) => {
         });
 
     } catch (error) {
-
         console.log(error);
-        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
+        res.status(500).render("error", {
+            error: "Something went wrong",
+            currentUser: req.user || null
+        });
     }
-
 });
 
 
@@ -225,17 +272,18 @@ router.get("/search", async (req, res) => {
 // =========================
 
 router.get("/profile/:id/edit", async (req, res) => {
-
     try {
 
         const { id } = req.params;
 
         const user = await User.findById(id);
 
+
         if (!user) {
-
-            return res.status(404).render("error", { error: "User not found", currentUser: req.user || null });
-
+            return res.status(404).render("error", {
+                error: "User not found",
+                currentUser: req.user || null
+            });
         }
 
 
@@ -245,12 +293,13 @@ router.get("/profile/:id/edit", async (req, res) => {
         });
 
     } catch (error) {
-
         console.log(error);
-        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
+        res.status(500).render("error", {
+            error: "Something went wrong",
+            currentUser: req.user || null
+        });
     }
-
 });
 
 
@@ -277,7 +326,6 @@ router.get(
 // =========================
 
 router.get("/profile/:id/view", async (req, res) => {
-
     try {
 
         const { id } = req.params;
@@ -288,9 +336,10 @@ router.get("/profile/:id/view", async (req, res) => {
 
 
         if (!post) {
-
-            return res.status(404).render("error", { error: "Post not found", currentUser: req.user || null });
-
+            return res.status(404).render("error", {
+                error: "Post not found",
+                currentUser: req.user || null
+            });
         }
 
 
@@ -313,6 +362,7 @@ router.get("/profile/:id/view", async (req, res) => {
         // Check if current user liked the post
         let userLiked = false;
 
+
         if (req.user) {
 
             const existingLike = await Like.findOne({
@@ -322,31 +372,27 @@ router.get("/profile/:id/view", async (req, res) => {
 
 
             if (existingLike) {
-
                 userLiked = true;
-
             }
-
         }
 
 
         res.render("view", {
-
             post,
             comments,
             currentUser: req.user,
             likeCount,
             userLiked
-
         });
 
     } catch (error) {
-
         console.log(error);
-        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
 
+        res.status(500).render("error", {
+            error: "Something went wrong",
+            currentUser: req.user || null
+        });
     }
-
 });
 
 
@@ -363,41 +409,49 @@ router.post(
 
             const post = await Post.findById(req.params.id);
 
+
             if (!post) {
-
-                return res.status(404).render("error", { error: "Post not found", currentUser: req.user || null });
-
+                return res.status(404).render("error", {
+                    error: "Post not found",
+                    currentUser: req.user || null
+                });
             }
 
 
             await Comment.create({
-
                 text: req.body.text,
-
                 author: req.user._id,
-
                 post: post._id
-
             });
 
-            if (post.author.toString() !== req.user._id.toString()) {
+
+            if (
+                post.author.toString() !==
+                req.user._id.toString()
+            ) {
+
                 await Notification.create({
                     recipient: post.author,
                     sender: req.user._id,
                     type: "comment",
                     post: post._id
                 });
+
             }
+
 
             res.redirect(`/profile/${post._id}/view`);
 
         } catch (error) {
 
             console.log(error);
-            res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
+
+            res.status(500).render("error", {
+                error: "Something went wrong",
+                currentUser: req.user || null
+            });
 
         }
-
     }
 );
 
@@ -419,9 +473,10 @@ router.delete(
 
 
             if (!post) {
-
-                return res.status(404).render("error", { error: "Post not found", currentUser: req.user || null });
-
+                return res.status(404).render("error", {
+                    error: "Post not found",
+                    currentUser: req.user || null
+                });
             }
 
 
@@ -456,6 +511,19 @@ router.delete(
             });
 
 
+            // Remove deleted post from everyone's saved posts
+            await User.updateMany(
+                {
+                    savedPosts: req.params.postId
+                },
+                {
+                    $pull: {
+                        savedPosts: req.params.postId
+                    }
+                }
+            );
+
+
             // DO NOT clear uid here
             // Otherwise user gets logged out
 
@@ -467,10 +535,112 @@ router.delete(
         } catch (error) {
 
             console.log(error);
-            res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
+
+            res.status(500).render("error", {
+                error: "Something went wrong",
+                currentUser: req.user || null
+            });
 
         }
+    }
+);
 
+
+// =========================
+// SAVE POST
+// =========================
+
+router.post(
+    "/hangout/:id/save",
+    restrictToLoggedinUserOnly,
+    async (req, res) => {
+
+        try {
+
+            const { id } = req.params;
+
+
+            // Check whether post exists
+            const post = await Post.findById(id);
+
+
+            if (!post) {
+                return res.status(404).send(
+                    "Post not found"
+                );
+            }
+
+
+            // Add post to savedPosts
+            await User.findByIdAndUpdate(
+                req.user._id,
+                {
+                    $addToSet: {
+                        savedPosts: id
+                    }
+                }
+            );
+
+
+            // Return to previous page
+            res.redirect(
+                req.get("Referrer") || "/hangout"
+            );
+
+        } catch (error) {
+
+            console.log(error);
+
+            res.status(500).render("error", {
+                error: "Something went wrong",
+                currentUser: req.user || null
+            });
+
+        }
+    }
+);
+
+
+// =========================
+// UNSAVE POST
+// =========================
+
+router.post(
+    "/hangout/:id/unsave",
+    restrictToLoggedinUserOnly,
+    async (req, res) => {
+
+        try {
+
+            const { id } = req.params;
+
+
+            // Remove post from savedPosts
+            await User.findByIdAndUpdate(
+                req.user._id,
+                {
+                    $pull: {
+                        savedPosts: id
+                    }
+                }
+            );
+
+
+            // Return to previous page
+            res.redirect(
+                req.get("Referrer") || "/hangout"
+            );
+
+        } catch (error) {
+
+            console.log(error);
+
+            res.status(500).render("error", {
+                error: "Something went wrong",
+                currentUser: req.user || null
+            });
+
+        }
     }
 );
 
@@ -491,28 +661,23 @@ router.post(
 
             const post = await Post.findById(id);
 
-            if (!post) {
 
+            if (!post) {
                 return res.status(404).send(
                     "Post not found"
                 );
-
             }
 
 
             const existingLike = await Like.findOne({
-
                 post: id,
-
                 user: req.user._id
-
             });
 
 
             if (existingLike) {
 
                 // UNLIKE
-
                 await Like.findByIdAndDelete(
                     existingLike._id
                 );
@@ -520,24 +685,25 @@ router.post(
             } else {
 
                 // LIKE
-
                 await Like.create({
-
                     post: id,
-
                     user: req.user._id
-
                 });
 
-                if (post.author.toString() !== req.user._id.toString()) {
+
+                if (
+                    post.author.toString() !==
+                    req.user._id.toString()
+                ) {
+
                     await Notification.create({
                         recipient: post.author,
                         sender: req.user._id,
                         type: "like",
                         post: post._id
                     });
-                }
 
+                }
             }
 
 
@@ -547,10 +713,13 @@ router.post(
         } catch (error) {
 
             console.log(error);
-            res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
+
+            res.status(500).render("error", {
+                error: "Something went wrong",
+                currentUser: req.user || null
+            });
 
         }
-
     }
 );
 
@@ -571,28 +740,23 @@ router.post(
 
             const post = await Post.findById(id);
 
-            if (!post) {
 
+            if (!post) {
                 return res.status(404).send(
                     "Post not found"
                 );
-
             }
 
 
             const existingLike = await Like.findOne({
-
                 post: id,
-
                 user: req.user._id
-
             });
 
 
             if (existingLike) {
 
                 // UNLIKE
-
                 await Like.findByIdAndDelete(
                     existingLike._id
                 );
@@ -600,100 +764,135 @@ router.post(
             } else {
 
                 // LIKE
-
                 await Like.create({
-
                     post: id,
-
                     user: req.user._id
-
                 });
 
-                if (post.author.toString() !== req.user._id.toString()) {
+
+                if (
+                    post.author.toString() !==
+                    req.user._id.toString()
+                ) {
+
                     await Notification.create({
                         recipient: post.author,
                         sender: req.user._id,
                         type: "like",
                         post: post._id
                     });
-                }
 
+                }
             }
 
 
             // Stay on View Post
-            res.redirect(`/profile/${id}/view`);
+            res.redirect(
+                `/profile/${id}/view`
+            );
 
         } catch (error) {
 
             console.log(error);
-            res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
+
+            res.status(500).render("error", {
+                error: "Something went wrong",
+                currentUser: req.user || null
+            });
 
         }
-
     }
 );
+
 
 // =========================
 // FOLLOWERS LIST
 // =========================
 
-router.get("/profile/:id/followers", async (req, res) => {
-    try {
+router.get(
+    "/profile/:id/followers",
+    async (req, res) => {
 
-        const { id } = req.params;
+        try {
 
-        const user = await User.findById(id)
-            .populate("followers");
+            const { id } = req.params;
 
-        if (!user) {
-            return res.status(404).render("error", { error: "User not found", currentUser: req.user || null });
+
+            const user = await User.findById(id)
+                .populate("followers");
+
+
+            if (!user) {
+                return res.status(404).render("error", {
+                    error: "User not found",
+                    currentUser: req.user || null
+                });
+            }
+
+
+            res.render("followers", {
+                user,
+                followers: user.followers,
+                currentUser: req.user
+            });
+
+        } catch (error) {
+
+            console.log(error);
+
+            res.status(500).render("error", {
+                error: "Something went wrong",
+                currentUser: req.user || null
+            });
+
         }
-
-        res.render("followers", {
-            user,
-            followers: user.followers,
-            currentUser: req.user
-        });
-
-    } catch (error) {
-
-        console.log(error);
-        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
-
     }
-});
+);
 
 
 // =========================
 // FOLLOWING LIST
 // =========================
 
-router.get("/profile/:id/following", async (req, res) => {
-    try {
+router.get(
+    "/profile/:id/following",
+    async (req, res) => {
 
-        const { id } = req.params;
+        try {
 
-        const user = await User.findById(id)
-            .populate("following");
+            const { id } = req.params;
 
-        if (!user) {
-            return res.status(404).render("error", { error: "User not found", currentUser: req.user || null });
+
+            const user = await User.findById(id)
+                .populate("following");
+
+
+            if (!user) {
+                return res.status(404).render("error", {
+                    error: "User not found",
+                    currentUser: req.user || null
+                });
+            }
+
+
+            res.render("following", {
+                user,
+                following: user.following,
+                currentUser: req.user
+            });
+
+        } catch (error) {
+
+            console.log(error);
+
+            res.status(500).render("error", {
+                error: "Something went wrong",
+                currentUser: req.user || null
+            });
+
         }
-
-        res.render("following", {
-            user,
-            following: user.following,
-            currentUser: req.user
-        });
-
-    } catch (error) {
-
-        console.log(error);
-        res.status(500).render("error", { error: "Something went wrong", currentUser: req.user || null });
-
     }
-});
+);
 
 
 module.exports = router;

@@ -1,289 +1,506 @@
 <% layout("layouts/boilerplate") -%>
 
-    <div>
+<div>
 
-        <% if (allPosts && allPosts.length> 0) { %>
+    <% if (allPosts && allPosts.length > 0) { %>
 
-            <% for (let post of allPosts) { %>
+        <% for (let post of allPosts) { %>
 
-                <% if (!post.mediaUrl) { %>
-                    <div class="text-post-card">
-                        <div class="post-header-info">
-                            <% if (post.author && post.author.profilePic) { %>
-                                <a href="/profile/<%= post.author._id %>">
-                                    <img src="<%= post.author.profilePic %>" class="post-author-img">
-                                </a>
-                                <% } else { %>
-                                    <div class="post-author-placeholder">
-                                        <%= post.author.name ? post.author.name.charAt(0).toUpperCase() : "U" %>
-                                    </div>
-                                    <% } %>
-                                        <div style="flex: 1;">
-                                            <div class="post-author-name">
-                                                <a href="/profile/<%= post.author._id %>" class="post-author-link">
-                                                    <%= post.author.name || post.author.username %>
-                                                </a>
-                                            </div>
-                                            <div class="post-author-handle">
-                                                @<%= post.author.username %>
-                                            </div>
-                                        </div>
-                        </div>
-                        <a href="/profile/<%= post._id %>/view" style="text-decoration: none; color: inherit;">
-                            <div class="post-body-text">
-                                <%= post.content %>
-                            </div>
-                            <div class="post-date-text">
-                                <%= new Date(post.createdAt).toLocaleString() %>
-                            </div>
-                        </a>
-                        <div class="feed-actions">
-                            <% if (currentUser) { %>
-                                <form action="/hangout/<%= post._id %>/like" method="POST" class="like-form">
-                                    <button type="submit" class="feed-action-btn" title="Like">
-                                        <i class="uil uil-heart"></i>
-                                    </button>
-                                </form>
-                                <% } else { %>
-                                    <a href="/login" class="feed-action-btn" title="Like">
-                                        <i class="uil uil-heart"></i>
-                                    </a>
-                                    <% } %>
-                                        <a href="/profile/<%= post._id %>/view" class="feed-action-btn" title="Comment">
-                                            <i class="uil uil-comment-alt"></i>
-                                        </a>
-                                        <button type="button" class="feed-action-btn share-btn" title="Share"
-                                            onclick="navigator.clipboard.writeText(window.location.origin + '/profile/<%= post._id %>/view'); alert('Link copied!')">
-                                            <i class="uil uil-share-alt"></i>
-                                        </button>
-                                        <button type="button" class="feed-action-btn bookmark-btn" title="Bookmark"
-                                            style="margin-left: auto;">
-                                            <i class="uil uil-bookmark"></i>
-                                        </button>
-                        </div>
-                        <div class="feed-like-count" style="padding-left: 14px; margin-bottom: 2px;">
-                            <strong>
-                                <%= likeCountMap[post._id.toString()] || 0 %>
-                                    <%= (likeCountMap[post._id.toString()] || 0)===1 ? "Like" : "Likes" %>
-                            </strong>
-                        </div>
-                    </div>
-                    <% } else { %>
+            <!-- ========================= -->
+            <!-- TEXT POST -->
+            <!-- ========================= -->
 
-                        <div class="feed-post">
+            <% if (!post.mediaUrl) { %>
 
+                <div class="text-post-card">
 
-                            <!-- ========================= -->
-                            <!-- HEADER -->
-                            <!-- ========================= -->
+                    <!-- POST HEADER -->
+                    <div class="post-header-info">
 
-                            <div class="feed-header">
+                        <!-- PROFILE IMAGE -->
+                        <% if (post.author && post.author.profilePic) { %>
 
+                            <a href="/profile/<%= post.author._id %>">
+                                <img
+                                    src="<%= post.author.profilePic %>"
+                                    class="post-author-img"
+                                    alt="<%= post.author.username %>"
+                                >
+                            </a>
 
-                                <!-- Avatar -->
+                        <% } else { %>
 
-                                <div class="avatar-med">
+                            <a
+                                href="/profile/<%= post.author._id %>"
+                                class="post-author-placeholder"
+                            >
+                                <%= post.author && post.author.name
+                                    ? post.author.name.charAt(0).toUpperCase()
+                                    : "U"
+                                %>
+                            </a>
 
-                                    <% if (post.author && post.author.profilePic) { %>
-
-                                        <a href="/profile/<%= post.author._id %>">
-
-                                            <img src="<%= post.author.profilePic %>" alt="<%= post.author.username %>">
-
-                                        </a>
-
-                                        <% } else { %>
-
-                                            <%= post.author && post.author.username ? post.author.username .charAt(0)
-                                                .toUpperCase() : "U" %>
-
-                                                <% } %>
-
-                                </div>
-
-
-                                <!-- Username -->
-
-                                <div class="user-info-row" style="flex: 1; margin-left: 12px;">
-
-                                    <div class="post-author-name">
-                                        <a href="/profile/<%= post.author._id %>" class="post-author-link">
-                                            <%= post.author.name || post.author.username %>
-                                        </a>
-                                    </div>
-                                    <div class="post-author-handle">
-                                        @<%= post.author.username %>
-                                    </div>
-
-                                </div>
-
-
-                                <!-- View Post -->
-
-                                <a href="/profile/<%= post._id %>/view" class="btn-follow">
-                                    View Post
-                                </a>
-
-
-                            </div>
-
-
-                            <!-- ========================= -->
-                            <!-- POST MEDIA / TEXT CONTENT -->
-                            <!-- ========================= -->
-
-                            <% if (post.type==="image" && post.mediaUrl) { %>
-
-                                <div class="feed-image">
-                                    <img src="<%= post.mediaUrl %>" alt="Post image" class="img-post-container">
-                                </div>
-
-                                <% } else { %>
-
-                                    <a href="/profile/<%= post._id %>/view" style="text-decoration: none;">
-                                        <div class="feed-text-post">
-                                            <h3 class="feed-text-content">
-                                                <%= post.content %>
-                                            </h3>
-                                        </div>
-                                    </a>
-
-                                    <% } %>
-
-
-                                        <!-- ========================= -->
-                                        <!-- ACTIONS -->
-                                        <!-- ========================= -->
-
-                                        <div class="feed-actions">
-
-
-                                            <!-- LIKE -->
-
-                                            <% if (currentUser) { %>
-
-                                                <form action="/hangout/<%= post._id %>/like" method="POST"
-                                                    class="like-form">
-
-                                                    <button type="submit" class="feed-action-btn" title="Like">
-
-                                                        <i class="uil uil-heart"></i>
-
-                                                    </button>
-
-                                                </form>
-
-                                                <% } else { %>
-
-                                                    <a href="/login" class="feed-action-btn" title="Like">
-
-                                                        <i class="uil uil-heart"></i>
-
-                                                    </a>
-
-                                                    <% } %>
-
-
-                                                        <!-- COMMENT -->
-
-                                                        <a href="/profile/<%= post._id %>/view" class="feed-action-btn"
-                                                            title="Comment">
-                                                            <i class="uil uil-comment-alt"></i>
-                                                        </a>
-                                                        <button type="button" class="feed-action-btn share-btn"
-                                                            title="Share"
-                                                            onclick="navigator.clipboard.writeText(window.location.origin + '/profile/<%= post._id %>/view'); alert('Link copied!')">
-                                                            <i class="uil uil-share-alt"></i>
-                                                        </button>
-
-
-                                                        <!-- BOOKMARK -->
-
-                                                        <button type="button" class="feed-action-btn bookmark-btn"
-                                                            title="Bookmark" style="margin-left: auto;">
-
-                                                            <i class="uil uil-bookmark"></i>
-
-                                                        </button>
-
-
-                                        </div>
-
-
-                                        <!-- ========================= -->
-                                        <!-- LIKE COUNT -->
-                                        <!-- ========================= -->
-
-                                        <div class="feed-like-count">
-
-                                            <strong>
-
-                                                <%= likeCountMap[post._id.toString()] || 0 %>
-
-                                                    <%= (likeCountMap[post._id.toString()] || 0)===1 ? "Like" : "Likes"
-                                                        %>
-
-                                            </strong>
-
-                                        </div>
-
-
-                                        <!-- ========================= -->
-                                        <!-- CAPTION -->
-                                        <!-- ========================= -->
-
-                                        <div class="feed-caption" style="padding: 0 14px;">
-
-                                            <% if (post.type==="image" && post.mediaUrl) { %>
-                                                <strong>
-                                                    <%= post.author.username %>
-                                                </strong>
-
-                                                <%= post.content %>
-
-                                                    <br>
-                                                    <% } %>
-
-                                                        <span style="
-                            color: var(--text-light);
-                            text-transform: uppercase;
-                            font-size: 10px;
-                            margin-top: 6px;
-                            display: block;
-                        ">
-
-                                                            <%= new Date( post.createdAt ).toLocaleString() %>
-
-                                                        </span>
-
-                                        </div>
-
-
-                        </div>
                         <% } %>
+
+
+                        <!-- USER INFO -->
+                        <div style="flex: 1;">
+
+                            <div class="post-author-name">
+
+                                <a
+                                    href="/profile/<%= post.author._id %>"
+                                    class="post-author-link"
+                                >
+                                    <%= post.author.name || post.author.username %>
+                                </a>
+
+                            </div>
+
+                            <div class="post-author-handle">
+
+                                @<%= post.author.username %>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- POST CONTENT -->
+                    <a
+                        href="/profile/<%= post._id %>/view"
+                        style="text-decoration: none; color: inherit;"
+                    >
+
+                        <div class="post-body-text">
+
+                            <%= post.content %>
+
+                        </div>
+
+                        <div class="post-date-text">
+
+                            <%= new Date(post.createdAt).toLocaleString() %>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- ACTIONS -->
+                    <div class="feed-actions">
+
+                        <!-- LIKE -->
+                        <% if (currentUser) { %>
+
+                            <form
+                                action="/hangout/<%= post._id %>/like"
+                                method="POST"
+                                class="like-form"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="feed-action-btn"
+                                    title="Like"
+                                >
+                                    <i class="uil uil-heart"></i>
+                                </button>
+
+                            </form>
+
+                        <% } else { %>
+
+                            <a
+                                href="/login"
+                                class="feed-action-btn"
+                                title="Like"
+                            >
+                                <i class="uil uil-heart"></i>
+                            </a>
+
+                        <% } %>
+
+
+                        <!-- COMMENT -->
+                        <a
+                            href="/profile/<%= post._id %>/view"
+                            class="feed-action-btn"
+                            title="Comment"
+                        >
+                            <i class="uil uil-comment-alt"></i>
+                        </a>
+
+
+                        <!-- SHARE -->
+                        <button
+                            type="button"
+                            class="feed-action-btn share-btn"
+                            title="Share"
+                            onclick="navigator.clipboard.writeText(window.location.origin + '/profile/<%= post._id %>/view'); alert('Link copied!')"
+                        >
+                            <i class="uil uil-share-alt"></i>
+                        </button>
+
+
+                        <!-- BOOKMARK -->
+                        <% if (currentUser) { %>
+
+                            <form
+                                action="/hangout/<%= post._id %>/save"
+                                method="POST"
+                                class="bookmark-form"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="feed-action-btn bookmark-btn"
+                                    title="Save Post"
+                                >
+                                    <i class="uil uil-bookmark"></i>
+                                </button>
+
+                            </form>
+
+                        <% } else { %>
+
+                            <a
+                                href="/login"
+                                class="feed-action-btn bookmark-btn"
+                                title="Login to save"
+                            >
+                                <i class="uil uil-bookmark"></i>
+                            </a>
+
+                        <% } %>
+
+                    </div>
+
+
+                    <!-- LIKE COUNT -->
+                    <div
+                        class="feed-like-count"
+                        style="padding-left: 14px; margin-bottom: 2px;"
+                    >
+
+                        <strong>
+
+                            <%= likeCountMap[post._id.toString()] || 0 %>
+
+                            <%= (likeCountMap[post._id.toString()] || 0) === 1
+                                ? "Like"
+                                : "Likes"
+                            %>
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+            <!-- ========================= -->
+            <!-- IMAGE POST -->
+            <!-- ========================= -->
+
+            <% } else { %>
+
+                <div class="feed-post">
+
+
+                    <!-- ========================= -->
+                    <!-- HEADER -->
+                    <!-- ========================= -->
+
+                    <div class="feed-header">
+
+
+                        <!-- AVATAR -->
+                        <div class="avatar-med">
+
+                            <% if (post.author && post.author.profilePic) { %>
+
+                                <a href="/profile/<%= post.author._id %>">
+
+                                    <img
+                                        src="<%= post.author.profilePic %>"
+                                        alt="<%= post.author.username %>"
+                                    >
+
+                                </a>
+
+                            <% } else { %>
+
+                                <a
+                                    href="/profile/<%= post.author._id %>"
+                                    style="text-decoration: none; color: inherit;"
+                                >
+
+                                    <%= post.author && post.author.username
+                                        ? post.author.username.charAt(0).toUpperCase()
+                                        : "U"
+                                    %>
+
+                                </a>
 
                             <% } %>
 
-
-                                <% } else { %>
-
-
-                                    <!-- ========================= -->
-                                    <!-- NO POSTS -->
-                                    <!-- ========================= -->
-
-                                    <div class="no-posts-container">
-
-                                        <i class="uil uil-camera" style="font-size: 40px;">
-                                        </i>
-
-                                        <h2>
-                                            No posts yet
-                                        </h2>
-
-                                    </div>
+                        </div>
 
 
-                                    <% } %>
+                        <!-- USER INFO -->
+                        <div
+                            class="user-info-row"
+                            style="flex: 1; margin-left: 12px;"
+                        >
 
-    </div>
+                            <div class="post-author-name">
+
+                                <a
+                                    href="/profile/<%= post.author._id %>"
+                                    class="post-author-link"
+                                >
+
+                                    <%= post.author.name || post.author.username %>
+
+                                </a>
+
+                            </div>
+
+                            <div class="post-author-handle">
+
+                                @<%= post.author.username %>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- VIEW POST -->
+                        <a
+                            href="/profile/<%= post._id %>/view"
+                            class="btn-follow"
+                        >
+                            View Post
+                        </a>
+
+                    </div>
+
+
+                    <!-- ========================= -->
+                    <!-- POST IMAGE -->
+                    <!-- ========================= -->
+
+                    <% if (post.type === "image" && post.mediaUrl) { %>
+
+                        <div class="feed-image">
+
+                            <img
+                                src="<%= post.mediaUrl %>"
+                                alt="Post image"
+                                class="img-post-container"
+                            >
+
+                        </div>
+
+                    <% } %>
+
+
+                    <!-- ========================= -->
+                    <!-- ACTIONS -->
+                    <!-- ========================= -->
+
+                    <div class="feed-actions">
+
+
+                        <!-- LIKE -->
+                        <% if (currentUser) { %>
+
+                            <form
+                                action="/hangout/<%= post._id %>/like"
+                                method="POST"
+                                class="like-form"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="feed-action-btn"
+                                    title="Like"
+                                >
+
+                                    <i class="uil uil-heart"></i>
+
+                                </button>
+
+                            </form>
+
+                        <% } else { %>
+
+                            <a
+                                href="/login"
+                                class="feed-action-btn"
+                                title="Like"
+                            >
+
+                                <i class="uil uil-heart"></i>
+
+                            </a>
+
+                        <% } %>
+
+
+                        <!-- COMMENT -->
+                        <a
+                            href="/profile/<%= post._id %>/view"
+                            class="feed-action-btn"
+                            title="Comment"
+                        >
+
+                            <i class="uil uil-comment-alt"></i>
+
+                        </a>
+
+
+                        <!-- SHARE -->
+                        <button
+                            type="button"
+                            class="feed-action-btn share-btn"
+                            title="Share"
+                            onclick="navigator.clipboard.writeText(window.location.origin + '/profile/<%= post._id %>/view'); alert('Link copied!')"
+                        >
+
+                            <i class="uil uil-share-alt"></i>
+
+                        </button>
+
+
+                        <!-- BOOKMARK -->
+                        <% if (currentUser) { %>
+
+                            <form
+                                action="/hangout/<%= post._id %>/save"
+                                method="POST"
+                                class="bookmark-form"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="feed-action-btn bookmark-btn"
+                                    title="Save Post"
+                                >
+
+                                    <i class="uil uil-bookmark"></i>
+
+                                </button>
+
+                            </form>
+
+                        <% } else { %>
+
+                            <a
+                                href="/login"
+                                class="feed-action-btn bookmark-btn"
+                                title="Login to save"
+                            >
+
+                                <i class="uil uil-bookmark"></i>
+
+                            </a>
+
+                        <% } %>
+
+                    </div>
+
+
+                    <!-- ========================= -->
+                    <!-- LIKE COUNT -->
+                    <!-- ========================= -->
+
+                    <div class="feed-like-count">
+
+                        <strong>
+
+                            <%= likeCountMap[post._id.toString()] || 0 %>
+
+                            <%= (likeCountMap[post._id.toString()] || 0) === 1
+                                ? "Like"
+                                : "Likes"
+                            %>
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- ========================= -->
+                    <!-- CAPTION -->
+                    <!-- ========================= -->
+
+                    <div
+                        class="feed-caption"
+                        style="padding: 0 14px;"
+                    >
+
+                        <% if (post.content) { %>
+
+                            <strong>
+
+                                <%= post.author.username %>
+
+                            </strong>
+
+                            <%= post.content %>
+
+                            <br>
+
+                        <% } %>
+
+
+                        <span
+                            style="
+                                color: var(--text-light);
+                                text-transform: uppercase;
+                                font-size: 10px;
+                                margin-top: 6px;
+                                display: block;
+                            "
+                        >
+
+                            <%= new Date(post.createdAt).toLocaleString() %>
+
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            <% } %>
+
+        <% } %>
+
+
+    <!-- ========================= -->
+    <!-- NO POSTS -->
+    <!-- ========================= -->
+
+    <% } else { %>
+
+        <div class="no-posts-container">
+
+            <i
+                class="uil uil-camera"
+                style="font-size: 40px;"
+            ></i>
+
+            <h2>
+                No posts yet
+            </h2>
+
+        </div>
+
+    <% } %>
+
+</div>

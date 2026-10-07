@@ -65,6 +65,14 @@ const userSchema = new mongoose.Schema(
             },
         ],
 
+        // Saved posts
+        savedPosts: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Post",
+            },
+        ],
+
         verified: {
             type: Boolean,
             default: false,
@@ -76,7 +84,7 @@ const userSchema = new mongoose.Schema(
 
         otpExpiry: {
             type: Date,
-        }
+        },
     },
     {
         timestamps: true,

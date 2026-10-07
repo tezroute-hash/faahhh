@@ -2976,3 +2976,609 @@ body.dark-theme .sidebar-menu-item.logout-item:hover {
         object-fit: contain !important;
     }
 }
+
+.bookmark-form {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.bookmark-form .bookmark-btn {
+    border: none;
+    background: transparent;
+}
+
+.bookmark-btn {
+    cursor: pointer;
+}
+
+.bookmark-btn:hover {
+    color: var(--primary);
+}
+
+/* =========================================
+   SAVED POSTS PAGE
+========================================= */
+
+.saved-page {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 35px 20px 80px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.saved-page-header {
+    margin-bottom: 28px;
+}
+
+.saved-page-header h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin: 0;
+
+    color: var(--text-dark);
+
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.saved-page-header h1 i {
+    color: var(--primary);
+}
+
+.saved-page-header p {
+    margin: 7px 0 0;
+
+    color: var(--text-light);
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   SAVED POSTS LIST
+========================================= */
+
+.saved-posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+
+/* =========================================
+   SAVED POST CARD
+========================================= */
+
+.saved-post-card {
+    width: 100%;
+
+    background: var(--bg-color-content);
+
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    box-shadow: var(--shadow-md);
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   POST HEADER
+========================================= */
+
+.saved-post-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 16px 18px;
+}
+
+
+/* =========================================
+   USER
+========================================= */
+
+.saved-user {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    min-width: 0;
+}
+
+.saved-user-img,
+.saved-user-placeholder {
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+}
+
+.saved-user-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+
+/* =========================================
+   USER INFO
+========================================= */
+
+.saved-user-info {
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+.saved-user-name {
+    color: var(--text-dark);
+
+    font-size: 15px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.saved-user-name:hover {
+    color: var(--primary);
+}
+
+.saved-user-handle {
+    margin-top: 2px;
+
+    color: var(--text-light);
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   VIEW POST BUTTON
+========================================= */
+
+.saved-view-btn {
+    flex-shrink: 0;
+
+    padding: 8px 13px;
+
+    border-radius: 9px;
+
+    background: rgba(217, 119, 87, 0.1);
+
+    color: var(--primary);
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.saved-view-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+
+/* =========================================
+   IMAGE
+========================================= */
+
+.saved-image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    max-height: 600px;
+
+    overflow: hidden;
+
+    background: #f5f5f5;
+
+    text-decoration: none;
+}
+
+.saved-image-container img {
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+
+    height: auto;
+    max-height: 600px;
+
+    object-fit: contain;
+    object-position: center;
+}
+
+
+/* =========================================
+   TEXT CONTENT
+========================================= */
+
+.saved-content {
+    display: block;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 14px 18px;
+
+    color: var(--text-dark);
+
+    font-size: 14px;
+    line-height: 1.5;
+
+    text-align: left;
+
+    text-decoration: none;
+
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: break-word;
+
+    height: auto;
+    min-height: 0;
+}
+
+.saved-content:hover {
+    color: var(--text-dark);
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.saved-post-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 12px 18px 16px;
+
+    border-top: 1px solid var(--border-color);
+}
+
+.saved-date {
+    color: var(--text-light);
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================
+   UNSAVE BUTTON
+========================================= */
+
+.saved-post-footer form {
+    margin: 0;
+}
+
+.unsave-btn {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 6px 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--primary);
+
+    font-family: inherit;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.unsave-btn:hover {
+    color: #dc2626;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.saved-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 400px;
+
+    padding: 40px;
+
+    text-align: center;
+
+    background: var(--bg-color-content);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 20px;
+
+    box-sizing: border-box;
+}
+
+.saved-empty-icon {
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    border-radius: 50%;
+
+    background: rgba(217, 119, 87, 0.1);
+
+    color: var(--primary);
+
+    font-size: 30px;
+}
+
+.saved-empty h2 {
+    margin: 0;
+
+    color: var(--text-dark);
+
+    font-size: 21px;
+}
+
+.saved-empty p {
+    margin: 8px 0 20px;
+
+    color: var(--text-light);
+
+    font-size: 14px;
+}
+
+.saved-browse-btn {
+    padding: 10px 18px;
+
+    border-radius: 10px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.saved-browse-btn:hover {
+    background: var(--primary-hover);
+}
+
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+body.dark-theme .saved-post-card,
+body.dark-theme .saved-empty {
+    background: var(--bg-color-content);
+
+    border-color: var(--border-color);
+}
+
+body.dark-theme .saved-image-container {
+    background: #1c1917;
+}
+
+body.dark-theme .saved-view-btn {
+    background: rgba(217, 119, 87, 0.15);
+}
+
+body.dark-theme .saved-empty-icon {
+    background: rgba(217, 119, 87, 0.15);
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .saved-page {
+        padding: 25px 12px 90px;
+    }
+
+
+    .saved-page-header {
+        margin-bottom: 20px;
+    }
+
+
+    .saved-page-header h1 {
+        font-size: 24px;
+    }
+
+
+    .saved-posts-list {
+        gap: 16px;
+    }
+
+
+    .saved-post-header {
+        padding: 13px;
+    }
+
+
+    .saved-user-img,
+    .saved-user-placeholder {
+        width: 40px;
+        height: 40px;
+    }
+
+
+    .saved-view-btn {
+        padding: 7px 9px;
+
+        font-size: 12px;
+    }
+
+
+    .saved-image-container {
+        max-height: 500px;
+    }
+
+
+    .saved-image-container img {
+        max-height: 500px;
+    }
+
+
+    .saved-content {
+        padding: 14px;
+
+        font-size: 15px;
+    }
+
+
+    .saved-post-footer {
+        padding: 10px 14px 14px;
+    }
+
+
+    .saved-date {
+        font-size: 9px;
+    }
+}
+
+/* =========================================
+   SAVED POST CAPTION - FINAL OVERRIDE
+========================================= */
+
+.saved-post-card .saved-content {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    box-sizing: border-box !important;
+
+    padding: 12px 18px 16px !important;
+
+    margin: 0 !important;
+
+    color: var(--text-dark) !important;
+
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+
+    text-align: left !important;
+
+    text-decoration: none !important;
+
+    white-space: normal !important;
+
+    overflow: visible !important;
+
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+}
+
+
+/* Make the entire card grow with caption */
+.saved-post-card {
+    height: auto !important;
+    min-height: 0 !important;
+
+    overflow: hidden !important;
+}
+
+
+/* Remove any fixed height from content */
+.saved-post-card .saved-content * {
+    height: auto !important;
+    max-height: none !important;
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .saved-post-card .saved-content {
+        width: 100% !important;
+
+        padding: 10px 14px 14px !important;
+
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+
+        text-align: left !important;
+
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+
+        white-space: normal !important;
+
+        overflow: visible !important;
+        overflow-wrap: anywhere !important;
+        word-break: break-word !important;
+    }
+}
