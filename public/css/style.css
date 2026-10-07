@@ -2177,3 +2177,124 @@ body.dark-theme .profile-tab.active {
     color: var(--text-dark);
     border-top-color: var(--text-dark);
 }
+
+/* =========================================
+   DELETE CHAT BUTTON
+========================================= */
+
+.delete-chat-form {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* Main button */
+
+.delete-chat-btn {
+    width: 44px;
+    height: 44px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #374151;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    font-size: 21px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* Icon */
+
+.delete-chat-btn i {
+    line-height: 1;
+}
+
+
+/* Hover */
+
+.delete-chat-btn:hover {
+    background: #fff1f2;
+    color: #dc2626;
+    border-color: #fecaca;
+
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.12);
+
+    transform: translateY(-1px);
+}
+
+
+/* Click */
+
+.delete-chat-btn:active {
+    transform: scale(0.94);
+    box-shadow: none;
+}
+
+
+/* Focus */
+
+.delete-chat-btn:focus-visible {
+    outline: 3px solid rgba(220, 38, 38, 0.2);
+    outline-offset: 2px;
+}
+
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+body.dark-theme .delete-chat-btn {
+    background: var(--bg-color-content);
+    color: #d1d5db;
+    border-color: #374151;
+}
+
+
+body.dark-theme .delete-chat-btn:hover {
+    background: #3f1d1d;
+    color: #f87171;
+    border-color: #7f1d1d;
+
+    box-shadow: 0 4px 12px rgba(248, 113, 113, 0.12);
+}
+
+
+/* =========================================
+   CHAT USER INFO
+========================================= */
+
+.chat-user-info {
+    min-width: 0;
+}
+
+
+/* =========================================
+MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .delete-chat-btn {
+        width: 40px;
+        height: 40px;
+
+        font-size: 19px;
+    }
+
+}

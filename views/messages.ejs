@@ -1,279 +1,375 @@
 <% layout("layouts/boilerplate") -%>
 
-    <div class="messages-container <%= typeof receiver !== 'undefined' && receiver ? 'chat-active' : '' %>">
+<div class="messages-container <%= receiver ? 'chat-active' : '' %>">
 
-        <!-- ==================== LEFT SIDE ==================== -->
-        <div class="messages-sidebar">
+    <!-- =========================
+         LEFT SIDEBAR
+    ========================== -->
 
-            <!-- TITLE -->
-            <div class="messages-title">
-                Messages
-            </div>
+    <div class="messages-sidebar">
 
-            <!-- CONVERSATIONS -->
-            <div class="conversations-list">
+        <div class="messages-title">
+            Messages
+        </div>
 
-                <% if (conversations && conversations.length> 0) { %>
+        <div class="conversations-list">
 
-                    <% conversations.forEach(conversation=> { %>
+            <% if (conversations && conversations.length > 0) { %>
 
-                        <a href="/messages/<%= conversation.user._id %>" class="conversation-item
-                        <% if (
-                            receiver &&
-                            receiver._id.toString() ===
-                            conversation.user._id.toString()
-                        ) { %>
-                            active-conversation
-                        <% } %>">
+                <% conversations.forEach(conversation => { %>
 
-                            <!-- PROFILE IMAGE -->
-                            <div class="convo-avatar avatar-med">
+                    <a
+                        href="/messages/<%= conversation.user._id %>"
+                        class="conversation-item <%= receiver && receiver._id.toString() === conversation.user._id.toString() ? 'active-conversation' : '' %>"
+                    >
 
-                                <% if (conversation.user.profilePic) { %>
+                        <!-- Avatar -->
+                        <div class="convo-avatar avatar-med">
 
-                                    <img src="<%= conversation.user.profilePic %>" alt="Profile" class="convo-img">
+                            <% if (conversation.user.profilePic) { %>
 
-                                    <% } else { %>
-
-                                        <%= conversation.user.username .charAt(0) .toUpperCase() %>
-
-                                            <% } %>
-
-                            </div>
-
-
-                            <!-- USER INFO -->
-                            <div class="convo-info">
-
-                                <strong>
-                                    <%= conversation.user.username %>
-                                </strong>
-
-
-                                <div class="convo-text">
-                                    <%= conversation.lastMessage.text %>
-                                </div>
-
-                            </div>
-
-
-                            <!-- DATE -->
-                            <div class="convo-date">
-                                <%= new Date( conversation.lastMessage.createdAt ).toLocaleDateString() %>
-                            </div>
-
-                        </a>
-
-                        <% }) %>
-
+                                <img
+                                    src="<%= conversation.user.profilePic %>"
+                                    alt="Profile"
+                                    class="convo-img"
+                                >
 
                             <% } else { %>
 
-                                <!-- NO CONVERSATIONS -->
+                                <%= conversation.user.username
+                                    .charAt(0)
+                                    .toUpperCase()
+                                %>
 
-                                <div class="no-conversations">
+                            <% } %>
 
-                                    <i class="uil uil-message no-convos-icon"></i>
+                        </div>
 
-                                    <h3>
-                                        No messages yet
-                                    </h3>
 
-                                    <p>
-                                        Visit someone's profile to start a conversation.
-                                    </p>
+                        <!-- Conversation Info -->
+                        <div class="convo-info">
 
-                                </div>
+                            <strong>
+                                <%= conversation.user.username %>
+                            </strong>
 
-                                <% } %>
+                            <div class="convo-text">
 
-            </div>
+                                <%= conversation.lastMessage.text %>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Date -->
+                        <div class="convo-date">
+
+                            <%= new Date(
+                                conversation.lastMessage.createdAt
+                            ).toLocaleDateString() %>
+
+                        </div>
+
+                    </a>
+
+                <% }) %>
+
+
+            <% } else { %>
+
+                <!-- No Conversations -->
+
+                <div class="no-conversations">
+
+                    <i class="uil uil-message no-convos-icon"></i>
+
+                    <h3>
+                        No messages yet
+                    </h3>
+
+                    <p>
+                        Visit someone's profile to start a conversation.
+                    </p>
+
+                </div>
+
+            <% } %>
 
         </div>
 
+    </div>
 
 
-        <!-- ==================== RIGHT SIDE ==================== -->
+    <!-- =========================
+         CHAT AREA
+    ========================== -->
 
-        <div class="chat-container">
-
-            <% if (receiver) { %>
-
-                <!-- ==================== CHAT HEADER ==================== -->
-
-                <div class="chat-header">
-                    <!-- Mobile Back Button -->
-                    <a href="/messages" class="mobile-back-btn"
-                        style="display: none; font-size: 24px; color: var(--text-dark); margin-right: 10px; text-decoration: none;">
-                        <i class="uil uil-angle-left"></i>
-                    </a>
-
-                    <!-- PROFILE IMAGE -->
-
-                    <div class="chat-avatar avatar-med">
-
-                        <% if (receiver.profilePic) { %>
-
-                            <img src="<%= receiver.profilePic %>" alt="Profile" class="convo-img">
-
-                            <% } else { %>
-
-                                <%= receiver.username .charAt(0) .toUpperCase() %>
-
-                                    <% } %>
-
-                    </div>
+    <div class="chat-container">
 
 
-                    <!-- USER NAME -->
+        <% if (receiver) { %>
 
-                    <div>
-                        <strong class="chat-username">
-                            <%= receiver.username %>
-                        </strong>
 
-                        <div class="chat-fullname">
-                            <%= receiver.name || receiver.username %>
-                        </div>
+            <!-- =========================
+                 CHAT HEADER
+            ========================== -->
+
+            <div class="chat-header">
+
+
+                <!-- Mobile Back -->
+                <a
+                    href="/messages"
+                    class="mobile-back-btn"
+                >
+                    <i class="uil uil-angle-left"></i>
+                </a>
+
+
+                <!-- Receiver Avatar -->
+                <div class="chat-avatar avatar-med">
+
+                    <% if (receiver.profilePic) { %>
+
+                        <img
+                            src="<%= receiver.profilePic %>"
+                            alt="Profile"
+                            class="convo-img"
+                        >
+
+                    <% } else { %>
+
+                        <%= receiver.username
+                            .charAt(0)
+                            .toUpperCase()
+                        %>
+
+                    <% } %>
+
+                </div>
+
+
+                <!-- Receiver Information -->
+                <div class="chat-user-info">
+
+                    <strong class="chat-username">
+
+                        <%= receiver.username %>
+
+                    </strong>
+
+                    <div class="chat-fullname">
+
+                        <%= receiver.name || receiver.username %>
+
                     </div>
 
                 </div>
 
 
+                <!-- =========================
+                     DELETE CHAT
+                ========================== -->
 
-                <!-- ==================== CHAT MESSAGES ==================== -->
+                <form
+                    action="/messages/delete/<%= receiver._id %>"
+                    method="POST"
+                    class="delete-chat-form"
+                    onsubmit="return confirm('Are you sure you want to delete this entire chat?');"
+                >
 
-                <div id="chat-messages" class="chat-messages-area">
+                    <button
+                        type="submit"
+                        class="delete-chat-btn"
+                        title="Delete chat"
+                    >
 
-                    <% if (messages && messages.length> 0) { %>
+                        <i class="uil uil-trash-alt"></i>
 
+                    </button>
 
-                        <% messages.forEach(message=> { %>
+                </form>
 
-                            <% const isMine=message.sender._id.toString()===currentUser._id.toString(); %>
-
-                                <!-- MESSAGE ROW -->
-
-                                <div class="<%= isMine
-                                ? 'message-row mine'
-                                : 'message-row theirs'
-                            %>">
-
-                                    <!-- MESSAGE BUBBLE -->
-
-                                    <div class="<%= isMine
-                                    ? 'message-bubble mine-bubble'
-                                    : 'message-bubble their-bubble'
-                                %>">
-
-                                        <%= message.text %>
+            </div>
 
 
-                                            <!-- TIME -->
+            <!-- =========================
+                 MESSAGES
+            ========================== -->
 
-                                            <div class="message-time">
+            <div
+                id="chat-messages"
+                class="chat-messages-area"
+            >
 
-                                                <%= new Date( message.createdAt ).toLocaleTimeString( [], {
-                                                    hour: "2-digit" , minute: "2-digit" } ) %>
+                <% if (messages && messages.length > 0) { %>
 
-                                            </div>
 
-                                    </div>
+                    <% messages.forEach(message => { %>
+
+                        <%
+                            const isMine =
+                                message.sender._id.toString() ===
+                                currentUser._id.toString();
+                        %>
+
+
+                        <div
+                            class="<%= isMine ? 'message-row mine' : 'message-row theirs' %>"
+                        >
+
+
+                            <div
+                                class="<%= isMine ? 'message-bubble mine-bubble' : 'message-bubble their-bubble' %>"
+                            >
+
+                                <div class="message-text">
+
+                                    <%= message.text %>
 
                                 </div>
 
-                                <% }) %>
 
+                                <!-- Message Time -->
 
-                                    <% } else { %>
+                                <div class="message-time">
 
+                                    <%= new Date(
+                                        message.createdAt
+                                    ).toLocaleTimeString([], {
+                                        hour: "2-digit",
+                                        minute: "2-digit"
+                                    }) %>
 
-                                        <!-- NO MESSAGES -->
+                                </div>
 
-                                        <div class="no-chat-selected">
+                            </div>
 
-                                            <div style="text-align: center;">
+                        </div>
 
-                                                <i class="uil uil-comment no-convos-icon"></i>
+                    <% }) %>
 
-                                                <h3>
-                                                    Start the conversation
-                                                </h3>
-
-                                                <p>
-                                                    Send a message to
-                                                    <%= receiver.username %>
-                                                </p>
-
-                                            </div>
-
-                                        </div>
-
-
-                                        <% } %>
-
-                </div>
-
-
-
-                <!-- ==================== MESSAGE INPUT ==================== -->
-
-                <div class="chat-input-area">
-
-                    <form action="/messages/<%= receiver._id %>" method="POST" class="chat-form">
-
-                        <input type="text" name="text" placeholder="Type a message..." required autocomplete="off"
-                            class="chat-input">
-
-                        <button type="submit" class="chat-send-btn">
-                            Send
-                        </button>
-
-                    </form>
-
-                </div>
 
                 <% } else { %>
 
 
-                    <!-- ==================== NO CHAT SELECTED ==================== -->
+                    <!-- No Messages -->
 
                     <div class="no-chat-selected">
 
                         <div style="text-align: center;">
 
-                            <i class="uil uil-message" style="font-size: 70px;"></i>
+                            <i
+                                class="uil uil-comment"
+                                style="font-size: 60px;"
+                            ></i>
 
-                            <h2>
-                                Your Messages
-                            </h2>
+                            <h3>
+                                Start the conversation
+                            </h3>
 
                             <p>
-                                Select a conversation to start chatting.
+                                Send a message to
+                                <%= receiver.username %>
                             </p>
 
                         </div>
 
                     </div>
 
-                    <% } %>
 
-        </div>
+                <% } %>
+
+            </div>
+
+
+            <!-- =========================
+                 MESSAGE INPUT
+            ========================== -->
+
+            <div class="chat-input-area">
+
+                <form
+                    action="/messages/<%= receiver._id %>"
+                    method="POST"
+                    class="chat-form"
+                >
+
+                    <input
+                        type="text"
+                        name="text"
+                        class="chat-input"
+                        placeholder="Type a message..."
+                        autocomplete="off"
+                        required
+                    >
+
+
+                    <button
+                        type="submit"
+                        class="chat-send-btn"
+                    >
+
+                        Send
+
+                    </button>
+
+                </form>
+
+            </div>
+
+
+        <% } else { %>
+
+
+            <!-- =========================
+                 NO CHAT SELECTED
+            ========================== -->
+
+            <div class="no-chat-selected">
+
+                <div style="text-align: center;">
+
+                    <i
+                        class="uil uil-message"
+                        style="font-size: 70px;"
+                    ></i>
+
+                    <h2>
+                        Your Messages
+                    </h2>
+
+                    <p>
+                        Select a conversation to start chatting.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        <% } %>
 
     </div>
 
-    <!-- ==================== AUTO SCROLL ==================== -->
+</div>
 
-    <script>
 
-        const chatMessages =
-            document.getElementById("chat-messages");
+<!-- =========================
+     AUTO SCROLL
+========================== -->
 
-        if (chatMessages) {
+<script>
 
-            chatMessages.scrollTop =
-                chatMessages.scrollHeight;
+    const chatMessages =
+        document.getElementById("chat-messages");
 
-        }
+    if (chatMessages) {
 
-    </script>
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+    }
+
+</script>

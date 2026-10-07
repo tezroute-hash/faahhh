@@ -363,5 +363,38 @@ router.post(
     }
 );
 
+// =========================
+// DELETE ENTIRE CHAT
+// =========================
+router.post(
+    "/delete/:userId",
+    restrictToLoggedinUserOnly,
+    async (req, res) => {
+        try {
+            const currentUserId = req.user._id;
+            const otherUserId = req.params.userId;
+        
+            await Message.deleteMany({
+                $or: [
+                    {
+                        sender: currentUserId,
+                        receiver: otherUserId
+                    },
+                    {
+                        sender: otherUserId,
+                        receiver: currentUserId
+                    }
+                    ]
+                });
+            
+                return res.redirect("/messages");
+            
+            } catch (error) {
+            console.error("Delete chat error:", error);
+            return res.status(500).send("Failed to delete chat");
+        }
+    }
+);
+
 
 module.exports = router;
