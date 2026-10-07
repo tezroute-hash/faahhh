@@ -1775,30 +1775,108 @@ a {
   margin-top: 2px;
 }
 
+/* =========================
+   DELETE POST BUTTON
+   ========================= */
+
 .delete-form {
   margin-left: auto;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
 
 .delete-btn {
-  border: none;
-  background: #fee2e2;
-  color: #dc2626;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 14px;
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #6b7280;
+  font-family: inherit;
+  font-size: 18px;
   font-weight: 600;
+  line-height: 1;
   cursor: pointer;
-  transition: all 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: 0 2px 8px rgba(45, 40, 37, 0.06);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.delete-btn i,
+.delete-btn svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  font-size: 18px;
+  line-height: 1;
+  pointer-events: none;
 }
 
 .delete-btn:hover {
-  background: #dc2626;
-  color: white;
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #dc2626;
+  box-shadow: 0 5px 14px rgba(220, 38, 38, 0.12);
+  transform: translateY(-1px);
+}
+
+.delete-btn:focus-visible {
+  outline: 3px solid rgba(220, 38, 38, 0.18);
+  outline-offset: 2px;
+  border-color: #fca5a5;
 }
 
 .delete-btn:active {
-  transform: scale(0.96);
+  transform: scale(0.94);
+  box-shadow: 0 2px 6px rgba(45, 40, 37, 0.08);
+}
+
+.delete-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Dark theme */
+body.dark-theme .delete-btn {
+  background: var(--bg-color-content);
+  border-color: var(--border-color);
+  color: var(--text-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+body.dark-theme .delete-btn:hover {
+  background: rgba(220, 38, 38, 0.12);
+  border-color: rgba(248, 113, 113, 0.45);
+  color: #f87171;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .delete-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 11px;
+  }
+
+  .delete-btn i,
+  .delete-btn svg {
+    width: 17px;
+    height: 17px;
+    font-size: 17px;
+  }
 }
 
 .post-content {
@@ -3581,4 +3659,129 @@ body.dark-theme .saved-empty-icon {
         overflow-wrap: anywhere !important;
         word-break: break-word !important;
     }
+}
+/* =========================================================
+   FINAL PROFILE DELETE BUTTON FIX
+   The screenshot shows the account-delete button inside
+   .profile-name-row, not the .delete-btn used for post deletion.
+   These rules intentionally target that actual profile location.
+========================================================= */
+
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.profile-name-row > form,
+.profile-name-row form {
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+.profile-name-row > form > button,
+.profile-name-row form > button,
+.profile-name-row form button[type="submit"] {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  min-height: 44px !important;
+  max-width: 44px !important;
+  max-height: 44px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  color: #374151 !important;
+  font-family: inherit !important;
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+  outline: none !important;
+  transition: background-color .2s ease,
+              border-color .2s ease,
+              color .2s ease,
+              box-shadow .2s ease,
+              transform .15s ease !important;
+}
+
+.profile-name-row > form > button:hover,
+.profile-name-row form > button:hover,
+.profile-name-row form button[type="submit"]:hover {
+  background: #fff1f2 !important;
+  border-color: #fca5a5 !important;
+  color: #dc2626 !important;
+  box-shadow: 0 5px 14px rgba(220, 38, 38, 0.14) !important;
+  transform: translateY(-1px) !important;
+}
+
+.profile-name-row > form > button:focus-visible,
+.profile-name-row form > button:focus-visible,
+.profile-name-row form button[type="submit"]:focus-visible {
+  outline: 3px solid rgba(220, 38, 38, 0.18) !important;
+  outline-offset: 2px !important;
+}
+
+.profile-name-row > form > button:active,
+.profile-name-row form > button:active,
+.profile-name-row form button[type="submit"]:active {
+  transform: scale(.94) !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, .08) !important;
+}
+
+.profile-name-row > form > button i,
+.profile-name-row > form > button svg,
+.profile-name-row form button i,
+.profile-name-row form button svg {
+  width: 18px !important;
+  height: 18px !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  color: inherit !important;
+  pointer-events: none !important;
+}
+
+body.dark-theme .profile-name-row > form > button,
+body.dark-theme .profile-name-row form > button,
+body.dark-theme .profile-name-row form button[type="submit"] {
+  background: var(--bg-color-content) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-light) !important;
+}
+
+body.dark-theme .profile-name-row > form > button:hover,
+body.dark-theme .profile-name-row form > button:hover,
+body.dark-theme .profile-name-row form button[type="submit"]:hover {
+  background: rgba(220, 38, 38, .12) !important;
+  border-color: rgba(248, 113, 113, .45) !important;
+  color: #f87171 !important;
+}
+
+@media (max-width: 768px) {
+  .profile-name-row > form > button,
+  .profile-name-row form > button,
+  .profile-name-row form button[type="submit"] {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+    max-width: 42px !important;
+    max-height: 42px !important;
+    border-radius: 9px !important;
+  }
 }

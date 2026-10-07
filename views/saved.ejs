@@ -200,29 +200,6 @@
 
                         <div class="saved-post-footer">
 
-                            <span
-                            style="
-                                color: var(--text-light);
-                                text-transform: uppercase;
-                                font-size: 10px;
-                                margin-top: 6px;
-                                display: block;
-                            "
-                        >
-
-                        <%= new Date().toLocaleString("en-IN", {
-                                timeZone: "Asia/Kolkata",
-                                day: "2-digit",
-                                month: "2-digit",
-                                year: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                second: "2-digit",
-                                hour12: true
-                            }) %>
-
-                        </span>
-
                             <!-- REMOVE -->
                             <form
                                 action="/hangout/<%= post._id %>/unsave"
